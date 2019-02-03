@@ -266,7 +266,7 @@ class Player extends Component {
             }
             let display = '';
             let toDisplay = this.state.currentPlaybackName.replace(/ *\([^)]*\) */g, "");
-                    if(toDisplay.length > 20){
+                    if(toDisplay.length > 22){
                         display = toDisplay.toUpperCase().substring(0,20) + '...';
                         this.setState({display: display})
                     } else {
