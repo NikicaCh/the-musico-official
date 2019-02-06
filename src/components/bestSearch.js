@@ -22,6 +22,11 @@ class BestSearch extends React.Component {
     }
 
     componentDidMount() {
+        document.getElementById("results").addEventListener("wheel", (e) => {
+            console.log(e)
+            if(e.deltaY > 0) { //scroll down
+            }
+        })
         let token = accessToken();
         let userId = this.props.userId;
         getDevices(token)
@@ -160,10 +165,10 @@ class BestSearch extends React.Component {
                                         className="condition">albums</span>
                                 </div>
                             </div>
-                            <div className="resttracks">
+                            <div id="rest-tracks" className="resttracks">
                                 <RestTracks tracks={this.props.restTracks} device={this.props.deviceId}/>
                             </div>
-                            <div className="restartists hide">
+                            <div id="rest-artists" className="restartists hide">
                                 <RestArtists artists={this.props.restArtists} device={this.props.deviceId}/>
                             </div>
                             }

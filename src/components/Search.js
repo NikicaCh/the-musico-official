@@ -189,7 +189,7 @@ class Search extends Component {
                     }
                 </div>
                 <div>
-                <div className="results hide">
+                <div id="results" className="results hide">
                     <BestSearch
                             type={type}
                             image={this.state.maxImg}
