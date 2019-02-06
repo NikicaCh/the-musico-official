@@ -5,7 +5,7 @@ import $ from 'jquery';
 import Cookies from 'universal-cookie';
 
 const linkToRedirectInDevelopment = "http://localhost:8888/login";
-const linkToRedirectInProduction = "https://musico-redirect.herokuapp.com/login";
+const linkToRedirectInProduction = "https://themusico-redirect.herokuapp.com/login";
 
 export const Port = async () => {
     const response = await fetch('/port')
