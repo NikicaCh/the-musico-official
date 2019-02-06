@@ -46,13 +46,6 @@ class App extends Component {
   }
   
   componentDidMount() {
-    
-  }
-  componentWillUnmount() {
-    const cookies = new Cookies();
-    cookies.remove("access", ["Expires=Thu, 01 Jan 1970 00:00:01 GMT;"])
-  }
-  render() {
     document.title = "Musico";
     const linkToRedirectInDevelopment = "http://localhost:8888/login";
     const linkToRedirectInProduction = "https://themusico-redirect.herokuapp.com/login";
@@ -77,6 +70,12 @@ class App extends Component {
     this.timer = setInterval(() =>  {
       window.location.replace(linkToRedirectInProduction)   
     }, 2500000);
+  }
+  componentWillUnmount() {
+    const cookies = new Cookies();
+    cookies.remove("access", ["Expires=Thu, 01 Jan 1970 00:00:01 GMT;"])
+  }
+  render() {
     return (
       <div id="app" className="App">        
         <BrowserRouter>
