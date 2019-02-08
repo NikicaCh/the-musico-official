@@ -35,7 +35,7 @@
   },
   "scripts": {
     "start": "react-scripts start",
-    "build": "react-scripts build",
+    "build": "brunch build -p",
     "test": "react-scripts test --env=jsdom",
     "eject": "react-scripts eject"
   },
@@ -46,6 +46,7 @@
     "babel": "^6.23.0",
     "babel-core": "^6.26.0",
     "babel-loader": "^7.1.4",
-    "jshint": "^2.9.6"
+    "jshint": "^2.9.6",
+    "uglify-js-brunch": "^2.10.0"
   }
 }
