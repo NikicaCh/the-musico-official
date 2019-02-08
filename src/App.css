@@ -1293,6 +1293,14 @@ button:focus {outline:0;}
   font-family: 'Amatic SC', cursive;
   color: white;
 }
+.pause-replay {
+  position: absolute;
+  top: 46%;
+  left: 20%;
+  font-size: 1.2em;
+  font-family: 'Amatic SC', cursive;
+  color: white;
+}
 
 .loading {
   position: absolute;
@@ -1714,4 +1722,55 @@ input[type=range]:focus::-ms-fill-upper {
 
 .device_active {
   color: #3aa065;
+}
+
+.legend-div {
+  position: absolute;
+  width: auto;
+  height: auto;
+  z-index: 5;
+  top: 90%;
+  left: 65%;
+  color: white;
+}
+.legend-button {
+  position: relative;
+  text-align: center;
+  border-radius: 10%;
+  background: linear-gradient(to right, rgb(153, 156, 156) 50%, rgb(113, 114, 114) 70%);
+  font-size: 1vw;
+  font-weight: 800;
+  color: white;
+  font-family: 'Amatic SC', cursive;
+  color: rgb(36, 35, 35);
+  opacity: .5;
+  border: solid .2px rgb(20, 20, 20);
+}
+.legend-button span {
+  color:rgb(231, 222, 205);
+  display: inline-block;
+  transform: translateX(-50%)
+}
+.legend-up {
+  position: absolute;
+  transform: translateY(-100%) translateX(49%);
+  width: auto;
+  height: auto;
+  margin-top: -5%;
+}
+.legend-middle {
+  position: absolute;
+  transform: translateX(90%) translateY(-80%);
+  width: auto;
+  height: auto;;
+}
+
+.legend-label {
+  font-family: 'Amatic SC', cursive;
+  font-size: 1.1vw;
+  background: rgba(43, 42, 44, .8);
+  color: white;
+  border-radius: 3px;
+  text-align: center;
+  transform: translateX(45%) translateY(50%);
 }

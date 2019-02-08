@@ -1,6 +1,6 @@
 import React, {Component} from "react"
 import '../App.css'
-import {Port, getDevices, accessToken, getCurrentPlayback, Pause, Play, NextTrack, Shuffle, SeekPosition, Lyrics, TransferPlayback, PreviousTrack, Volume, getUser, getGeniusKey} from './Fetch'
+import {Port, getDevices, accessToken, getCurrentPlayback, Pause, Play, NextTrack, Shuffle, SeekPosition, Lyrics, TransferPlayback, PreviousTrack, Volume, getUser, getGeniusKey, PlayTrack} from './Fetch'
 import CookiePopUp from './cookiePopUp'
 import Cookies from 'universal-cookie'
 // import ReactDOM from 'react-dom';
@@ -15,6 +15,7 @@ import LyricsDiv from './lyrics'
 import Modal from './modal'
 import Search from './Search'
 import Spinner from './Spinner'
+import Legend from './legend'
 import stringSimilarity  from 'string-similarity'
 // import scrapeIt from 'scrape-it'
 import cheerio from 'cheerio'
@@ -58,6 +59,8 @@ class Player extends Component {
             speakerSrc: "",
             devices: [],
             activeDevice: "",
+            currentPlaybackId: "",
+            currentPlaybackUri: "",
         }
         this.getLyrics = this.getLyrics.bind(this)
         this.setCurrentTrack = this.setCurrentTrack.bind(this)
@@ -217,6 +220,7 @@ class Player extends Component {
         let genius = getGeniusKey();
         getCurrentPlayback(access) // get info about the current spotify playback
         .then(data => {
+            console.log(data)
             if(data) {
                 let playing = data.data.is_playing;
                 let context = "";
@@ -253,7 +257,10 @@ class Player extends Component {
                             currentPlaybackName: data.data.item.name,
                             currentImage: data.data.item.album.images[0].url,
                             currentArtist: artists,
-                            max: data.data.item.duration_ms
+                            max: data.data.item.duration_ms,
+                            currentPlaybackId: data.data.item.id,
+                            currentPlaybackUri: data.data.item.uri
+                            
                         }, () => {
                             track = data.data.item.name;
                             songArtist = artist;
@@ -333,6 +340,11 @@ class Player extends Component {
                     $("#search").toggleClass("hide")
                 } else if(code === 83 && $("#search").hasClass("hide")) { //s
                     this.searchModal();
+                } else if(code === 82 && $("#search").hasClass("hide")) { //R
+                    PlayTrack(this.state.currentPlaybackUri, token, this.state.musicoId);
+                    this.setState({lyricsPosition: 0}, () => {
+                        this.setState({currentLyrics: this.state.fullLyrics[this.state.lyricsPosition]})
+                    })
                 }      
         }        
     }
@@ -576,6 +588,7 @@ class Player extends Component {
                     :<div className="paused-div fade-in">
                         <span className="paused-indicator">Paused</span>
                         <span className="pause-help">Press "Space" to resume</span>
+                        <span className="pause-replay">Press "R" to replay</span>
                     </div>
                 }
                 <div onMouseLeave={() => {
@@ -613,6 +626,7 @@ class Player extends Component {
                     </div>
                 </div>
                 <div className="device-warning hide"><p>Listening on {this.state.activeDevice}</p></div>
+                <Legend />
             </div>
         )
     }
