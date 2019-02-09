@@ -416,7 +416,7 @@ class Player extends Component {
                 })
             }
         })
-        document.querySelector("body").addEventListener("wheel", this.handleScrollLyrics)
+        document.querySelector("body").addEventListener("wheel", this.handleScrollLyrics, {passive: true})
         //PLAYBACK SDK ------------------------------------------------------------------------------------
         const script = document.createElement("script");
 
