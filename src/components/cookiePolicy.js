@@ -16,7 +16,7 @@ class CookiePolicy extends React.Component {
     render() {
         return(
             <div className="cookies">
-                <img className="cookie-image" src={require("../icons/cookie.png")}></img>
+                <img className="cookie-image" src={require("../icons/cookie.webp")}></img>
                 <div className="cookie-policy">
                                 <h2>Cookies</h2>
                                     <p>To make this site work properly, we sometimes place small data files called cookies on your computer. Most big websites do this too.</p>

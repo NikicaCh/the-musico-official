@@ -19,7 +19,7 @@ const CookiePopUp = props => {
                     onClick={closeModal(props.userId)}>
                 </img>
                 <p>We use cookies to provide you with the best experience.By continuing to use this website, you are agreeing to the use of cookies as set in our <a href="/cookie">Cookie Policy</a>.</p>
-                <img className="cookie-modal-image" src={require("../icons/cookie.png")}></img>
+                <img className="cookie-modal-image" src={require("../icons/cookie.webp")}></img>
             </div>
         )    
 }
