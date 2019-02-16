@@ -1,11 +1,6 @@
 @import url('https://fonts.googleapis.com/css?family=Amatic+SC');
 @import url('https://fonts.googleapis.com/css?family=Anton');
-.home {
-  height: 100vh;
-  width: 100%;
-  background: #090a0a;
-  position: absolute;
-}
+
 .heading {
   margin-top: 50px;
 }
@@ -165,35 +160,6 @@ body:focus {
 .navigation a:hover::after {
   width: 100%;
 }
-/* -------------------------------------------------- NEW */
-
-.playlist-row {
-  max-width: 100%;
-  height: 600px;
-  overflow-y: scroll;
-}
-.form-group {
-  width: 450px;
-}
-.song{
-    background-color: white; 
-}
-.song-image{
-  width: 120px;
-  height: 120px;
-  border-radius: 50%;
-}
-.artist-image{
-  width: 120px;
-  height: 120px;
-}
-.song-name {
-  color: rgb(175, 132, 214);
-  size: 2rem;
-}
-
-
-
 /*------------------------------ the player style ------------------------------------------------------*/
 .player {
   width: 100%;
@@ -439,21 +405,6 @@ body {
   background: rgba(253, 255, 227, 0.95)
 }
 
-.right-sidebar {
-  position: fixed;
-  right: 0;
-  width: 50%;
-  height: 100vh;
-  background-color: rgb(187, 149, 161);
-  transform: translateX(100%);
-  transition: transform ease-in-out 0.5s;
-  z-index: 5;
-}
-
-.sidebar-active {
-  transform: translateX(0);
-}
-
 .hide {
   display: none;
 }
@@ -568,17 +519,7 @@ body {
   font-size: .6em;
 }
 
-.frame {
-  position: absolute;
-  width: 15%;
-  height: 80%;
-  background-color: rgba(103, 115, 126 ,.25);
-  top: 10%;
-  left: 10%;
-  z-index: 6;
-  border-radius: 20px;
-  overflow-y: scroll;
-}
+
 
 .parag {
   position: relative;
@@ -1243,6 +1184,9 @@ button:focus {outline:0;}
   height: 100vh;
   margin: 0;
 } 
+.paused-div *::selection {
+  background: transparent;
+}
 .fade-in {
 	opacity: 1;
 	animation-name: fadeInOpacity;

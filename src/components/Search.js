@@ -85,7 +85,8 @@ class Search extends Component {
         let token = accessToken();
         this.setState({searchValue: value}, () => {
             this.search(token, value);
-        }) 
+        })
+        this.forceUpdate(); 
                
     }
     // handleKeyPress(e) {

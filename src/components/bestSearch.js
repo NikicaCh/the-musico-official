@@ -140,7 +140,6 @@ class BestSearch extends React.Component {
                                             </div>
                                             <img className="next-page-icon" alt="next-page" src={require("../icons/next-page.png")}></img>
                                             <img className="prev-page-icon" alt="prev-page" src={require("../icons/prev-page.png")}></img>
-                                            <div className="row ml-3 mt-4 second-page"><h1>HELLO WORLD</h1></div>
                                     </div> 
                                 : <div></div>
                             }
