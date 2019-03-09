@@ -18,12 +18,12 @@ class BestSearch extends React.Component {
             name: "",
             restCondition: "artists",
             whatToRender: "default", // default and artist are the options
+            arrayOfRestTracks: ""
         }
     }
 
     componentDidMount() {
         document.getElementById("results").addEventListener("wheel", (e) => {
-            console.log(e)
             if(e.deltaY > 0) { //scroll down
             }
         })
@@ -33,20 +33,20 @@ class BestSearch extends React.Component {
         .then((data) => {
             if(data) {
                 data.data.devices.forEach((device) => {
-                    if(device.name === `MUSICO`) {
+                    if(device.name === `MUSICO ${this.props.uniq}`) {
                         let deviceId = device.id;
                         this.setState({deviceId}, () => {
                             $("body").on('click', '.play-track', (e) => {
                                 let token = accessToken();
                                 // let userId = this.props.userId;
                                 let trackId = e.target.getAttribute('id');
-                                PlayTrack(trackId, token, deviceId);
+                                PlayTrack(trackId, token, this.state.deviceId);
                                 if(this.state.type === "artist"){
                                     let cookies = new Cookies();
-                                    if(cookies.get(`mostRecent1${userId}`) !== this.state.searched) {
+                                    if(cookies.get(`mostRecent1${userId}`) !== this.state.searched && cookies.get(`mostRecent2${userId}`) !== this.state.searched ) {
                                         cookies.set(`mostRecent2${userId}`, cookies.get(`mostRecent1${userId}`))
                                         cookies.set(`mostRecent1${userId}`, this.state.searched)
-                                    } 
+                                    }
                                 } else {
                                     let cookies = new Cookies();
                                     cookies.set(`lastTrack${userId}`, this.state.searched)
@@ -60,6 +60,7 @@ class BestSearch extends React.Component {
         
     }
     componentWillReceiveProps(nextProps) {
+        this.setState(this.state)
         if(this.props.restTracks.length) {
             let tracks = this.props.restTracks;
             let sortedTracks =  tracks.sort(function(a, b){
@@ -70,11 +71,20 @@ class BestSearch extends React.Component {
                 if(keyA > keyB) return -1;
                 return 0;
             });
-            console.log(sortedTracks)
         }
+        $("body").on("click", ".blank-search", () => {
+            if(!$("#results").hasClass("hide")) {
+                $("#results").attr("class", "results hide")
+                $(".search-input").val("")
+            }
+        })
+        $(".see-more").on("click", () => {
+            //to be done
+        })
         let token = accessToken();
         this.setState({searched: nextProps.search, type: nextProps.type, name: nextProps.max})
         if(nextProps.type == "artist") {
+            this.setState(this.state)
             Featuring(this.props.artistId, token )
             .then((data) => {
                 if(data) {
@@ -83,7 +93,7 @@ class BestSearch extends React.Component {
                         if(track.name.length > 20) {
                             name = track.name.substring(0, 20) +"...";
                         }
-                        return  <div className="col-md-3 col-sm-7 mt-2 mb-2">
+                        return  <div className="col-md-3 col-sm-7 mt-2 mb-5">
                                     <div className="row w-100 ml-3 d-flex justify-content-center">
                                         <img
                                             src={track.album.images[0].url}
@@ -94,11 +104,33 @@ class BestSearch extends React.Component {
                                     <div className="row w-100 ml-3 d-flex justify-content-center">
                                         <span title={track.name} className="featuring-title">{name}</span>
                                     </div>
-                    </div>
+                                    
+                                </div>
                     })
                     this.setState({featuring: array})
                 }
             })
+        }
+
+        if(this.props.restTracks && this.props.restTracks.length) {
+            let arrayOfRestTracks;
+            let restTracks = this.props.restTracks.map((track) => {
+                console.log("GHAHGAGGG", track)
+                if(track.type == "track") {
+                    return track;
+                }
+            })
+            arrayOfRestTracks = restTracks.slice(1, 6).map((track) => {
+                return  <div className="small-best-holder ml-3 d-flex justify-content-center">
+                            <img
+                                src={track.album.images[0].url}
+                                className="play-track small-best-search-img ml-4"
+                                id={track.uri}>
+                            </img>
+                            <span className="small-best-search-title">{track.name}</span>
+                        </div>
+            })
+            this.setState({arrayOfRestTracks})
         }
       }
     
@@ -118,16 +150,21 @@ class BestSearch extends React.Component {
             {
                 render
                 ? <div className="container w-100 search-top">
-                            <div className="row other-results-title"><h2>Top result</h2></div>
+                            <div className="row other-results-title">
+                            <h2>Top result</h2> 
+                            </div>
+                            <img
+                                className="blank-search"
+                                src={require("../icons/pill-close.png")}>
+                            </img>
                             <div
-                                className="row w-100 dragable"> {/*this is the div where I should append the drag 'n' drop event */}
+                                className="row w-100 dragable mb-5"> {/*this is the div where I should append the drag 'n' drop event */}
                                 <div className="row w-100 drag-wrapper">
                                     <div className="drag-menu1"></div>
                                     <div className="drag-menu2"></div>
                                 </div>
                                 <div className="col-md-3 col-xs-6 mt-5 relative"> 
                                     <img id={this.props.trackId} src={this.props.image} className={`best-search-img ${this.props.type}-img`}></img>
-                                    {/* <img className="play-hover" src={require("../icons/play-hover.png")}></img> */}
                                     <figcaption><span className="best-search-title">{this.props.name}</span></figcaption>    
                                 </div>
                                 <div className="col-md-9 mt-5"> 
@@ -143,11 +180,19 @@ class BestSearch extends React.Component {
                                     </div> 
                                 : <div></div>
                             }
+                            {
+                                (this.props.type == "play-track track")
+                                ? <div className="other-track-imgs row ml-5">
+                                    {this.state.arrayOfRestTracks}
+                                    <span className="see-more">see more</span>
+                                  </div> /*for other tracks*/
+                                : <div></div>
+                            }
                                 </div>
                             </div> {/*Where the dragable div ends */}
                             <div></div> {/*This is the second dragable div */}
                             <div className="other-results-container">
-                                <div className="row">
+                                <div className="row mt-5">
                                     <span
                                         className="condition"
                                         onClick={() => {

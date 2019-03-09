@@ -216,6 +216,17 @@ export const FeaturingPlaylists = (token) => {
     return promise;
 }
 
+export const UsersTop = (token, type, time_range, limit) => {
+    let promise = Axios(`https://api.spotify.com/v1/me/top/${type}?time_range=${time_range}&limit=${limit}&offset=21`, {
+        headers: {
+            "Authorization": `Bearer ${token}`,
+            "Content-Type": "application/json",
+            "Accept": "application/json"
+        }
+    })
+    return promise;
+}
+
 export const PlayTrack = (trackUri, token, deviceId) => {
     $.ajax({
         url: `https://api.spotify.com/v1/me/player/play?device_id=${deviceId}`,
@@ -226,6 +237,15 @@ export const PlayTrack = (trackUri, token, deviceId) => {
           console.log(data)
         }
        });  
+}
+
+export const profile = (token) => {
+    let promise = Axios("https://api.spotify.com/v1/me", {
+        headers: {
+            "Authorization": `Bearer ${token}`
+        }
+    })
+    return promise;
 }
 // let moving = document.getElementById("background-image");
         //     const windowWidth = window.innerWidth / 2 ;

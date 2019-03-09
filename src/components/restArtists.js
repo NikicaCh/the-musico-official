@@ -20,10 +20,14 @@ class RestArtists extends React.Component {
                 source="http://abs2018.lbsafricaclub.org/wp-content/uploads/2016/03/profile-placeholder.png"
             }
             return(
-                <div className="rest-artist-div col-md-4 col-xs-6">
+                <div
+                    className="artist rest-artist-div col-md-4 col-xs-6"
+                    id={artist.id}>
                     <img src={source}></img>
                     <div className="row">
-                        <h1>{artist.name}</h1>
+                        <h1 className="artist-value"
+                            id={artist.name}
+                            >{artist.name}</h1>
                     </div> 
                 </div>
             )

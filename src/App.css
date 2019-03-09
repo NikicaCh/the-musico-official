@@ -1,5 +1,6 @@
 @import url('https://fonts.googleapis.com/css?family=Amatic+SC');
 @import url('https://fonts.googleapis.com/css?family=Anton');
+@import url('https://fonts.googleapis.com/css?family=Indie+Flower');
 
 .heading {
   margin-top: 50px;
@@ -17,6 +18,7 @@
 
 body:focus {
   outline:none;
+  background: transparent;
 }
 .musico-logo {
   position: absolute;
@@ -25,6 +27,15 @@ body:focus {
   top: 4%;
   left: 4.5%;
   cursor: pointer;
+}
+.legend-div {
+  position: absolute;
+  width: auto;
+  height: auto;
+  z-index: 5;
+  top: 90%;
+  left: 12%;
+  color: white;
 }
 .title-layer {
   width: 30%;
@@ -116,6 +127,19 @@ body:focus {
   transform: scale(1.2);
   transition: all .2s ease-in-out;
 }
+.blank-search {
+  width: .6%;
+  top: 45%;
+  left: 80%;
+  margin: 1%;
+  cursor: pointer;
+  position: fixed;
+}
+.blank-search:hover {
+  transform: scale(1.2);
+  transition: all .2s ease-in-out;
+}
+
 .navigation {
   position: absolute;
   background-color: transparent;
@@ -691,24 +715,33 @@ button:focus {outline:0;}
   position: relative;
   top: 55%;
   width: 35%;
-  margin: 0 auto;
+  margin: 1% auto;
   color: white;
 }
 
-@media only screen and (max-width: 1200px) {
+@media only screen and (max-width: 1000px) {
   .pills-row{
     top: 60%;
   }
 }
-@media only screen and (max-width: 1200px) {
+@media only screen and (max-width: 1420px) {
   .pills-row {
     display: none;
   }
 }
-@media only screen and (max-width: 1200px) {
+@media only screen and (max-height: 700px) {
+  .pills-row {
+    display: none;
+  }
+}
+@media only screen and (max-height: 700px) {
   .search-title {
-    position: absolute;
-    top: -20%;
+    transform: translateY(-50%);
+  }
+}
+@media only screen and (max-width: 1500px) {
+  .search-title {
+    transform: translateY(-10%);
   }
 }
 .pills-searched {
@@ -729,6 +762,7 @@ button:focus {outline:0;}
 .pill:hover {
   transform: scale(1.1, 1.1);
   transition:  all .3s ease-in-out;
+  backface-visibility: hidden;
 }
 .pill::selection {
   background: transparent;
@@ -767,6 +801,50 @@ button:focus {outline:0;}
 
 .track-img {
   border-radius: 50%;
+}
+
+.small-best-holder {
+  align-content: center;
+  
+}
+.other-track-imgs {
+  width: 100%;
+  height: 100%;
+}
+.small-best-search-img {
+  border-radius: 50%;
+  height: 5vw;
+  width: 5vw;
+  margin: auto;
+}
+.small-best-search-img:hover {
+  transform: scale(1.4);
+  backface-visibility: hidden;
+  transition: all .3s ease-in-out;
+}
+.small-best-search-title {
+  font-family: 'Amatic SC', cursive;
+  color: rgb(206, 204, 204);
+  font-size: .9vw;
+  position: absolute;
+  top: 80%;
+  margin: 0% auto auto 1.5%;
+  word-wrap: break-word;
+  word-break: break-all;
+  max-width: 15%;
+  text-align: center;
+}
+
+.see-more {
+  color: white;
+  font-family: 'Amatic SC', cursive;
+  text-decoration: underline;
+  position: absolute;
+  top: 95%;
+  right: 0;
+}
+.see-more::selection {
+  background: transparent;
 }
 
 .best-search-title {
@@ -846,7 +924,13 @@ button:focus {outline:0;}
   z-index: -1111
 }
 
-
+.default-search {
+  position: relative;
+  width: 60%;
+  height: 50%;
+  margin: auto;
+  border: solid 1px red;
+}
 
 .results {
   position: absolute;
@@ -876,8 +960,23 @@ button:focus {outline:0;}
 .featuring-img::selection{
   background: transparent;
 }
+.featuring-img:hover {
+  transform: scale(1.4);
+  backface-visibility: hidden;
+  transition: all .3s ease-in-out;
+}
 
-
+.related-artists {
+  background: #211076;
+  position: absolute;
+  width: 100%;
+  height: 5%;
+  top: 15%;
+}
+.fragable {
+  position: absolute;
+  margin-bottom: 10px;
+}
 .featuring-title {
   font-family: 'Amatic SC', cursive;
   color: rgb(206, 204, 204);
@@ -974,10 +1073,6 @@ button:focus {outline:0;}
   color: rgb(212, 212, 212);
   text-transform: uppercase;
   font-size: 1.1vw;
-}
-
-.dragable {
-  cursor: pointer;
 }
 
 .drag-wrapper {
@@ -1668,15 +1763,7 @@ input[type=range]:focus::-ms-fill-upper {
   color: #3aa065;
 }
 
-.legend-div {
-  position: absolute;
-  width: auto;
-  height: auto;
-  z-index: 5;
-  top: 90%;
-  left: 65%;
-  color: white;
-}
+
 .legend-button {
   position: relative;
   text-align: center;
@@ -1717,4 +1804,44 @@ input[type=range]:focus::-ms-fill-upper {
   border-radius: 3px;
   text-align: center;
   transform: translateX(45%) translateY(50%);
+}
+
+.logout-area {
+  position: absolute;
+  height: 12vh;
+  width: 10vh;
+  top: 85%;
+  right: 0%;
+  z-index: 100;
+}
+
+.profile-circle {
+  position: absolute;
+  background: transparent;
+  top: 43%;
+  right: 35%;
+  height: 3.5vh;
+  width: 3.5vh;
+  border-radius: 50%;
+  border: solid 1px rgb(140, 141, 138);
+  text-align: center;
+  z-index: 1000;
+  align-content: center;
+}
+.profile-circle:hover {
+  cursor: pointer;
+}
+.initials {
+  font-size: 1vw;
+  font-family: 'Indie Flower', cursive;
+  color: rgb(140, 141, 138);
+  font-weight: 100;
+}
+.logout-icon img {
+  position: absolute;
+  height: 3.5vh;
+  width: 3.5vh;
+  top: 43%;
+  right: 35%;
+  cursor: pointer;
 }

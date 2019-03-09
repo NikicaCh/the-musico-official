@@ -3,10 +3,11 @@ import queryString from 'query-string'
 import $ from "jquery"
 
 import Result from './searchResults/Result'
-import {accessToken, SearchFor, FeaturingPlaylists} from './Fetch'
+import {accessToken, SearchFor, FeaturingPlaylists, UsersTop} from './Fetch'
 import BestSearch from './bestSearch'
 import Cookies from 'universal-cookie'
 import FeaPlaylists from './featuringPlaylists'
+import DefaultSearch from './defaultSearch';
 
 
 class Search extends Component {
@@ -26,14 +27,15 @@ class Search extends Component {
           playlistScrolling: false,
           restTracks: [],
           restArtists: []
-
         }
         this.handleChange = this.handleChange.bind(this);
         this.search = this.search.bind(this);
+        this.openArtist = this.openArtist.bind(this);
         // this.handleKeyPress = this.handleKeyPress.bind(this);
     };
     search(token, value) {
-        SearchFor(token, value, "track", 50)
+        this.setState(this.state)
+        SearchFor(token, value + " ", "track", 50)
             .then((data) => {
                 if(data && data.data && data.data.tracks && data.data.tracks.items){
                     let array = data.data.tracks.items
@@ -46,34 +48,58 @@ class Search extends Component {
                     this.setState({noData1: true})
                 }
             })
-            SearchFor(token, value, "artist", 50)
-            .then((data) => {
-                if(data && data.data && data.data.artists && data.data.artists.items) {
-                    let array = data.data.artists.items;
-                    if(array.length) {
-                        let maxPop = Math.max.apply(Math, array.map(function(artist) { return artist.popularity; }))
-                        let mostPopularArtist = array.find((artist) => { return artist.popularity === maxPop}) // the most popular artist object
-                        this.setState({artist: mostPopularArtist, artistId: mostPopularArtist.id, restArtists: array}, () => { // after both track and artist search finishes
-                            let trackPop = this.state.track.popularity;
-                            let artistPop = this.state.artist.popularity;
-                            
-                            if(artistPop + 5 >= trackPop && this.state.artist.images.length) {
-                                this.setState({max: this.state.artist.name, maxImg: this.state.artist.images[0].url, type: "artist"})
-                            } else if(trackPop > artistPop && this.state.track.album.images && this.state.track.album.images.length) {
-                                this.setState({max: this.state.track.name, maxImg: this.state.track.album.images[0].url, type: "track"})
-                            }
-                        })
-                    }
-                } else {
-                    this.setState({noData2: true}, () => {
-                        if(this.state.noData1 == true) {
-                            this.setState({track: "", artist: "", max: "", maxImg: "", type: ""});
+        SearchFor(token, value + " ", "artist", 50)
+        .then((data) => {
+            if(data && data.data && data.data.artists && data.data.artists.items) {
+                let array = data.data.artists.items;
+                if(array.length) {
+                    let maxPop = Math.max.apply(Math, array.map(function(artist) { return artist.popularity; }))
+                    let mostPopularArtist = array.find((artist) => { return artist.popularity === maxPop}) // the most popular artist object
+                    this.setState({artist: mostPopularArtist, artistId: mostPopularArtist.id, restArtists: array}, () => { // after both track and artist search finishes
+                        let trackPop = this.state.track.popularity;
+                        let artistPop = this.state.artist.popularity;
+                        
+                        if(artistPop + 5 >= trackPop && this.state.artist.images.length) {
+                            this.setState({max: this.state.artist.name, maxImg: this.state.artist.images[0].url, type: "artist"})
+                        } else if(trackPop > artistPop && this.state.track.album.images && this.state.track.album.images.length) {
+                            this.setState({max: this.state.track.name, maxImg: this.state.track.album.images[0].url, type: "track"})
                         }
                     })
                 }
-            })    
+            } else {
+                this.setState({noData2: true}, () => {
+                    if(this.state.noData1 == true) {
+                        this.setState({track: "", artist: "", max: "", maxImg: "", type: ""});
+                    }
+                })
+            }
+        })    
+    }
+    openArtist(token, value, id) {
+        console.log("HAHA",id)
+        SearchFor(token, value, "artist", 50) 
+        .then((data) => {
+            if(data && data.data && data.data.artists && data.data.artists.items) {
+                data.data.artists.items.map((item) => {
+                    console.log("HIHI", item.id, id)
+                    if(item.id == id && item.images[0].url) {
+                        this.setState({max: item.name, maxImg: item.images[0].url, type: "artist", artist: item, artistId: item.id})
+                        this.setState({max: item.name, maxImg: item.images[0].url, type: "artist", artist: item, artistId: item.id})
+                    }
+                })
+                console.log("HOHO", data)
+                $('html, .search').animate({
+                    scrollTop: 0
+                }, 800);            }
+        })
     }
     handleChange(event) {
+        $(".artist").on("click", (e) => {
+            let target = e.target.parentElement;
+            let h1 = target.querySelector(".artist-value");
+            let token = accessToken();
+            this.openArtist(token, h1.id, target.id)
+        })
         let value = $(".search-input").val();
         if(value == "") {
             this.setState({track: "", artist: "", max: "", maxImg: "", type: "", noData1: false, noData2: false})
@@ -81,6 +107,9 @@ class Search extends Component {
         $(".search-inner").addClass("search-searched")
         $(".search-title").addClass("title-searched")
         $(".pills-row").addClass("pills-searched")
+        if($("#results").hasClass("hide")) {
+            $("#results").removeClass("hide")
+        }
         $(".results").attr("class", "results")
         let token = accessToken();
         this.setState({searchValue: value}, () => {
@@ -89,21 +118,24 @@ class Search extends Component {
         this.forceUpdate(); 
                
     }
-    // handleKeyPress(e) {
-    //     let code = e.keyCode;
-    //     let token = accessToken();
-    //     if(code == 27 && !$("#search").hasClass("hide")) {
-    //         $("#search").toggleClass("hide")
-    //     }
-    // }
     componentDidMount() {
-        // document.onkeydown = this.handleKeyPress; //handle keypress
-        $(".search-close").on("click", () => $("#search").toggleClass("hide"))
-        let value = $(".search-input").val();
         let token = accessToken();
+        UsersTop(token,  "tracks", "short_term", 10)
+        .then((data) => {
+            console.log("USERS TOP",data.data.items)
+        })
+        $(".search-close").on("click", () => {
+            if(!$("#search").hasClass("hide")) {
+                $("#search").toggleClass("hide")
+            }
+        })
+        let value = $(".search-input").val();
         $(".search-inner").addClass("search-searched")
         $(".search-title").addClass("title-searched")
         $(".pills-row").addClass("pills-searched")
+        if($("#results").hasClass("hide")) {
+            $("#results").removeClass("hide")
+        }
         $(".results").attr("class", "results")
         if(!$("#search").hasClass("hide")) {
             this.setState({searchValue: value}, () => {
@@ -115,16 +147,15 @@ class Search extends Component {
         })
         $(".pill").on("click", (e) => {
             if(e.target.id === "pill1" || e.target.id === "pill2" || e.target.id === "pill3") { //if you click pill 1, 2 or 3
-                this.setState({searchValue: value}, () => {
-                    let value = e.target.innerText;
-                    let token = accessToken();
-                    $(".search-inner").addClass("search-searched")
-                    $(".search-title").addClass("title-searched")
-                    $(".pills-row").addClass("pills-searched")
-                    $(".results").attr("class", "results")
-                    this.search(token, value);
-                    this.setState(this.state); //this is because sometimes it happens that the component doesn't rerender after a pill is clicked
-                }) 
+                let value = e.target.innerText;
+                let token = accessToken();
+                $(".search-inner").addClass("search-searched")
+                $(".search-title").addClass("title-searched")
+                $(".pills-row").addClass("pills-searched")
+                $(".results").attr("class", "results")
+                this.search(token, value);
+                this.search(token, value);
+                this.setState(this.state)
             } else if(e.target.id === "pill5") { //if you click pill 5
                 FeaturingPlaylists(token)
                 .then(data => console.log(data.data.playlists.items))
@@ -185,25 +216,27 @@ class Search extends Component {
                 </div>
                 <div className="row">
                     { value
-                    ? <span className="search-indicator">Press Enter to search for "{value}"</span>
+                    ? <span className="search-indicator">Showing results for "{value}"</span>
                     : <span></span>
                     }
                 </div>
                 <div>
                 <div id="results" className="results hide">
                     <BestSearch
-                            type={type}
-                            image={this.state.maxImg}
-                            name={this.state.max}
-                            artistId={this.state.artistId}
-                            deviceId={this.props.deviceId}
-                            trackId={this.state.trackId} 
-                            userId={this.props.userId}
-                            search={this.state.searchValue}
-                            restTracks={this.state.restTracks}
-                            restArtists={this.state.restArtists}/>
+                        type={type}
+                        image={this.state.maxImg}
+                        name={this.state.max}
+                        artistId={this.state.artistId}
+                        deviceId={this.props.deviceId}
+                        uniq={this.props.uniq}
+                        trackId={this.state.trackId} 
+                        userId={this.props.userId}
+                        search={this.state.searchValue}
+                        restTracks={this.state.restTracks}
+                        restArtists={this.state.restArtists}/>
+                    <DefaultSearch />
                     {/* <FeaPlaylists /> */}
-                    <div></div>
+                    <div className="artist"></div> // placeholder for event listener 
                 </div>                
                 </div>
             </div>

@@ -38,6 +38,17 @@ class Legend extends React.Component {
     }
 
     render() {
+        // let legendDiv = {
+        //     .legend-div {
+        //         position: absolute;
+        //         width: auto;
+        //         height: auto;
+        //         z-index: 5;
+        //         top: 90%;
+        //         left: 65%;
+        //         color: white;
+        //       }
+        // }
         return (
             <div className="legend-div">
                 <div className="container row legend-up">

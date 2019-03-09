@@ -16,6 +16,7 @@ import Modal from './modal'
 import Search from './Search'
 import Spinner from './Spinner'
 import Legend from './legend'
+import Profile from './profile'
 import stringSimilarity  from 'string-similarity'
 // import scrapeIt from 'scrape-it'
 import cheerio from 'cheerio'
@@ -23,6 +24,7 @@ import Axios from "../../node_modules/axios"
 // import { stringify } from "querystring"
 import $ from 'jquery'
 import {MDCSlider} from '@material/slider'
+import uniqid from 'uniqid'
 const linkBackendInDevelopment = "http://localhost:8888/";
 const linkBackendInProduction = "https://themusico-redirect.herokuapp.com/";
 
@@ -61,6 +63,8 @@ class Player extends Component {
             activeDevice: "",
             currentPlaybackId: "",
             currentPlaybackUri: "",
+            thisPlayersId: "",
+            uniq: "",
         }
         this.getLyrics = this.getLyrics.bind(this)
         this.setCurrentTrack = this.setCurrentTrack.bind(this)
@@ -220,7 +224,6 @@ class Player extends Component {
         let genius = getGeniusKey();
         getCurrentPlayback(access) // get info about the current spotify playback
         .then(data => {
-            console.log(data)
             if(data) {
                 let playing = data.data.is_playing;
                 let context = "";
@@ -307,7 +310,7 @@ class Player extends Component {
         }
     }
     handleKeyPress(e) {
-        if($("#search").length) { //if the search modal is not active
+        if($("#search").hasClass("hide")) { //if the search modal is not active
             let event = e;
             let code = event.keyCode;
             let token = accessToken();
@@ -336,9 +339,8 @@ class Player extends Component {
                             Volume(token, this.state.volume)
                         })
                     }
-                } else if(code === 27 && !$("#search").hasClass("hide")) { //esc
-                    $("#search").toggleClass("hide")
-                } else if(code === 83 && $("#search").hasClass("hide")) { //s
+                }
+                else if(code === 83 && $("#search").hasClass("hide")) { //s
                     this.searchModal();
                 } else if(code === 82 && $("#search").hasClass("hide")) { //R
                     PlayTrack(this.state.currentPlaybackUri, token, this.state.musicoId);
@@ -346,6 +348,10 @@ class Player extends Component {
                         this.setState({currentLyrics: this.state.fullLyrics[this.state.lyricsPosition]})
                     })
                 }      
+        } else {
+            if(e.keyCode == 27) { //esc
+                $("#search").toggleClass("hide")
+            }
         }        
     }
     searchModal() {
@@ -381,28 +387,7 @@ class Player extends Component {
             this.setState({volume: e.target.value}, () => {
                 this.handleVolumeChange(this.state.volume)
             })
-        })
-        
-        // document.getElementById('seekbar-div').addEventListener("click", function(event){
-        //     getCurrentPlayback(access) // get info about the current spotify playback
-        //     .then(data => {
-        //         if(data) {
-        //             this.setState({max: data.data.item.duration_ms}, () => {
-        //                 let max = this.state.max;
-        //                 let progress = (event.clientX-this.offsetLeft) / this.offsetWidth * 100;
-        //                 document.getElementById("seekbar").style.width = `${progress}%`
-        //                 let prog = Math.ceil(progress)
-        //                 console.log("MAX", max)
-        //                 let seek = (max/100)*prog
-        //                 console.log(seek) 
-        //                 let position = (max * progress/100);
-        //                 console.log(position)
-        //                 SeekPosition(access, seek)
-        //             })
-        //         }
-        //     });
-        // })
-            
+        })            
         getUser(access)
         .then((data) => {
             if(data) {
@@ -426,8 +411,10 @@ class Player extends Component {
         document.body.appendChild(script);
         window.onSpotifyWebPlaybackSDKReady = () => {
             const token = access;
+            let uniq = uniqid();
+            this.setState({uniq})
             const player = new window.Spotify.Player({
-              name: `MUSICO`,
+              name: `MUSICO ${uniq}`,
               getOAuthToken: cb => { cb(token); }
             });
 
@@ -449,7 +436,7 @@ class Player extends Component {
             .then((data) => {
                 if(data) {
                     data.data.devices.forEach((device) => {
-                        if(device.name === `MUSICO`) {
+                        if(device.name === `MUSICO ${this.state.uniq}`) {
                             musicoId = device.id;
                             this.setState({musicoId});
                         }
@@ -521,7 +508,8 @@ class Player extends Component {
                 <Search
                     deviceId={this.state.musicoId}
                     playing={this.state.playing}
-                    userId={this.state.userId}/>
+                    userId={this.state.userId}
+                    uniq={this.state.uniq}/>
                 <DisplayText
                     name={this.state.display}
                     class={'songName'} 
@@ -607,13 +595,21 @@ class Player extends Component {
                                         this.setState({activeDevice: device.name})
                                         $(".device-warning").removeClass("hide")
                                     }
+                                    let deviceName;
+                                    if(device.name == `MUSICO ${this.state.uniq}`) {
+                                        deviceName = `MUSICO*`
+                                    } else if(device.name.startsWith("MUSICO")) {
+                                        deviceName = "MUSICO"
+                                    }  else {
+                                        deviceName = device.name
+                                    }
                                     return <h3
                                         className={`device_name ${active}`} 
                                         onClick={() => {
                                         let access = accessToken();
                                         TransferPlayback(access, device.id)
                                         $(".devices_modal").addClass("hide")
-                                    }}>{device.name}</h3>
+                                    }}>{deviceName}</h3>
                                 })
                                 this.setState({devices: names})
                                 console.log("DEVICES",response.data.devices)
@@ -627,6 +623,7 @@ class Player extends Component {
                 </div>
                 <div className="device-warning hide"><p>Listening on {this.state.activeDevice}</p></div>
                 <Legend />
+                <Profile />
             </div>
         )
     }
