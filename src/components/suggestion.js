@@ -11,7 +11,10 @@ class Suggestion extends Component {
 
     render() {
         return(
-            <div className="suggestion"></div>
+            <div className="suggestion visible">
+                <div className="suggestion-timer"></div>
+                <div className="suggestion-img"></div>
+            </div>
         )
     }
 }

@@ -140,7 +140,9 @@ export const Volume = (token, percent) => {
 
 export const Lyrics = (trackName, artist, token) => {
     let track = trackName.replace(/ *\([^)]*\) */g , "");
-    track = track.replace("- Remastered [0-9]", "");
+    if(track.indexOf("Remastered") !== -1) {
+        track = track.substring(0, track.indexOf("remastered"));
+    }
     let promise = Axios(`https://api.genius.com/search?q=${artist}-${track}`, {
         method: 'GET',
         params: {
@@ -234,7 +236,6 @@ export const PlayTrack = (trackUri, token, deviceId) => {
         data: `{"uris": ["${trackUri}"]}`,
         beforeSend: function(xhr){xhr.setRequestHeader('Authorization', `Bearer ${token}` );},
         success: function(data) { 
-          console.log(data)
         }
        });  
 }

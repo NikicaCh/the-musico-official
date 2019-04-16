@@ -7,7 +7,6 @@ import {accessToken, SearchFor, FeaturingPlaylists, UsersTop} from './Fetch'
 import BestSearch from './bestSearch'
 import Cookies from 'universal-cookie'
 import FeaPlaylists from './featuringPlaylists'
-import DefaultSearch from './defaultSearch';
 
 
 class Search extends Component {
@@ -33,9 +32,9 @@ class Search extends Component {
         this.openArtist = this.openArtist.bind(this);
         // this.handleKeyPress = this.handleKeyPress.bind(this);
     };
-    search(token, value) {
+    search(token, value, id) {
         this.setState(this.state)
-        SearchFor(token, value + " ", "track", 50)
+            SearchFor(token, value, "track", 50)
             .then((data) => {
                 if(data && data.data && data.data.tracks && data.data.tracks.items){
                     let array = data.data.tracks.items
@@ -48,7 +47,7 @@ class Search extends Component {
                     this.setState({noData1: true})
                 }
             })
-        SearchFor(token, value + " ", "artist", 50)
+        SearchFor(token, value, "artist", 50)
         .then((data) => {
             if(data && data.data && data.data.artists && data.data.artists.items) {
                 let array = data.data.artists.items;
@@ -59,8 +58,8 @@ class Search extends Component {
                         let trackPop = this.state.track.popularity;
                         let artistPop = this.state.artist.popularity;
                         
-                        if(artistPop + 5 >= trackPop && this.state.artist.images.length) {
-                            this.setState({max: this.state.artist.name, maxImg: this.state.artist.images[0].url, type: "artist"})
+                        if(artistPop + 10 >= trackPop && this.state.artist.images.length) {
+                            this.setState({max: this.state.artist.name, maxImg: this.state.artist.images[0].url, type: "artist" })
                         } else if(trackPop > artistPop && this.state.track.album.images && this.state.track.album.images.length) {
                             this.setState({max: this.state.track.name, maxImg: this.state.track.album.images[0].url, type: "track"})
                         }
@@ -73,21 +72,18 @@ class Search extends Component {
                     }
                 })
             }
-        })    
+            })        
     }
     openArtist(token, value, id) {
-        console.log("HAHA",id)
         SearchFor(token, value, "artist", 50) 
         .then((data) => {
             if(data && data.data && data.data.artists && data.data.artists.items) {
                 data.data.artists.items.map((item) => {
-                    console.log("HIHI", item.id, id)
                     if(item.id == id && item.images[0].url) {
-                        this.setState({max: item.name, maxImg: item.images[0].url, type: "artist", artist: item, artistId: item.id})
-                        this.setState({max: item.name, maxImg: item.images[0].url, type: "artist", artist: item, artistId: item.id})
+                        this.setState({maxImg: item.images[0].url, type: "artist", artist: item, artistId: item.id})
+                        this.setState({maxImg: item.images[0].url, type: "artist", artist: item, artistId: item.id})
                     }
                 })
-                console.log("HOHO", data)
                 $('html, .search').animate({
                     scrollTop: 0
                 }, 800);            }
@@ -122,7 +118,6 @@ class Search extends Component {
         let token = accessToken();
         UsersTop(token,  "tracks", "short_term", 10)
         .then((data) => {
-            console.log("USERS TOP",data.data.items)
         })
         $(".search-close").on("click", () => {
             if(!$("#search").hasClass("hide")) {
@@ -223,6 +218,9 @@ class Search extends Component {
                 <div>
                 <div id="results" className="results hide">
                     <BestSearch
+                        state={this.props.state}
+                        position={this.props.position}
+                        currentPlaybackId={this.props.currentPlaybackId}
                         type={type}
                         image={this.state.maxImg}
                         name={this.state.max}
@@ -233,8 +231,11 @@ class Search extends Component {
                         userId={this.props.userId}
                         search={this.state.searchValue}
                         restTracks={this.state.restTracks}
-                        restArtists={this.state.restArtists}/>
-                    <DefaultSearch />
+                        restArtists={this.state.restArtists}
+                        track={this.state.track}
+                        artist={this.state.artist}
+                        playing={this.props.playing}
+                        replay={this.props.replay}/>
                     {/* <FeaPlaylists /> */}
                     <div className="artist"></div> // placeholder for event listener 
                 </div>                

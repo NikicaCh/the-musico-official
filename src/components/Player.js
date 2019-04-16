@@ -65,6 +65,9 @@ class Player extends Component {
             currentPlaybackUri: "",
             thisPlayersId: "",
             uniq: "",
+            state: "",
+            replay: "",
+            replayTimeOut: 0
         }
         this.getLyrics = this.getLyrics.bind(this)
         this.setCurrentTrack = this.setCurrentTrack.bind(this)
@@ -314,6 +317,7 @@ class Player extends Component {
             let event = e;
             let code = event.keyCode;
             let token = accessToken();
+            let {currentPlaybackUri} = this.state
                 if(code === 37 && $("#search").hasClass("hide") && this.state.context !== "") { // left arrow
                     PreviousTrack(token);
                 }
@@ -343,19 +347,25 @@ class Player extends Component {
                 else if(code === 83 && $("#search").hasClass("hide")) { //s
                     this.searchModal();
                 } else if(code === 82 && $("#search").hasClass("hide")) { //R
-                    PlayTrack(this.state.currentPlaybackUri, token, this.state.musicoId);
-                    this.setState({lyricsPosition: 0}, () => {
+                    if(this.state.replayTimeOut == 0) {
+                        PlayTrack(currentPlaybackUri, token, this.state.musicoId);
+                        let uniqId = uniqid();
+                        this.setState({lyricsPosition: 0, replay: uniqId}, () => {
                         this.setState({currentLyrics: this.state.fullLyrics[this.state.lyricsPosition]})
-                    })
+                        })
+                    }
                 }      
         } else {
             if(e.keyCode == 27) { //esc
                 $("#search").toggleClass("hide")
+                $(".suggestion").attr("class", "suggestion visible")
             }
         }        
     }
     searchModal() {
         $("#search").toggleClass("hide")
+        $(".suggestion").attr("class", "suggestion hide")
+
     }
 
     seek(event) {
@@ -428,7 +438,6 @@ class Player extends Component {
             
         // Ready
         player.addListener('ready', ({ device_id }) => {
-            loading = false;
             this.setState({loading: false})
             this.setCurrentTrack(access); // SET CURRENT TRACK --------------------------------------------------
             this.setCurrentTrack(access); // I must call this func twice, because when I try to play the same song again the API returns is_playing:false
@@ -450,11 +459,18 @@ class Player extends Component {
 
         // Playback status updates
         player.addListener('player_state_changed', state => { 
+            console.log("state POSITION", state)
+            this.setState({replayTimeOut: 1}, () => {
+                setTimeout(() => {
+                    this.setState({replayTimeOut: 0})
+                }, 5000)
+            })
             // if(state.paused) {
             //     this.setState({playing: false})
             // } else {
             //     this.setState({playing: true})
             // }
+            this.setState({state})
             let token = accessToken();
             getDevices(token)
             .then((response) => {
@@ -469,7 +485,6 @@ class Player extends Component {
                     })
                 }
             })
-            console.log("state change", state)
             this.setCurrentTrack(access); // SET CURRENT TRACK -------------------------------------------------
             this.setCurrentTrack(access); // I must call this func twice, because when I try to play the same song again the API returns is_playing:false
             let url;
@@ -506,10 +521,14 @@ class Player extends Component {
                 ? <Spinner /> 
                 :<div ref={"player"} id="player" className="player">
                 <Search
+                    state={this.state.state}
+                    position={this.state.state.position}
+                    currentPlaybackId={this.state.currentPlaybackId}
                     deviceId={this.state.musicoId}
                     playing={this.state.playing}
                     userId={this.state.userId}
-                    uniq={this.state.uniq}/>
+                    uniq={this.state.uniq}
+                    replay={this.state.replay}/>
                 <DisplayText
                     name={this.state.display}
                     class={'songName'} 

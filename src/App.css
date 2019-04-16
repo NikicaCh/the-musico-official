@@ -287,7 +287,9 @@ body:focus {
   width: 100%;
   height: 100%;
   transform: rotate(-60deg);
-  
+}
+.hexagon-inner-in::selection {
+  background: transparent;
 }
 
 
@@ -429,9 +431,9 @@ body {
   background: rgba(253, 255, 227, 0.95)
 }
 
-.hide {
-  display: none;
-}
+.hide {visibility: hidden;}
+.visible {visibility: visible;}
+
 .lyrics-icons {
   position: relative;
   height: 1.5em;
@@ -986,6 +988,10 @@ button:focus {outline:0;}
   text-align: center;
   margin-top: 3%;
 }
+.featuring-title-playing {
+  color: #3aa065;
+  font-weight: 800;
+}
 .featuring-title::selection {
   background: transparent;
 }
@@ -1045,7 +1051,7 @@ button:focus {outline:0;}
 .rest-artists {
   width: 100%;
   margin: auto;
-  margin-top: 10%;
+  margin-top: -170%;
 }
 
 .rest-artist-div  img{
@@ -1843,5 +1849,18 @@ input[type=range]:focus::-ms-fill-upper {
   width: 3.5vh;
   top: 43%;
   right: 35%;
+  cursor: pointer;
+}
+
+.suggestion {
+  position: fixed;
+  top: 80%;
+  right: 0;
+  width: 10%;
+  height: 6%;
+  border: solid red 1px;
+}
+
+#volume-slider {
   cursor: pointer;
 }

@@ -12,7 +12,7 @@ class Legend extends React.Component {
     }
 
     componentDidMount() {
-        $(".legend-button").on("mouseover", (e) => {
+        $(".legend-button").on("mouseenter", (e) => {
             e.target.style.opacity = 1;
             let id = (e.target.className.substr(-1))
             if(id == 1) {
