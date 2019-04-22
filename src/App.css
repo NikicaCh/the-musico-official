@@ -784,6 +784,15 @@ button:focus {outline:0;}
   background: transparent;
 }
 
+.search-menu {
+  position: relative;
+  width: 50vw;
+  height: 5vh;
+  background: red;
+  margin: auto;
+  margin-top: 20%;
+}
+
 .best-search {
   position: absolute;
   top: 61%;
@@ -1278,12 +1287,13 @@ button:focus {outline:0;}
 } */
 
 .paused-div {
-  position: absolute;
+  position: fixed;
   background: rgba(71, 73, 76, 0.9);
-  z-index: 5;
+  z-index: 0;
   width: 100vw;
   height: 100vh;
   margin: 0;
+  top: 0;
 } 
 .paused-div *::selection {
   background: transparent;

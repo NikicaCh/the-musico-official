@@ -1,12 +1,13 @@
 import React from 'react'
-import {Featuring, accessToken, PlayTrack, getDevices} from './Fetch'
+import {Featuring, accessToken, PlayTrack, getDevices, Pause} from './Fetch'
 import $ from 'jquery'
 import Cookies from 'universal-cookie'
 
 import RestTracks from './restTracks'
 import RestArtists from './restArtists'
 import RestAlbums from './restAlbums'
-import Suggestion from './suggestion';
+import Suggestion from './suggestion'
+import PauseDiv from './pause'
 
 class BestSearch extends React.Component {
     constructor(props) {
@@ -25,7 +26,8 @@ class BestSearch extends React.Component {
             arrayOfUris: [],
             currentId: "",
             currentPlaybackId: "",
-            replayed: false
+            replayed: false,
+            pausedState: "Paused"
         }
         this.nextSuggestion = this.nextSuggestion.bind(this)
     }
@@ -36,7 +38,16 @@ class BestSearch extends React.Component {
             let index = this.state.arrayOfUris.indexOf(`spotify:track:${this.props.currentPlaybackId}`);
             let nextIndex = this.state.arrayOfUris[index +1]
             console.log("STARTING SOON", nextIndex, "deviceID:", this.state.deviceId, "index", index)
-            PlayTrack(nextIndex, token, this.state.deviceId)
+            this.setState({pausedState:"Starting soon"}, () => {
+                Pause(token)
+                setTimeout(() => {
+                    PlayTrack(nextIndex, token, this.state.deviceId)
+                    setTimeout(() => {
+                        this.setState({pausedState:"Paused"})
+                    }, 1000)
+                }, 5000)
+            })
+            
         }
     }
 
@@ -68,7 +79,7 @@ class BestSearch extends React.Component {
                                     let cookies = new Cookies();
                                     let data1 = cookies.get(`mostRecent1${userId}`)
                                     let data2 = this.props.artist.name
-                                    if(cookies.get(`mostRecent1${userId}`) !== data2 && cookies.get(`mostRecent2${userId}`) !== data2 ) {
+                                    if(data1 !== data2 && cookies.get(`mostRecent2${userId}`) !== data2 ) {
                                         cookies.set(`mostRecent2${userId}`, data1, {expires: new Date(Date.now()+2592000)})
                                         cookies.set(`mostRecent1${userId}`, data2, {expires: new Date(Date.now()+2592000)})
                                     }
@@ -86,20 +97,22 @@ class BestSearch extends React.Component {
         
     }
 
-    componentDidUpdate(prevProps) {
-        if(
-            (this.props.currentPlaybackId == prevProps.currentPlaybackId) && 
-            (this.props.position == 0) && (this.props.position !== prevProps.position) &&
-            (this.props.replay == prevProps.replay) && 
-            (this.state.replayed === false) && 
-            (this.state.context !== "")) {
-            console.log("HEHE THE SONG FINISHED")
-            this.nextSuggestion()
-            this.setState({replayed: true})
-        } else if(this.props.currentPlaybackId !== prevProps.currentPlaybackId) {
-            this.setState({replayed: false})
-        }
-    }
+    // componentDidUpdate(prevProps) {
+    //     if(this.props.state !== prevProps.state) {
+    //         if(
+    //             (this.props.currentPlaybackId == prevProps.currentPlaybackId) && 
+    //             (this.props.position == 0) && (this.props.position !== prevProps.position) &&
+    //             (this.props.replay == prevProps.replay) && 
+    //             (this.state.replayed === false) && (this.props.replayCounter == prevProps.replayCounter) && 
+    //             (this.state.context !== "")) {
+    //             console.log("HEHE THE SONG FINISHED")
+    //             this.nextSuggestion()
+    //             this.setState({replayed: true})
+    //         } else if(this.props.currentPlaybackId !== prevProps.currentPlaybackId) {
+    //             this.setState({replayed: false})
+    //         }
+    //     }
+    // }
     componentWillReceiveProps(nextProps) {
         
         this.setState(this.state)
@@ -197,6 +210,9 @@ class BestSearch extends React.Component {
         return (
             <div>
             <Suggestion />
+            <PauseDiv 
+                playing={this.props.playing}
+                pausedState={this.state.pausedState} />
             {
                 render
                 ? <div className="container w-100 search-top">

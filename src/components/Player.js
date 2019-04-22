@@ -67,7 +67,9 @@ class Player extends Component {
             uniq: "",
             state: "",
             replay: "",
-            replayTimeOut: 0
+            replayTimeOut: 0, 
+            player: "",
+            replayCounter: 0
         }
         this.getLyrics = this.getLyrics.bind(this)
         this.setCurrentTrack = this.setCurrentTrack.bind(this)
@@ -350,7 +352,7 @@ class Player extends Component {
                     if(this.state.replayTimeOut == 0) {
                         PlayTrack(currentPlaybackUri, token, this.state.musicoId);
                         let uniqId = uniqid();
-                        this.setState({lyricsPosition: 0, replay: uniqId}, () => {
+                        this.setState({lyricsPosition: 0, replay: uniqId, replayCounter: this.state.replayCounter + 1}, () => {
                         this.setState({currentLyrics: this.state.fullLyrics[this.state.lyricsPosition]})
                         })
                     }
@@ -359,13 +361,14 @@ class Player extends Component {
             if(e.keyCode == 27) { //esc
                 $("#search").toggleClass("hide")
                 $(".suggestion").attr("class", "suggestion visible")
+                $(".paused-div").attr("class", "paused-div fade-in visible")
             }
         }        
     }
     searchModal() {
         $("#search").toggleClass("hide")
         $(".suggestion").attr("class", "suggestion hide")
-
+        $(".paused-div").attr("class", "paused-div fade-in hide")
     }
 
     seek(event) {
@@ -427,7 +430,7 @@ class Player extends Component {
               name: `MUSICO ${uniq}`,
               getOAuthToken: cb => { cb(token); }
             });
-
+            this.setState({player})
         player.addListener('initialization_error', ({ message }) => { console.error(message); });
         player.addListener('authentication_error', ({ message }) => {
             window.location.replace("https://themusico-redirect.herokuapp.com/login")
@@ -522,13 +525,14 @@ class Player extends Component {
                 :<div ref={"player"} id="player" className="player">
                 <Search
                     state={this.state.state}
-                    position={this.state.state.position}
                     currentPlaybackId={this.state.currentPlaybackId}
                     deviceId={this.state.musicoId}
                     playing={this.state.playing}
                     userId={this.state.userId}
                     uniq={this.state.uniq}
-                    replay={this.state.replay}/>
+                    replay={this.state.replay}
+                    replayCounter={this.state.replayCounter}
+                    player={this.state.player}/>
                 <DisplayText
                     name={this.state.display}
                     class={'songName'} 
@@ -589,15 +593,6 @@ class Player extends Component {
                 }
                 
                 <div id="for-modals"></div>
-                {
-                    (this.state.playing)
-                    ? <span></span>
-                    :<div className="paused-div fade-in">
-                        <span className="paused-indicator">Paused</span>
-                        <span className="pause-help">Press "Space" to resume</span>
-                        <span className="pause-replay">Press "R" to replay</span>
-                    </div>
-                }
                 <div onMouseLeave={() => {
                         $(".devices_modal").addClass("hide")
                     }}>

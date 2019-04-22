@@ -209,6 +209,11 @@ class Search extends Component {
                     <span id="pill4" className="pill">new_releases<img className="pill-close" src={require("../icons/pill-close.png")}></img></span>
                     <span id="pill5" className="pill">featuring<img className="pill-close" src={require("../icons/pill-close.png")}></img></span>
                 </div>
+                <div className="row search-menu">
+                    <span>
+                        
+                    </span>
+                </div>
                 <div className="row">
                     { value
                     ? <span className="search-indicator">Showing results for "{value}"</span>
@@ -235,7 +240,9 @@ class Search extends Component {
                         track={this.state.track}
                         artist={this.state.artist}
                         playing={this.props.playing}
-                        replay={this.props.replay}/>
+                        replay={this.props.replay}
+                        replayCounter={this.props.replayCounter}
+                        player={this.props.player}/>
                     {/* <FeaPlaylists /> */}
                     <div className="artist"></div> // placeholder for event listener 
                 </div>                
