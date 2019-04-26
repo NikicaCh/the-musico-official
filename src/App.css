@@ -1874,3 +1874,21 @@ input[type=range]:focus::-ms-fill-upper {
 #volume-slider {
   cursor: pointer;
 }
+
+.wider-screen {
+  position: absolute;
+  z-index: 100000;
+  background: #333138;
+  width: 120vw;
+  height: 150vh;
+  overflow: hidden;
+}
+
+.wider-screen h1 {
+  color: white;
+  font-size: 3vw;
+  font-family: 'Amatic SC', cursive;
+  position: relative;
+  top: 45%;
+  left: 30%;
+}

@@ -21,6 +21,7 @@ import CookiePolicy from './components/cookiePolicy'
 //import components
 import Logo from './components/logo'
 import SearchButton from './components/searchButton'
+import WiderScreen from './components/widerscreen';
 
 
 class App extends Component {
@@ -29,9 +30,21 @@ class App extends Component {
     this.state = {
       token: '',
       refresh: 0,
+      narrowScreen: false
     }
-    this.handleRedirect = this.handleRedirect.bind(this);
-    this.refresToken = this.refresToken.bind(this);
+    this.handleRedirect = this.handleRedirect.bind(this)
+    this.refresToken = this.refresToken.bind(this)
+    this.screenWidth = this.screenWidth.bind(this)
+  }
+
+  screenWidth = () => {
+    if(window.innerWidth < 1200) {
+      this.setState({ narrowScreen: true });
+    } else {
+      let update_width  = window.innerWidth-100;
+      let update_height = Math.round(update_width/4.4);
+      this.setState({ narrowScreen: false });
+    }
   }
 
   handleRedirect = () => {
@@ -46,7 +59,8 @@ class App extends Component {
   }
   
   componentDidMount() {
-    
+    this.screenWidth();
+    window.addEventListener("resize", this.screenWidth);
   }
   componentWillUnmount() {
     const cookies = new Cookies();
@@ -71,42 +85,47 @@ class App extends Component {
       cookies.set("access_time", date.toString())
       window.location.replace("/")
     } else if( typeof cookies.get("access_time") === "undefined" || new Date(cookies.get("access_time").toString()).addHours(1).toString() < new Date().toString()) {
-      window.location.replace(linkToRedirectInProduction)   
+      window.location.replace(linkToRedirectInDevelopment)   
     }
     let access_token = accessToken()
     this.timer = setInterval(() =>  {
-      window.location.replace(linkToRedirectInProduction)   
+      window.location.replace(linkToRedirectInDevelopment)   
     }, 2500000);
     return (
-      <div id="app" className="App">        
-        <BrowserRouter>
-          <Switch>
-           { /*The home route */}
-            <Route exact path="/home" render ={ () => {
-              return(
-                <div>
-                  <Logo color="" />
-                  <Home/>
-                </div>
-              );
-            }
-            }
-            />
-            <Route exact path="/about" component={AboutPage} />
-            <Route exact path="/cookie" component={CookiePolicy} />
-            <Route exact path="/" render = { () => {
-              return (
-                <div>
-                  <Logo color={"-black"} />
-                  <SearchButton color={"-black"} />
-                  <Player/>
-                </div>
-                );
-              }
-            }
-            />
-          </Switch>
-        </BrowserRouter>
+      <div id="app" className="App">
+      {
+        (this.state.narrowScreen == true)
+        ? <WiderScreen />
+        :<div></div>
+      }        
+      <BrowserRouter>
+      <Switch>
+       { /*The home route */}
+        <Route exact path="/home" render ={ () => {
+          return(
+            <div>
+              <Logo color="" />
+              <Home/>
+            </div>
+          );
+        }
+        }
+        />
+        <Route exact path="/about" component={AboutPage} />
+        <Route exact path="/cookie" component={CookiePolicy} />
+        <Route exact path="/" render = { () => {
+          return (
+            <div>
+              <Logo color={"-black"} />
+              <SearchButton color={"-black"} />
+              <Player/>
+            </div>
+            );
+          }
+        }
+        />
+      </Switch>
+    </BrowserRouter>
       </div>
     );
   }
