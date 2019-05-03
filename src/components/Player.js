@@ -117,7 +117,7 @@ class Player extends Component {
         Shuffle(token);
     }
     async receiveLyrics() {
-        const response = await fetch(linkBackendInDevelopment);
+        const response = await fetch(linkBackendInProduction);
         const body = await response.json();
     
         if (response.status !== 200) throw Error(body.message);
@@ -180,7 +180,7 @@ class Player extends Component {
           .trim();
       }
     sendToBackEnd(url, track) {
-        Axios.post(linkBackendInDevelopment, {
+        Axios.post(linkBackendInProduction, {
                     data: {
                         url,
                         track
@@ -195,7 +195,8 @@ class Player extends Component {
         //LYRICS ------------------------------------------------------------------------------------
          Lyrics(track, artist, token)
         .then((data) => {
-            let hitsName = [];
+            if(data) {
+                let hitsName = [];
             let hitsObject = [];
             let hit;
             data.data.response.hits.map((hit) => {
@@ -220,7 +221,8 @@ class Player extends Component {
                 if(!$("#lyrics-main").hasClass("hide")) {
                     $("#lyrics-main").toggleClass("hide")
                 }
-            }    
+            } 
+            }   
         })
     }
     setCurrentTrack(access) {
