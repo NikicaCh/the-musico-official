@@ -34,9 +34,9 @@ class Profile extends React.Component {
                 this.setState({initials})
             }
         })
-        $(".logout-area").on("mouseover", () => {
-            this.setState({profileLogout: true})
-        })
+        // $(".logout-area").on("mouseover", () => {
+        //     this.setState({profileLogout: true})
+        // })
         $(".logout-area").on("mouseleave", () => {
             console.log("LEAVE")
             this.setState({profileLogout: false})

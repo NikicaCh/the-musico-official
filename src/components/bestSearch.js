@@ -5,8 +5,6 @@ import Cookies from 'universal-cookie'
 
 import RestTracks from './restTracks'
 import RestArtists from './restArtists'
-import RestAlbums from './restAlbums'
-import Suggestion from './suggestion'
 import PauseDiv from './pause'
 
 class BestSearch extends React.Component {
@@ -70,10 +68,10 @@ class BestSearch extends React.Component {
                                 // let userId = this.props.userId;
                                 let index = e.target.parentElement.getAttribute("id")
                                 this.setState({indexOfPlayingTrack: index})
-                                $(".featuring-title").removeClass("featuring-title-playing")
-                                $(`.${index}`).addClass("featuring-title-playing")
                                 let trackId = e.target.getAttribute('id');
-                                PlayTrack(trackId, token, this.state.deviceId);
+                                console.log("hey",this.state.arrayOfUris)
+                                let slicedFromStarting = this.state.arrayOfUris.slice(this.state.arrayOfUris.indexOf(trackId))
+                                PlayTrack(slicedFromStarting, token, this.state.deviceId);
                                 if(this.props.type === "artist"){
                                     this.setState({context: "search artist", currentId: trackId})
                                     let cookies = new Cookies();
@@ -138,7 +136,7 @@ class BestSearch extends React.Component {
         })
         let token = accessToken();
         this.setState({searched: nextProps.search, type: nextProps.type, name: nextProps.max})
-        if(nextProps.type == "artist") {
+        if(nextProps.type === "artist") {
             this.setState(this.state)
             Featuring(this.props.artistId, token )
             .then((data) => {
@@ -146,7 +144,7 @@ class BestSearch extends React.Component {
                     let index = 0;
                     let arrayOfUris = []
                     data.data.tracks.map((track) => {
-                        arrayOfUris.push(track.uri)
+                        return arrayOfUris.push(track.uri)
                     })
                     let array = data.data.tracks.slice(0, 8).map((track) => {
                         let name = track.name
@@ -162,7 +160,8 @@ class BestSearch extends React.Component {
                                         <img
                                             src={track.album.images[0].url}
                                             className="featuring-img play-track mb-3"
-                                            id={track.uri}>
+                                            id={track.uri}
+                                            alt="featuring img">
                                         </img>
                                     </div>
                                     <div className="row w-100 ml-3 d-flex justify-content-center">
@@ -178,7 +177,7 @@ class BestSearch extends React.Component {
         if(this.props.restTracks && this.props.restTracks.length) {
             let arrayOfRestTracks;
             let restTracks = this.props.restTracks.map((track) => {
-                if(track.type == "track") {
+                if(track.type === "track") {
                     return track;
                 }
             })
@@ -187,7 +186,8 @@ class BestSearch extends React.Component {
                             <img
                                 src={track.album.images[0].url}
                                 className="play-track small-best-search-img ml-4"
-                                id={track.uri}>
+                                id={track.uri}
+                                alt="best search img">
                             </img>
                             <span className="small-best-search-title">{track.name}</span>
                         </div>
@@ -199,17 +199,14 @@ class BestSearch extends React.Component {
     render() {
         let render = this.props.image;
         let featuring = false;
-        let condition = this.state.restCondition;
-        if(this.props.type == "artist") {
+        if(this.props.type === "artist") {
             featuring = true;
-            let token = accessToken();
             
         } else {
             featuring = false
         }
         return (
             <div>
-            <Suggestion />
             <PauseDiv 
                 playing={this.props.playing}
                 pausedState={this.state.pausedState} />
@@ -221,12 +218,13 @@ class BestSearch extends React.Component {
                             </div>
                             <img
                                 className="blank-search"
-                                src={require("../icons/pill-close.png")}>
+                                src={require("../icons/pill-close.png")}
+                                alt="pill close">
                             </img>
                             <div
                                 className="row w-100 dragable mb-5"> {/*this is the div where I should append the drag 'n' drop event */}
                                 <div className="col-md-3 col-xs-6 mt-5 relative"> 
-                                    <img id={this.props.trackId} src={this.props.image} className={`best-search-img ${this.props.type}-img`}></img>
+                                    <img id={this.props.trackId} src={this.props.image} className={`best-search-img ${this.props.type}-img`} alt="best search"></img>
                                     <figcaption><span className="best-search-title">{this.props.name}</span></figcaption>    
                                 </div>
                                 <div className="col-md-9 mt-5"> 

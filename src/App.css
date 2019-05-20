@@ -997,10 +997,6 @@ button:focus {outline:0;}
   text-align: center;
   margin-top: 3%;
 }
-.featuring-title-playing {
-  color: #3aa065;
-  font-weight: 800;
-}
 .featuring-title::selection {
   background: transparent;
 }

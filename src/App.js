@@ -1,18 +1,11 @@
 import React, { Component } from 'react';
-import {Route, BrowserRouter, Switch, Redirect, Router} from 'react-router-dom';
-import {browserHistory} from "react-router";
+import {Route, BrowserRouter, Switch} from 'react-router-dom';
 import {accessToken, getDevices} from './components/Fetch';
 import Cookies from 'universal-cookie';
-import Axios from 'axios';
-import $ from 'jquery';
 import './App.css';
 import queryString from 'query-string';
-
-import Search from './components/Search';
-import Playlist from './components/Playlist';
 import Home from './components/Home';
 import Player from './components/Player';
-import Navbar from './components/navbar';
 import AboutPage from './components/AboutPage';
 import CookiePolicy from './components/cookiePolicy'
 
@@ -85,19 +78,13 @@ class App extends Component {
       cookies.set("access_time", date.toString())
       window.location.replace("/")
     } else if( typeof cookies.get("access_time") === "undefined" || new Date(cookies.get("access_time").toString()).addHours(1).toString() < new Date().toString()) {
-      window.location.replace(linkToRedirectInDevelopment)   
+      window.location.replace(linkToRedirectInProduction)   
     }
-    let access_token = accessToken()
     this.timer = setInterval(() =>  {
-      window.location.replace(linkToRedirectInDevelopment)   
+      window.location.replace(linkToRedirectInProduction)   
     }, 2500000);
     return (
-      <div id="app" className="App">
-      {
-        (this.state.narrowScreen == true)
-        ? <WiderScreen />
-        :<div></div>
-      }        
+      <div id="app" className="App">     
       <BrowserRouter>
       <Switch>
        { /*The home route */}
@@ -126,6 +113,11 @@ class App extends Component {
         />
       </Switch>
     </BrowserRouter>
+      {
+        (this.state.narrowScreen === true)
+        ? <WiderScreen />
+        :<div></div>
+      }   
       </div>
     );
   }

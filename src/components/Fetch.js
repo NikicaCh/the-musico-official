@@ -230,14 +230,19 @@ export const UsersTop = (token, type, time_range, limit) => {
 }
 
 export const PlayTrack = (trackUri, token, deviceId) => {
-    $.ajax({
-        url: `https://api.spotify.com/v1/me/player/play?device_id=${deviceId}`,
-        type: "PUT",
-        data: `{"uris": ["${trackUri}"]}`,
-        beforeSend: function(xhr){xhr.setRequestHeader('Authorization', `Bearer ${token}` );},
-        success: function(data) { 
-        }
-       });  
+    let uri = trackUri;
+    if(typeof(trackUri) === "string") {
+        uri = [`${trackUri}`]
+    }
+    fetch(`https://api.spotify.com/v1/me/player/play?device_id=${deviceId}`, {
+    method: 'PUT',
+    headers: {
+        'Authorization': 'Bearer ' + token ,
+        'Content-Type': 'application/json',
+    },
+    body: JSON.stringify({
+        "uris": uri })
+    });
 }
 
 export const profile = (token) => {

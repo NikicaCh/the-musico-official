@@ -1,6 +1,6 @@
 import React, {Component} from "react"
 import '../App.css'
-import {Port, getDevices, accessToken, getCurrentPlayback, Pause, Play, NextTrack, Shuffle, SeekPosition, Lyrics, TransferPlayback, PreviousTrack, Volume, getUser, getGeniusKey, PlayTrack} from './Fetch'
+import {getDevices, accessToken, getCurrentPlayback, Pause, Play, NextTrack, Shuffle, SeekPosition, Lyrics, TransferPlayback, PreviousTrack, Volume, getUser, getGeniusKey, PlayTrack} from './Fetch'
 import CookiePopUp from './cookiePopUp'
 import Cookies from 'universal-cookie'
 // import ReactDOM from 'react-dom';
@@ -12,7 +12,6 @@ import Cookies from 'universal-cookie'
 import Photo from './photo'
 import DisplayText from './display-text'
 import LyricsDiv from './lyrics'
-import Modal from './modal'
 import Search from './Search'
 import Spinner from './Spinner'
 import Legend from './legend'
@@ -23,7 +22,6 @@ import cheerio from 'cheerio'
 import Axios from "../../node_modules/axios"
 // import { stringify } from "querystring"
 import $ from 'jquery'
-import {MDCSlider} from '@material/slider'
 import uniqid from 'uniqid'
 const linkBackendInDevelopment = "http://localhost:8888/";
 const linkBackendInProduction = "https://themusico-redirect.herokuapp.com/";
@@ -67,7 +65,6 @@ class Player extends Component {
             uniq: "",
             state: "",
             replay: "",
-            replayTimeOut: 0, 
             player: "",
             replayCounter: 0
         }
@@ -117,7 +114,7 @@ class Player extends Component {
         Shuffle(token);
     }
     async receiveLyrics() {
-        const response = await fetch(linkBackendInDevelopment);
+        const response = await fetch(linkBackendInProduction);
         const body = await response.json();
     
         if (response.status !== 200) throw Error(body.message);
@@ -180,7 +177,7 @@ class Player extends Component {
           .trim();
       }
     sendToBackEnd(url, track) {
-        Axios.post(linkBackendInDevelopment, {
+        Axios.post(linkBackendInProduction, {
                     data: {
                         url,
                         track
@@ -224,11 +221,14 @@ class Player extends Component {
         })
     }
     setCurrentTrack(access) {
+        console.log("SET CURRENT TRACK")
         let track = '';
         let songArtist;
         let genius = getGeniusKey();
         getCurrentPlayback(access) // get info about the current spotify playback
+        getCurrentPlayback(access) // get info about the current spotify playback
         .then(data => {
+            console.log("GET CURRENT PLAYBACK", data.status)
             if(data) {
                 let playing = data.data.is_playing;
                 let context = "";
@@ -349,26 +349,20 @@ class Player extends Component {
                 else if(code === 83 && $("#search").hasClass("hide")) { //s
                     this.searchModal();
                 } else if(code === 82 && $("#search").hasClass("hide")) { //R
-                    if(this.state.replayTimeOut == 0) {
                         PlayTrack(currentPlaybackUri, token, this.state.musicoId);
                         let uniqId = uniqid();
                         this.setState({lyricsPosition: 0, replay: uniqId, replayCounter: this.state.replayCounter + 1}, () => {
                         this.setState({currentLyrics: this.state.fullLyrics[this.state.lyricsPosition]})
                         })
-                    }
                 }      
         } else {
             if(e.keyCode == 27) { //esc
                 $("#search").toggleClass("hide")
-                $(".suggestion").attr("class", "suggestion visible")
-                $(".paused-div").attr("class", "paused-div fade-in visible")
             }
         }        
     }
     searchModal() {
         $("#search").toggleClass("hide")
-        $(".suggestion").attr("class", "suggestion hide")
-        $(".paused-div").attr("class", "paused-div fade-in hide")
     }
 
     seek(event) {
@@ -441,6 +435,7 @@ class Player extends Component {
             
         // Ready
         player.addListener('ready', ({ device_id }) => {
+            console.log("READY", device_id)
             this.setState({loading: false})
             this.setCurrentTrack(access); // SET CURRENT TRACK --------------------------------------------------
             this.setCurrentTrack(access); // I must call this func twice, because when I try to play the same song again the API returns is_playing:false
@@ -462,12 +457,7 @@ class Player extends Component {
 
         // Playback status updates
         player.addListener('player_state_changed', state => { 
-            console.log("state POSITION", state)
-            this.setState({replayTimeOut: 1}, () => {
-                setTimeout(() => {
-                    this.setState({replayTimeOut: 0})
-                }, 5000)
-            })
+            console.log("state", state)
             // if(state.paused) {
             //     this.setState({playing: false})
             // } else {
