@@ -192,7 +192,8 @@ class Player extends Component {
         //LYRICS ------------------------------------------------------------------------------------
          Lyrics(track, artist, token)
         .then((data) => {
-            let hitsName = [];
+            if(data) {
+                let hitsName = [];
             let hitsObject = [];
             let hit;
             data.data.response.hits.map((hit) => {
@@ -217,7 +218,8 @@ class Player extends Component {
                 if(!$("#lyrics-main").hasClass("hide")) {
                     $("#lyrics-main").toggleClass("hide")
                 }
-            }    
+            } 
+            }   
         })
     }
     setCurrentTrack(access) {
