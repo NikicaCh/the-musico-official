@@ -76,7 +76,6 @@ body:focus {
   background: transparent;
 }
 .search-div {
-  position: absolute;
   border: solid 2px white;
   color: white;
   font-size: 1.3em;
@@ -87,6 +86,7 @@ body:focus {
   left: 4.5%;
   transform: rotate(-90deg);
   cursor: pointer;
+  z-index: 99999 !important;
 }
 .search-div:hover {
   background: white;
@@ -1283,9 +1283,9 @@ button:focus {outline:0;}
 } */
 
 .paused-div {
-  position: fixed;
+  position: fixed !important;
   background: rgba(71, 73, 76, 0.9);
-  z-index: 0;
+  z-index: -999999999 !important;
   width: 100vw;
   height: 100vh;
   margin: 0;

@@ -192,8 +192,7 @@ class Player extends Component {
         //LYRICS ------------------------------------------------------------------------------------
          Lyrics(track, artist, token)
         .then((data) => {
-            if(data) {
-                let hitsName = [];
+            let hitsName = [];
             let hitsObject = [];
             let hit;
             data.data.response.hits.map((hit) => {
@@ -218,8 +217,7 @@ class Player extends Component {
                 if(!$("#lyrics-main").hasClass("hide")) {
                     $("#lyrics-main").toggleClass("hide")
                 }
-            } 
-            }   
+            }    
         })
     }
     setCurrentTrack(access) {
@@ -237,7 +235,7 @@ class Player extends Component {
                 if(data.data.context) {
                     context = data.data.context.type
                     this.setState({context})
-                } else {
+                } else if(this.state.context !=="context") {
                     context = "";
                     this.setState({context})
                 }
@@ -359,12 +357,19 @@ class Player extends Component {
                 }      
         } else {
             if(e.keyCode == 27) { //esc
-                $("#search").toggleClass("hide")
+               this.searchModal();
             }
         }        
     }
     searchModal() {
         $("#search").toggleClass("hide")
+        if($(".paused-div").hasClass("visible")) {
+            $(".paused-div").removeClass("visible")
+            $(".paused-div").addClass("hide")
+        } else {
+            $(".paused-div").removeClass("hide")
+            $(".paused-div").addClass("visible")
+        }
     }
 
     seek(event) {
@@ -460,6 +465,11 @@ class Player extends Component {
         // Playback status updates
         player.addListener('player_state_changed', state => { 
             console.log("state", state)
+            if((state.track_window.next_tracks.length) || (state.track_window.previous_tracks.length) ) {
+                this.setState({context: "context"})
+            }else {
+                this.setState({context: ""})
+            }    
             // if(state.paused) {
             //     this.setState({playing: false})
             // } else {

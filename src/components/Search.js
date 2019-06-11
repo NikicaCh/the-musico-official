@@ -120,9 +120,14 @@ class Search extends Component {
         .then((data) => {
         })
         $(".search-close").on("click", () => {
-            if(!$("#search").hasClass("hide")) {
-                $("#search").toggleClass("hide")
-            }
+            $("#search").toggleClass("hide")
+            if($(".paused-div").hasClass("visible")) {
+                $(".paused-div").removeClass("visible")
+                $(".paused-div").addClass("hide")
+            } else {
+                $(".paused-div").removeClass("hide")
+                $(".paused-div").addClass("visible")
+        }
         })
         let value = $(".search-input").val();
         $(".search-inner").addClass("search-searched")
@@ -174,7 +179,7 @@ class Search extends Component {
         }
         let type;
         if(this.state.type === "track") {
-            type = "play-track track"
+            type = "track"
         } else {
             type = this.state.type;
         }
@@ -239,7 +244,7 @@ class Search extends Component {
                         replayCounter={this.props.replayCounter}
                         player={this.props.player}/>
                     {/* <FeaPlaylists /> */}
-                    <div className="artist"></div> // placeholder for event listener 
+                    <div className="artist"></div>
                 </div>                
                 </div>
             </div>

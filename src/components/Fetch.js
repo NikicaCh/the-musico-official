@@ -141,7 +141,7 @@ export const Volume = (token, percent) => {
 export const Lyrics = (trackName, artist, token) => {
     let track = trackName.replace(/ *\([^)]*\) */g , "");
     if(track.indexOf("Remastered") !== -1) {
-        track = track.substring(0, track.indexOf("remastered"));
+        track = track.substring(0, track.indexOf("Remastered"));
     }
     let promise = Axios(`https://api.genius.com/search?q=${artist}-${track}`, {
         method: 'GET',

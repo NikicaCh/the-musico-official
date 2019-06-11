@@ -19,6 +19,7 @@ class BestSearch extends React.Component {
             restCondition: "artists",
             whatToRender: "default", // default and artist are the options
             arrayOfRestTracks: "",
+            restTracksUris: [],
             indexOfPlayingTrack: "",
             context: "", 
             arrayOfUris: [],
@@ -35,7 +36,6 @@ class BestSearch extends React.Component {
         if(this.state.context === "search artist") {
             let index = this.state.arrayOfUris.indexOf(`spotify:track:${this.props.currentPlaybackId}`);
             let nextIndex = this.state.arrayOfUris[index +1]
-            console.log("STARTING SOON", nextIndex, "deviceID:", this.state.deviceId, "index", index)
             this.setState({pausedState:"Starting soon"}, () => {
                 Pause(token)
                 setTimeout(() => {
@@ -69,10 +69,12 @@ class BestSearch extends React.Component {
                                 let index = e.target.parentElement.getAttribute("id")
                                 this.setState({indexOfPlayingTrack: index})
                                 let trackId = e.target.getAttribute('id');
-                                console.log("hey",this.state.arrayOfUris)
-                                let slicedFromStarting = this.state.arrayOfUris.slice(this.state.arrayOfUris.indexOf(trackId))
-                                PlayTrack(slicedFromStarting, token, this.state.deviceId);
-                                if(this.props.type === "artist"){
+                                if($(e.target).hasClass("rest")) {
+                                    PlayTrack(trackId, token, this.state.deviceId);
+                                }
+                                else if(this.props.type === "artist"){
+                                    let slicedFromStarting = this.state.arrayOfUris.slice(this.state.arrayOfUris.indexOf(trackId))
+                                    PlayTrack(slicedFromStarting, token, this.state.deviceId);
                                     this.setState({context: "search artist", currentId: trackId})
                                     let cookies = new Cookies();
                                     let data1 = cookies.get(`mostRecent1${userId}`)
@@ -82,6 +84,8 @@ class BestSearch extends React.Component {
                                         cookies.set(`mostRecent1${userId}`, data2, {expires: new Date(Date.now()+2592000)})
                                     }
                                 } else {
+                                    let slicedFromStarting = this.state.restTracksUris.slice(this.state.restTracksUris.indexOf(trackId))
+                                    PlayTrack(slicedFromStarting, token, this.state.deviceId);
                                     this.setState({context: "search track"})
                                     let cookies = new Cookies();
                                     cookies.set(`lastTrack${userId}`, this.props.track.name, {expires: new Date(Date.now()+2592000)}) //the track name
@@ -181,7 +185,9 @@ class BestSearch extends React.Component {
                     return track;
                 }
             })
+            let restTracksUris = [];
             arrayOfRestTracks = restTracks.slice(1, 6).map((track) => {
+                restTracksUris.push(track.uri);
                 return  <div className="small-best-holder ml-3 d-flex justify-content-center">
                             <img
                                 src={track.album.images[0].url}
@@ -192,6 +198,8 @@ class BestSearch extends React.Component {
                             <span className="small-best-search-title">{track.name}</span>
                         </div>
             })
+            restTracksUris.unshift(this.props.trackId)
+            this.setState({restTracksUris})
             this.setState({arrayOfRestTracks})
         }
       }
@@ -224,7 +232,7 @@ class BestSearch extends React.Component {
                             <div
                                 className="row w-100 dragable mb-5"> {/*this is the div where I should append the drag 'n' drop event */}
                                 <div className="col-md-3 col-xs-6 mt-5 relative"> 
-                                    <img id={this.props.trackId} src={this.props.image} className={`best-search-img ${this.props.type}-img`} alt="best search"></img>
+                                    <img id={this.props.trackId} src={this.props.image} className={`play-track best-search-img ${this.props.type}-img`} alt="best search"></img>
                                     <figcaption><span className="best-search-title">{this.props.name}</span></figcaption>    
                                 </div>
                                 <div className="col-md-9 mt-5"> 
@@ -241,7 +249,7 @@ class BestSearch extends React.Component {
                                 : <div></div>
                             }
                             {
-                                (this.props.type === "play-track track")
+                                (this.props.type === "track")
                                 ? <div className="other-track-imgs row ml-5">
                                     {this.state.arrayOfRestTracks}
                                     <span className="see-more">see more</span>

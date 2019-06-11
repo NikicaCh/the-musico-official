@@ -23,7 +23,7 @@ class RestTracks extends React.Component {
         let tracks = this.props.tracks.map((track) => {
             let artists = track.artists.map((artist) => artist.name).join(",")
             return(
-                <div id={track.uri} className="play-track">
+                <div id={track.uri} className="play-track rest">
                     <h1 id={track.uri}>{track.name}<h2>{artists}</h2></h1>
                     <span id={track.uri}>{this.msToMins(track.duration_ms)}</span>
                 </div>
