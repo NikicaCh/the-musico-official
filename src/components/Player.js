@@ -195,29 +195,32 @@ class Player extends Component {
             let hitsName = [];
             let hitsObject = [];
             let hit;
-            data.data.response.hits.map((hit) => {
-                hitsObject.push(hit.result);
-                hitsName.push(hit.result.full_title);
-            })
-            if(hitsName.length) { // if the genius api responds with a result
-                if($("#lyrics-main").hasClass("hide")) {
-                    $("#lyrics-main").toggleClass("hide")
-                }
-                let lyrics = stringSimilarity.findBestMatch(track, hitsName);
-                hitsObject.forEach((object) => {
-                    if(object.full_title === lyrics.bestMatch.target) {
-                        hit = object;
+            if(data) {
+                data.data.response.hits.map((hit) => {
+                    hitsObject.push(hit.result);
+                    hitsName.push(hit.result.full_title);
+                })
+                if(hitsName.length) { // if the genius api responds with a result
+                    if($("#lyrics-main").hasClass("hide")) {
+                        $("#lyrics-main").toggleClass("hide")
                     }
-                })
-                this.setState({currentLyricsUrl: hit.url}, () => {
-                    this.sendToBackEnd(this.state.currentLyricsUrl, track)
-                    this.receiveLyrics();
-                })
-            } else {
-                if(!$("#lyrics-main").hasClass("hide")) {
-                    $("#lyrics-main").toggleClass("hide")
-                }
-            }    
+                    let lyrics = stringSimilarity.findBestMatch(track, hitsName);
+                    hitsObject.forEach((object) => {
+                        if(object.full_title === lyrics.bestMatch.target) {
+                            hit = object;
+                        }
+                    })
+                    this.setState({currentLyricsUrl: hit.url}, () => {
+                        this.sendToBackEnd(this.state.currentLyricsUrl, track)
+                        this.receiveLyrics();
+                    })
+                } else {
+                    if(!$("#lyrics-main").hasClass("hide")) {
+                        $("#lyrics-main").toggleClass("hide")
+                    }
+                } 
+            }
+               
         })
     }
     setCurrentTrack(access) {

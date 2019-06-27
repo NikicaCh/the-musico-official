@@ -227,7 +227,7 @@ class Search extends Component {
                     <span id="pill1" className="pill">{mostRecent1}<img className="pill-close" src={require("../icons/pill-close.png")}></img></span>
                     <span id="pill2" className="pill">{mostRecent2}<img className="pill-close" src={require("../icons/pill-close.png")}></img></span>
                     <span id="pill3" className="pill">{lastTrack}<img className="pill-close" src={require("../icons/pill-close.png")}></img></span>
-                    <span id="pill4" className="pill">new_releases<img className="pill-close" src={require("../icons/pill-close.png")}></img></span>
+                    <span id="pill-new" className="pill"><img className="fire" src={require("../icons/new.webp")}></img>new_releases<img className="pill-close" src={require("../icons/pill-close.png")}></img></span>
                 </div>
                 <div className="row">
                     { value
