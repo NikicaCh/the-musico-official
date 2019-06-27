@@ -1,6 +1,7 @@
 import React from 'react'
-import $ from 'jquery'
+
 import {accessToken, PlayTrack} from './Fetch'
+
 
 class RestTracks extends React.Component {
     constructor(props) {
@@ -23,7 +24,13 @@ class RestTracks extends React.Component {
         let tracks = this.props.tracks.map((track) => {
             let artists = track.artists.map((artist) => artist.name).join(",")
             return(
-                <div id={track.uri} className="play-track rest">
+                <div id={track.uri}
+                     className="rest"
+                     onClick={(e) => {
+                        let token = accessToken();
+                        let trackId = e.target.id;
+                        PlayTrack(trackId, token, this.props.device);
+                     }}>
                     <h1 id={track.uri}>{track.name}<h2>{artists}</h2></h1>
                     <span id={track.uri}>{this.msToMins(track.duration_ms)}</span>
                 </div>

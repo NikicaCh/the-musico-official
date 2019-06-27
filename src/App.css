@@ -129,7 +129,7 @@ body:focus {
 }
 .blank-search {
   width: .6%;
-  top: 45%;
+  top: 35%;
   left: 80%;
   margin: 1%;
   cursor: pointer;
@@ -645,7 +645,7 @@ body {
 .search-inner {
   position: absolute;
   text-align: center;
-  top: 40%;
+  top: 25%;
   left: 27.5%;
   margin: 2vw;
   width: 41%;
@@ -693,7 +693,7 @@ button:focus {outline:0;}
   color: rgb(212, 212, 212);
   text-transform: uppercase;
   position: absolute;
-  top: 33%;
+  top: 20%;
   left: 45%;
   font-family: 'Anton', sans-serif;
 }
@@ -715,8 +715,8 @@ button:focus {outline:0;}
 
 .pills-row {
   position: relative;
-  top: 55%;
-  width: 35%;
+  top: 40%;
+  width: 38%;
   margin: 1% auto;
   color: white;
 }
@@ -731,12 +731,12 @@ button:focus {outline:0;}
     display: none;
   }
 }
-@media only screen and (max-height: 700px) {
+@media only screen and (max-width: 700px) {
   .pills-row {
     display: none;
   }
 }
-@media only screen and (max-height: 700px) {
+@media only screen and (max-width: 700px) {
   .search-title {
     transform: translateY(-50%);
   }
@@ -845,6 +845,19 @@ button:focus {outline:0;}
   max-width: 15%;
   text-align: center;
 }
+.small-best-search-artist {
+  font-family: 'Amatic SC', cursive;
+  color: #E3E64B;
+  font-size: 1vw;
+  font-weight: 500;
+  position: absolute;
+  top: 88%;
+  margin: 0% auto auto 1.5%;
+  word-wrap: break-word;
+  word-break: break-all;
+  max-width: 15%;
+  text-align: center;
+}
 
 .see-more {
   color: white;
@@ -947,8 +960,8 @@ button:focus {outline:0;}
   position: absolute;
   z-index: 150;
   width: 100vw;
-  height: 50%;
-  top: 50%;
+  height: 80%;
+  top: 33%;
   overflow: auto;
 }
 .results::-webkit-scrollbar {display:none;}
@@ -964,9 +977,22 @@ button:focus {outline:0;}
 }
 
 .featuring-img {
+  position: relative;
   border-radius: 50%;
   width: 2vw;
   height: 2vw;
+}
+@media only screen and (max-width: 1500px) {
+  .featuring-img{
+    width: 4vw;
+    height: 4vw;
+  }
+}
+@media only screen and (max-width: 1600px) {
+  .featuring-img{
+    width: 3.5vw;
+    height: 3.5vw;
+  }
 }
 .featuring-img::selection{
   background: transparent;
@@ -975,14 +1001,6 @@ button:focus {outline:0;}
   transform: scale(1.4);
   backface-visibility: hidden;
   transition: all .3s ease-in-out;
-}
-
-.related-artists {
-  background: #211076;
-  position: absolute;
-  width: 100%;
-  height: 5%;
-  top: 15%;
 }
 .fragable {
   position: absolute;
@@ -1056,7 +1074,7 @@ button:focus {outline:0;}
 .rest-artists {
   width: 100%;
   margin: auto;
-  margin-top: -170%;
+  margin-top: -20%;
 }
 
 .rest-artist-div  img{
@@ -1887,4 +1905,103 @@ input[type=range]:focus::-ms-fill-upper {
   position: relative;
   top: 45%;
   left: 30%;
+}
+
+.related-artists {
+  position: relative;
+  height: 5vh;
+  margin-top: -5%;
+  padding: 0 20% 0 40%;
+}
+
+.related-artist {
+  color: #e3e64b;
+  font-family: 'Amatic SC', cursive;
+  font-size: 1vw;
+  margin: auto;
+  cursor: pointer;
+}
+
+.nothing {
+  position: relative;
+  margin: 10% auto 0 auto;
+  color: #a9b1b1;
+  font-family: 'Amatic SC', cursive;
+  font-size: 1.5vw;
+}
+.nothing::selection {
+  background: transparent;
+}
+
+.personal {
+  position: relative;
+  width: 90%;
+  height: 90%;
+
+  margin: 0 0 0 20%;
+}
+.personal-section {
+  position: relative;
+  width: 100%;
+  height: 70%;
+  margin: auto;
+  white-space: nowrap;
+  overflow-x: scroll;
+}
+.personal-section::-webkit-scrollbar {display:none;}
+.personal-item {
+  position: relative;
+  display: inline-block;
+  background-image:url('https://images.unsplash.com/photo-1561266436-869747b1bff7?ixlib=rb-1.2.1&auto=format&fit=crop&w=1350&q=80');
+  height: 45%;
+  width: 13%;
+  margin: 2% .3%;
+  z-index: 100000;
+}
+.personal-section-2{
+  position: absolute;
+  width: 100%;
+  height: 70%;
+  margin: auto;
+  white-space: nowrap;
+  overflow-x: hidden;
+}
+.hoverable:hover {
+  cursor: pointer;
+  transform: scale(1.45);
+  z-index: 100000;
+  transition: all .25s ease-out;
+  transition-delay: .5s;
+  margin: 2.5% 2.5% ;
+}
+.hoverable:hover .personal-arrow {
+  display: block;
+  transform: translateY(5px);
+  transition: transform .2s ease-in;
+  transition-delay: .6s;
+}
+.personal-details {
+  position: relative;
+  width: 68%;
+  height: 5%;
+  margin-top: -10%;
+  color: transparent;
+}
+.personal-arrow {
+  position: relative;
+  width: 2vw;
+  height: 1.5vw;
+  margin: 82% auto 10% 40%;
+  display: none;
+}
+.maximized {
+  height: 45%;
+  transition: all .5s ease-in-out;
+}
+
+.fire {
+  width: 1vw;
+  height: 1vw;
+  position: relative;
+  margin: 0;
 }

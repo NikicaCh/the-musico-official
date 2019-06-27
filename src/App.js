@@ -8,6 +8,7 @@ import Home from './components/Home';
 import Player from './components/Player';
 import AboutPage from './components/AboutPage';
 import CookiePolicy from './components/cookiePolicy'
+import NotFound from './components/NotFound'
 
 
 
@@ -78,10 +79,10 @@ class App extends Component {
       cookies.set("access_time", date.toString())
       window.location.replace("/")
     } else if( typeof cookies.get("access_time") === "undefined" || new Date(cookies.get("access_time").toString()).addHours(1).toString() < new Date().toString()) {
-      window.location.replace(linkToRedirectInProduction)   
+      window.location.replace(linkToRedirectInDevelopment)   
     }
     this.timer = setInterval(() =>  {
-      window.location.replace(linkToRedirectInProduction)   
+      window.location.replace(linkToRedirectInDevelopment)   
     }, 2500000);
     return (
       <div id="app" className="App">     
@@ -111,6 +112,7 @@ class App extends Component {
           }
         }
         />
+        <Route path="/" component={NotFound} />
       </Switch>
     </BrowserRouter>
       {

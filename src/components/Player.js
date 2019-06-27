@@ -114,7 +114,7 @@ class Player extends Component {
         Shuffle(token);
     }
     async receiveLyrics() {
-        const response = await fetch(linkBackendInProduction);
+        const response = await fetch(linkBackendInDevelopment);
         const body = await response.json();
     
         if (response.status !== 200) throw Error(body.message);
@@ -177,7 +177,7 @@ class Player extends Component {
           .trim();
       }
     sendToBackEnd(url, track) {
-        Axios.post(linkBackendInProduction, {
+        Axios.post(linkBackendInDevelopment, {
                     data: {
                         url,
                         track
@@ -228,7 +228,6 @@ class Player extends Component {
         getCurrentPlayback(access) // get info about the current spotify playback
         getCurrentPlayback(access) // get info about the current spotify playback
         .then(data => {
-            console.log("GET CURRENT PLAYBACK", data.status)
             if(data) {
                 let playing = data.data.is_playing;
                 let context = "";
@@ -464,8 +463,9 @@ class Player extends Component {
 
         // Playback status updates
         player.addListener('player_state_changed', state => { 
+            this.setState({state})
             console.log("state", state)
-            if((state.track_window.next_tracks.length) || (state.track_window.previous_tracks.length) ) {
+            if(state.track_window && (state.track_window.next_tracks.length) || (state.track_window.previous_tracks.length) ) {
                 this.setState({context: "context"})
             }else {
                 this.setState({context: ""})

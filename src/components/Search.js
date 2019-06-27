@@ -7,6 +7,7 @@ import {accessToken, SearchFor, FeaturingPlaylists, UsersTop} from './Fetch'
 import BestSearch from './bestSearch'
 import Cookies from 'universal-cookie'
 import FeaPlaylists from './featuringPlaylists'
+import Personal from './Personal';
 
 
 class Search extends Component {
@@ -25,63 +26,76 @@ class Search extends Component {
           artistId: "",
           playlistScrolling: false,
           restTracks: [],
-          restArtists: []
+          restArtists: [], 
+          pillLastClicked: "",
         }
         this.handleChange = this.handleChange.bind(this);
         this.search = this.search.bind(this);
         this.openArtist = this.openArtist.bind(this);
+        this.blankSearch = this.blankSearch.bind(this);
         // this.handleKeyPress = this.handleKeyPress.bind(this);
     };
-    search(token, value, id) {
-        this.setState(this.state)
-            SearchFor(token, value, "track", 50)
-            .then((data) => {
-                if(data && data.data && data.data.tracks && data.data.tracks.items){
-                    let array = data.data.tracks.items
-                    if(array.length) {
-                        let maxPop = Math.max.apply(Math, array.map(function(track) { return track.popularity; }))
-                        let mostPopularTrack = array.find((track) => { return track.popularity === maxPop}) // the most popular track object
-                        this.setState({track: mostPopularTrack, trackId:mostPopularTrack.uri, restTracks: array})
-                    } 
-                } else {
-                    this.setState({noData1: true})
-                }
-            })
-        SearchFor(token, value, "artist", 50)
+    blankSearch() {
+        this.setState({searchValue: "", type: "", track: "", artist: "", max: "", maxImg: "" , personal: true})
+    }
+    search(token, value) {
+        let promise1 = SearchFor(token, value, "track", 50)
         .then((data) => {
-            if(data && data.data && data.data.artists && data.data.artists.items) {
-                let array = data.data.artists.items;
+            if(data && data.data && data.data.tracks && data.data.tracks.items){
+                let array = data.data.tracks.items
                 if(array.length) {
-                    let maxPop = Math.max.apply(Math, array.map(function(artist) { return artist.popularity; }))
-                    let mostPopularArtist = array.find((artist) => { return artist.popularity === maxPop}) // the most popular artist object
-                    this.setState({artist: mostPopularArtist, artistId: mostPopularArtist.id, restArtists: array}, () => { // after both track and artist search finishes
-                        let trackPop = this.state.track.popularity;
-                        let artistPop = this.state.artist.popularity;
-                        
-                        if(artistPop + 10 >= trackPop && this.state.artist.images.length) {
-                            this.setState({max: this.state.artist.name, maxImg: this.state.artist.images[0].url, type: "artist" })
-                        } else if(trackPop > artistPop && this.state.track.album.images && this.state.track.album.images.length) {
-                            this.setState({max: this.state.track.name, maxImg: this.state.track.album.images[0].url, type: "track"})
+                    let maxPop = Math.max.apply(Math, array.map(function(track) { return track.popularity; }))
+                    let mostPopularTrack = array.find((track) => { return track.popularity === maxPop}) // the most popular track object
+                    this.setState({track: mostPopularTrack, trackId:mostPopularTrack.uri, restTracks: array})
+                } 
+            } else {
+                this.setState({noData1: true})
+            } 
+        })
+        let promise2 = SearchFor(token, value, "artist", 50)
+            .then((data) => {
+                if(data && data.data && data.data.artists && data.data.artists.items) {
+                    let array = data.data.artists.items;
+                    if(array.length) {
+                        let maxPop = Math.max.apply(Math, array.map(function(artist) { return artist.popularity; }))
+                        let mostPopularArtist = array.find((artist) => { return artist.popularity === maxPop}) // the most popular artist object
+                        this.setState({artist: mostPopularArtist, artistId: mostPopularArtist.id, restArtists: array})
+                    }
+                } else {
+                    this.setState({noData2: true}, () => {
+                        if(this.state.noData1 == true) {
+                            this.setState({track: "", artist: "", max: "", maxImg: "", type: ""});
                         }
                     })
                 }
-            } else {
-                this.setState({noData2: true}, () => {
-                    if(this.state.noData1 == true) {
-                        this.setState({track: "", artist: "", max: "", maxImg: "", type: ""});
-                    }
-                })
-            }
-            })        
+            }) 
+            Promise.all([promise1, promise2])
+            .then(() => {
+                let trackPop = this.state.track.popularity;
+                let artistPop = this.state.artist.popularity;
+                if(artistPop + 10 >= trackPop && this.state.artist.images.length) {
+                    this.setState({max: this.state.artist.name, maxImg: this.state.artist.images[0].url, type: "artist" })
+                } else if(trackPop > artistPop && this.state.track.album.images && this.state.track.album.images.length) {
+                    this.setState({max: this.state.track.name, maxImg: this.state.track.album.images[0].url, type: "track"})
+                }
+            })
+              
     }
     openArtist(token, value, id) {
+        console.log("There")
         SearchFor(token, value, "artist", 50) 
         .then((data) => {
             if(data && data.data && data.data.artists && data.data.artists.items) {
                 data.data.artists.items.map((item) => {
-                    if(item.id == id && item.images[0].url) {
-                        this.setState({maxImg: item.images[0].url, type: "artist", artist: item, artistId: item.id})
-                        this.setState({maxImg: item.images[0].url, type: "artist", artist: item, artistId: item.id})
+                    if(item.id == id) {
+                        let img;
+                        if(item.images.length) {
+                            img = item.images[0].url 
+                        } else {
+                            img = "http://abs2018.lbsafricaclub.org/wp-content/uploads/2016/03/profile-placeholder.png"
+                        }
+                        this.setState({maxImg: img, type: "artist", artist: item, artistId: item.id, max: value})
+                        this.setState({maxImg: img, type: "artist", artist: item, artistId: item.id, max: value})
                     }
                 })
                 $('html, .search').animate({
@@ -146,19 +160,20 @@ class Search extends Component {
             e.target.parentNode.remove()
         })
         $(".pill").on("click", (e) => {
-            if(e.target.id === "pill1" || e.target.id === "pill2" || e.target.id === "pill3") { //if you click pill 1, 2 or 3
-                let value = e.target.innerText;
-                let token = accessToken();
-                $(".search-inner").addClass("search-searched")
-                $(".search-title").addClass("title-searched")
-                $(".pills-row").addClass("pills-searched")
-                $(".results").attr("class", "results")
-                this.search(token, value);
-                this.search(token, value);
-                this.setState(this.state)
-            } else if(e.target.id === "pill5") { //if you click pill 5
-                FeaturingPlaylists(token)
-                .then(data => console.log(data.data.playlists.items))
+            if(this.state.pillLastClicked !== e.target.id || this.state.max !== e.target.innerText ) {
+                if(e.target.id === "pill1" || e.target.id === "pill2" || e.target.id === "pill3") { //if you click pill 1, 2 or 3
+                    let value = e.target.innerText;
+                    let token = accessToken();
+                    this.search(token, value);
+                    $(".search-inner").addClass("search-searched")
+                    $(".search-title").addClass("title-searched")
+                    $(".pills-row").addClass("pills-searched")
+                    $(".results").attr("class", "results")
+                } else if(e.target.id === "pill5") { //if you click pill 5
+                    FeaturingPlaylists(token)
+                    .then(data => console.log(data.data.playlists.items))
+                }
+                this.setState({pillLastClicked: e.target.id})
             }
         }) 
     }
@@ -208,11 +223,11 @@ class Search extends Component {
                     </button>
                 </div>
                 <div className="row pills-row">
+                    <span id="pill-fire" className="pill"><img className="fire" src={require("../icons/trending.webp")}></img>trending<img className="pill-close" src={require("../icons/pill-close.png")}></img></span>
                     <span id="pill1" className="pill">{mostRecent1}<img className="pill-close" src={require("../icons/pill-close.png")}></img></span>
                     <span id="pill2" className="pill">{mostRecent2}<img className="pill-close" src={require("../icons/pill-close.png")}></img></span>
                     <span id="pill3" className="pill">{lastTrack}<img className="pill-close" src={require("../icons/pill-close.png")}></img></span>
                     <span id="pill4" className="pill">new_releases<img className="pill-close" src={require("../icons/pill-close.png")}></img></span>
-                    <span id="pill5" className="pill">featuring<img className="pill-close" src={require("../icons/pill-close.png")}></img></span>
                 </div>
                 <div className="row">
                     { value
@@ -242,7 +257,11 @@ class Search extends Component {
                         playing={this.props.playing}
                         replay={this.props.replay}
                         replayCounter={this.props.replayCounter}
-                        player={this.props.player}/>
+                        player={this.props.player}
+                        openArtist={this.openArtist}
+                        blankSearch={this.blankSearch}/>
+                    <Personal
+                        personal={this.state.personal}/>
                     {/* <FeaPlaylists /> */}
                     <div className="artist"></div>
                 </div>                

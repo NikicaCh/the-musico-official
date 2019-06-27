@@ -22,7 +22,7 @@ class SearchButton extends React.Component {
             <span
                 className={`search-div${this.props.color}`}
                 onClick={this.searchModal}
-                >search
+                >browse
             </span>        
         )
     }

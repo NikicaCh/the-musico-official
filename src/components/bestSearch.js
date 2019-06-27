@@ -1,5 +1,5 @@
 import React from 'react'
-import {Featuring, accessToken, PlayTrack, getDevices, Pause} from './Fetch'
+import {Featuring, accessToken, PlayTrack, getDevices, Pause, RelatedArtists} from './Fetch'
 import $ from 'jquery'
 import Cookies from 'universal-cookie'
 
@@ -13,7 +13,6 @@ class BestSearch extends React.Component {
         this.state = {
             featuring: [],
             deviceId: "",
-            searched: "",
             type: "",
             name: "",
             restCondition: "artists",
@@ -26,26 +25,8 @@ class BestSearch extends React.Component {
             currentId: "",
             currentPlaybackId: "",
             replayed: false,
-            pausedState: "Paused"
-        }
-        this.nextSuggestion = this.nextSuggestion.bind(this)
-    }
-
-    nextSuggestion() {
-        let token = accessToken()
-        if(this.state.context === "search artist") {
-            let index = this.state.arrayOfUris.indexOf(`spotify:track:${this.props.currentPlaybackId}`);
-            let nextIndex = this.state.arrayOfUris[index +1]
-            this.setState({pausedState:"Starting soon"}, () => {
-                Pause(token)
-                setTimeout(() => {
-                    PlayTrack(nextIndex, token, this.state.deviceId)
-                    setTimeout(() => {
-                        this.setState({pausedState:"Paused"})
-                    }, 1000)
-                }, 5000)
-            })
-            
+            pausedState: "Paused",
+            arrayOfRelatedArtists: []
         }
     }
 
@@ -98,85 +79,70 @@ class BestSearch extends React.Component {
         })
         
     }
-
-    // componentDidUpdate(prevProps) {
-    //     if(this.props.state !== prevProps.state) {
-    //         if(
-    //             (this.props.currentPlaybackId == prevProps.currentPlaybackId) && 
-    //             (this.props.position == 0) && (this.props.position !== prevProps.position) &&
-    //             (this.props.replay == prevProps.replay) && 
-    //             (this.state.replayed === false) && (this.props.replayCounter == prevProps.replayCounter) && 
-    //             (this.state.context !== "")) {
-    //             console.log("HEHE THE SONG FINISHED")
-    //             this.nextSuggestion()
-    //             this.setState({replayed: true})
-    //         } else if(this.props.currentPlaybackId !== prevProps.currentPlaybackId) {
-    //             this.setState({replayed: false})
-    //         }
-    //     }
-    // }
-    componentWillReceiveProps(nextProps) {
-        
-        this.setState(this.state)
-        if(this.props.restTracks.length) {
-            let tracks = this.props.restTracks;
-            let sortedTracks =  tracks.sort(function(a, b){
-                let keyA = a.popularity,
-                    keyB = b.popularity;
-                // Compare the 2 dates
-                if(keyA < keyB) return 1;
-                if(keyA > keyB) return -1;
-                return 0;
-            });
-        }
+    componentWillReceiveProps() {
+        // if(this.props.restTracks.length) {
+        //     let tracks = this.props.restTracks;
+        //     let sortedTracks =  tracks.sort(function(a, b){
+        //         let keyA = a.popularity,
+        //             keyB = b.popularity;
+        //         // Compare the 2 dates
+        //         if(keyA < keyB) return 1;
+        //         if(keyA > keyB) return -1;
+        //         return 0;
+        //     });
+        // }
         $("body").on("click", ".blank-search", () => {
-            if(!$("#results").hasClass("hide")) {
-                $("#results").attr("class", "results hide")
-                $(".search-input").val("")
-            }
+            this.props.blankSearch();
         })
         $(".see-more").on("click", () => {
             //to be done
         })
         let token = accessToken();
-        this.setState({searched: nextProps.search, type: nextProps.type, name: nextProps.max})
-        if(nextProps.type === "artist") {
-            this.setState(this.state)
-            Featuring(this.props.artistId, token )
-            .then((data) => {
-                if(data) {
-                    let index = 0;
-                    let arrayOfUris = []
-                    data.data.tracks.map((track) => {
-                        return arrayOfUris.push(track.uri)
-                    })
-                    let array = data.data.tracks.slice(0, 8).map((track) => {
-                        let name = track.name
-                        if(track.name.length > 20) {
-                            name = track.name.substring(0, 20) +"...";
-                        }
-                        index ++;
-                        return  <div
-                                    className="col-md-3 col-sm-7 mt-2 mb-5">
-                                    <div
-                                        id={`suggestion${index}`}  
-                                        className="row w-100 ml-3 d-flex justify-content-center">
-                                        <img
-                                            src={track.album.images[0].url}
-                                            className="featuring-img play-track mb-3"
-                                            id={track.uri}
-                                            alt="featuring img">
-                                        </img>
+        this.setState({type: this.props.type, name: this.props.max}, () => {
+            if(this.props.type === "artist") {
+                Featuring(this.props.artistId, token )
+                .then((data) => {
+                    if(data) {
+                        let index = 0;
+                        let arrayOfUris = []
+                        data.data.tracks.map((track) => {
+                            return arrayOfUris.push(track.uri)
+                        })
+                        let array = data.data.tracks.slice(0, 8).map((track) => {
+                            let name = track.name
+                            if(track.name.length > 20) {
+                                name = track.name.substring(0, 20) +"...";
+                            }
+                            index ++;
+                            let src;
+                            if(track.album.images.length) {
+                                src = track.album.images[0].url;
+                            } else {
+                                src = "https://images.unsplash.com/photo-1494232410401-ad00d5433cfa?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=1350&q=80"
+                            }
+                            return  <div
+                                        className="col-md-3 col-sm-7 mt-2 mb-5">
+                                        <div
+                                            id={`suggestion${index}`}  
+                                            className="row w-100 ml-3 d-flex justify-content-center">
+                                            <img
+                                                src={src}
+                                                className="featuring-img play-track mb-3"
+                                                id={track.uri}
+                                                alt="featuring img">
+                                            </img>
+                                        </div>
+                                        <div className="row w-100 ml-3 d-flex justify-content-center">
+                                            <span title={track.name} className={`featuring-title suggestion${index}`}>{name}</span>
+                                        </div>
                                     </div>
-                                    <div className="row w-100 ml-3 d-flex justify-content-center">
-                                        <span title={track.name} className={`featuring-title suggestion${index}`}>{name}</span>
-                                    </div>
-                                </div>
-                    })
-                    this.setState({featuring: array, arrayOfUris})
-                }
-            })
-        }
+                        })
+                        this.setState({featuring: array, arrayOfUris})
+                    }
+                })
+            }
+        })
+        
 
         if(this.props.restTracks && this.props.restTracks.length) {
             let arrayOfRestTracks;
@@ -187,21 +153,48 @@ class BestSearch extends React.Component {
             })
             let restTracksUris = [];
             arrayOfRestTracks = restTracks.slice(1, 6).map((track) => {
+                console.log(track)
                 restTracksUris.push(track.uri);
+                let src;
+                let artistName;
+                if(track.album.images.length) {
+                    src = track.album.images[0].url
+                } else {
+                    src = "https://images.unsplash.com/photo-1494232410401-ad00d5433cfa?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=1350&q=80"
+                }
+                if(track.artists.length) {
+                    artistName = track.artists[0].name
+                } else {
+                    artistName = ""
+                }
                 return  <div className="small-best-holder ml-3 d-flex justify-content-center">
                             <img
-                                src={track.album.images[0].url}
+                                src={src}
                                 className="play-track small-best-search-img ml-4"
                                 id={track.uri}
                                 alt="best search img">
                             </img>
                             <span className="small-best-search-title">{track.name}</span>
+                            <span className="small-best-search-artist">{artistName}</span>
                         </div>
             })
             restTracksUris.unshift(this.props.trackId)
             this.setState({restTracksUris})
             this.setState({arrayOfRestTracks})
         }
+        RelatedArtists(token, this.props.artistId)
+        .then((data) => {
+            let arrayOfRelatedArtists = data.data.artists.map((artist) => {
+                return <span id={artist.id} className="related-artist" onClick={(e) => {
+                        let target = e.target;
+                        let value = target.innerHTML;
+                        let token = accessToken();
+                        this.props.openArtist(token, value, artist.id)
+                        console.log("hello", value)
+                }}>{artist.name}</span>
+            })
+            this.setState({arrayOfRelatedArtists})
+        })
       }
     
     render() {
@@ -241,7 +234,10 @@ class BestSearch extends React.Component {
                                 ?   <div>
                                             <div id="first-page" className="row ml-3 mt-4 first-page" onClick={() => {
                                                 }}>
-                                                {this.state.featuring}
+                                                {this.state.featuring.length 
+                                                ? this.state.featuring
+                                                : <span className="nothing">Nothing to show here yet...</span>
+                                                }
                                             </div>
                                             <img className="next-page-icon" alt="next-page" src={require("../icons/next-page.png")}></img>
                                             <img className="prev-page-icon" alt="prev-page" src={require("../icons/prev-page.png")}></img>
@@ -259,6 +255,10 @@ class BestSearch extends React.Component {
                                 </div>
                             </div> {/*Where the dragable div ends */}
                             <div></div> {/*This is the second dragable div */}
+                            {this.props.type === "artist" 
+                            ? <div className="row related-artists">{this.state.arrayOfRelatedArtists.slice(0, 5)}</div>
+                            : <span></span>
+                            }
                             <div className="other-results-container">
                                 <div className="row mt-5">
                                     <span

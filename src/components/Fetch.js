@@ -253,6 +253,15 @@ export const profile = (token) => {
     })
     return promise;
 }
+
+export const RelatedArtists = (token, artistId) => {
+    let promise = Axios(`https://api.spotify.com/v1/artists/${artistId}/related-artists`, {
+        headers: {
+            "Authorization": `Bearer ${token}`
+        }
+    })
+    return promise;
+}
 // let moving = document.getElementById("background-image");
         //     const windowWidth = window.innerWidth / 2 ;
         //     const windowHeight = window.innerHeight / 2 ;
