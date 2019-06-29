@@ -8,7 +8,14 @@ class Personal extends React.Component {
         super(props)
 
         this.state = {
-            arrayOfFeaturingPlaylists: []
+            arrayOfFeaturingPlaylists: [],
+            detailsTitle: "",
+            detailsYear: "",
+            detailsArtists: [],
+            detailsDescription: "",
+            detailsFirstImage: "",
+            detailsFirstId: "",
+            detailsAllIds: [],
         }
         this.playlistDetails = this.playlistDetails.bind(this);
         this.closeDetails = this.closeDetails.bind(this);
