@@ -637,7 +637,7 @@ body {
 .search {
   position: absolute;
   z-index: 10;
-  background-color: rgba(34, 32, 34, .98);
+  background-color: rgb(34, 32, 34);
   width: 100%;
   height: 100vh;
 }
@@ -707,7 +707,7 @@ button:focus {outline:0;}
 .search-indicator {
   position: absolute;
   color: rgb(206, 204, 204);
-  top: 45%;
+  top: 28%;
   left: 32%;
   font-family: 'Amatic SC', cursive;
   font-size: .9vw;
@@ -1958,12 +1958,33 @@ input[type=range]:focus::-ms-fill-upper {
   margin: 2% .3%;
   z-index: 100000;
   transition: all .25s ease-out;
+  cursor: pointer; 
 }
 .personal-item:first {
   margin: 2% 0 0 6%;
 }
+.item-selected {
+  border: solid 6px #e3e64b;
+  transition: .5s ease-out;
+}
+.item-selected::after {
+  content: '';
+  position: absolute;
+  left: 42%;
+  top: 100%;
+  width: 0;
+  height: 0;
+  border-left: 20px solid transparent;
+  border-right: 20px solid transparent;
+  border-top: 20px solid #e3e64b;
+  clear: both;
+  transition: .5s ease-out;
+}
+.item-unselected {
+  border: solid .001px white;
+  transition: .15s ease-out;
+}
 .hoverable:hover {
-  cursor: pointer;
   transform: scale(1.45);
   z-index: 100000;
   transition: all .25s ease-out;
@@ -1976,6 +1997,10 @@ input[type=range]:focus::-ms-fill-upper {
   transition: all .2s ease-in;
   transition-delay: 1s;
 }
+.hoverable:hover .play-playlist {
+  opacity: .7;
+  transition: .1s ease-out;
+}
 .personal-details {
   position: relative;
   width: 68%;
@@ -1983,6 +2008,7 @@ input[type=range]:focus::-ms-fill-upper {
   margin-top: -10%;
   color: transparent;
   transition: all .5s ease-in-out;
+  opacity: 0;
 }
 .personal-arrow {
   position: relative;
@@ -1994,9 +2020,27 @@ input[type=range]:focus::-ms-fill-upper {
 .personal-arrow::selection {
   background: transparent;
 }
+.personal-details h1 {
+  display: inline-block;
+  font-size: 1.2vw;
+  color: rgb(212, 212, 212);
+  position: relative;
+  font-family: 'Anton', sans-serif;
+}
+.personal-details h1::selection {
+  background: red;
+}
+.personal-details span {
+  display: block;
+  font-size: .6vw;
+  color: rgb(212, 212, 212);
+  position: relative;
+  font-family: 'Anton', sans-serif;
+}
 .maximized {
   height: 45%;
   transition: all .5s ease-in-out;
+  opacity: 1;
 }
 .close-personal {
   width: 1.2%;
@@ -2020,4 +2064,20 @@ input[type=range]:focus::-ms-fill-upper {
 }
 .featuring-playlists::selection {
   background: transparent;
+}
+.play-playlist {
+  position: absolute;
+  max-width: 2vw;
+  max-height: 2vw;
+  border-radius: 50%;
+  top: 42%;
+  left: 5%;
+  padding: .5%;
+  background: rgba(238, 236, 214, 0.8);
+  opacity: 0;
+  transition: all .2s ease-out;
+}
+.play-playlist:hover {
+  transform: scale(1.2);
+  transition: all .1s ease-out;
 }
