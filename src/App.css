@@ -2011,10 +2011,11 @@ input[type=range]:focus::-ms-fill-upper {
   opacity: 0;
 }
 .personal-arrow {
-  position: relative;
+  position: absolute;
   width: 1.9vw;
   height: 1.5vw;
-  margin: 82% auto 10% 40%;
+  top: 80%;
+  left: 40%;
   opacity: 0;
 }
 .personal-arrow::selection {

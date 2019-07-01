@@ -1,6 +1,6 @@
 import React from 'react'
 import $ from 'jquery'
-import { accessToken ,FeaturingPlaylists} from './Fetch'
+import { accessToken ,FeaturingPlaylists, PlaylistsTracks} from './Fetch'
 
 
 class Personal extends React.Component {
@@ -9,6 +9,7 @@ class Personal extends React.Component {
 
         this.state = {
             arrayOfFeaturingPlaylists: [],
+            detailsPlaylistTracksIds: [],
             detailsTitle: "",
             detailsYear: "",
             detailsArtists: [],
@@ -16,6 +17,7 @@ class Personal extends React.Component {
             detailsFirstImage: "",
             detailsFirstId: "",
             detailsAllIds: [],
+            firstTracks: []
         }
         this.playlistDetails = this.playlistDetails.bind(this);
         this.closeDetails = this.closeDetails.bind(this);
@@ -46,14 +48,23 @@ class Personal extends React.Component {
     }
     componentDidMount() {
         let token = accessToken();
+        let array;
+
         FeaturingPlaylists(token)
         .then((data) => {
             if(data) {
-                console.log("DATAAAA",data.data.playlists.items)
                 let arrayOfFeaturingPlaylists = data.data.playlists.items.slice(0, 5).map((item) => {
                     const style = {
                         backgroundImage: `url(${item.images[0].url})`
                     }
+                    console.log({[item.id] : "HELLO"})
+                    PlaylistsTracks(token, item.id, 1)
+                    .then(data => {console.log("DAHADHA", data)})
+                    .catch(err => {console.log("ERRRRRR", err)})
+                    // let stateArray = this.state.firstTracks;
+                    // stateArray.push((item.id) = PlaylistsTracks(token, item.id, 1))
+                    // this.setState({firstTracks: stateArray})
+                    
                     return (
                         <div className="personal-item hoverable" style={style} onClick={this.clickUnhoverable}>
                         <img id={item.id} src={require("../icons/personal-arrow.webp")} className="personal-arrow" onClick={this.playlistDetails}></img>

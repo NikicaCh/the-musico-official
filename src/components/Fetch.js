@@ -218,6 +218,17 @@ export const FeaturingPlaylists = (token) => {
     return promise;
 }
 
+export const PlaylistsTracks = (token, id, limit) => {
+    let promise = Axios(`https://api.spotify.com/v1/playlists/${id}/tracks?limit=${limit}`, {
+        header: {
+            "Authorization": `Bearer ${token}`,
+            "Content-Type": "application/json",
+            "Accept": "application/json"
+        }
+    })
+    return promise
+}
+
 export const UsersTop = (token, type, time_range, limit) => {
     let promise = Axios(`https://api.spotify.com/v1/me/top/${type}?time_range=${time_range}&limit=${limit}&offset=21`, {
         headers: {
