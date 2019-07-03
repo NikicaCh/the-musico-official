@@ -79,10 +79,10 @@ class App extends Component {
       cookies.set("access_time", date.toString())
       window.location.replace("/")
     } else if( typeof cookies.get("access_time") === "undefined" || new Date(cookies.get("access_time").toString()).addHours(1).toString() < new Date().toString()) {
-      window.location.replace(linkToRedirectInDevelopment)   
+      window.location.replace(linkToRedirectInProduction)   
     }
     this.timer = setInterval(() =>  {
-      window.location.replace(linkToRedirectInDevelopment)   
+      window.location.replace(linkToRedirectInProduction)   
     }, 2500000);
     return (
       <div id="app" className="App">     
