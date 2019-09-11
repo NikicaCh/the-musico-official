@@ -96,7 +96,22 @@ export const Play = (token) => {
         method: 'PUT',
         headers: {
             'Authorization': 'Bearer ' + token },
-});
+    });
+}
+
+export const PlayContext = (token, uri) => {
+    fetch('https://api.spotify.com/v1/me/player/play', {
+        method: 'PUT',
+        headers: {
+            'Authorization': 'Bearer ' + token },
+        body: JSON.stringify({
+            "context_uri": `${uri}`,
+            "offset": {
+              "position": 0
+            },
+            "position_ms": 0
+          })
+    });
 }
 
 export const PreviousTrack = (token) => {
@@ -219,7 +234,18 @@ export const FeaturingPlaylists = (token) => {
 }
 
 export const PlaylistsTracks = (token, id, limit) => {
-    let promise = Axios(`https://api.spotify.com/v1/playlists/${id}/tracks?limit=${limit}`, {
+    let promise = Axios.get(`https://api.spotify.com/v1/playlists/${id}/tracks?limit=${limit}`, {
+        header: {
+            "Authorization": `Bearer ${token}`,
+            "Content-Type": "application/json",
+            "Accept": "application/json"
+        }
+    })
+    return promise
+}
+
+export const GetPlaylist = (token, id) => {
+    let promise = Axios(`https://api.spotify.com/v1/playlists/${id}`, {
         header: {
             "Authorization": `Bearer ${token}`,
             "Content-Type": "application/json",

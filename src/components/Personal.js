@@ -1,6 +1,7 @@
 import React from 'react'
 import $ from 'jquery'
-import { accessToken ,FeaturingPlaylists, PlaylistsTracks} from './Fetch'
+import { accessToken ,FeaturingPlaylists, PlayContext} from './Fetch'
+import Axios from 'axios'
 
 
 class Personal extends React.Component {
@@ -17,7 +18,8 @@ class Personal extends React.Component {
             detailsFirstImage: "",
             detailsFirstId: "",
             detailsAllIds: [],
-            firstTracks: []
+            firstTracks: [],
+            token: accessToken()
         }
         this.playlistDetails = this.playlistDetails.bind(this);
         this.closeDetails = this.closeDetails.bind(this);
@@ -46,10 +48,12 @@ class Personal extends React.Component {
         $(".personal-item").removeClass("item-selected")
         $(".personal-item").addClass("item-unselected")
     }
+    
     componentDidMount() {
         let token = accessToken();
         let array;
-
+        
+        
         FeaturingPlaylists(token)
         .then((data) => {
             if(data) {
@@ -57,10 +61,13 @@ class Personal extends React.Component {
                     const style = {
                         backgroundImage: `url(${item.images[0].url})`
                     }
-                    console.log({[item.id] : "HELLO"})
-                    PlaylistsTracks(token, item.id, 1)
-                    .then(data => {console.log("DAHADHA", data)})
-                    .catch(err => {console.log("ERRRRRR", err)})
+                    console.log(item.uri)/////here mate 
+                    
+
+                    
+                    // PlaylistsTracks(newToken, item.id, 10)
+                    // .then(data => {console.log("DAHADHA", data)})
+                    // .catch(err => {console.log("ERRRRRR", err)})
                     // let stateArray = this.state.firstTracks;
                     // stateArray.push((item.id) = PlaylistsTracks(token, item.id, 1))
                     // this.setState({firstTracks: stateArray})
@@ -68,14 +75,16 @@ class Personal extends React.Component {
                     return (
                         <div className="personal-item hoverable" style={style} onClick={this.clickUnhoverable}>
                         <img id={item.id} src={require("../icons/personal-arrow.webp")} className="personal-arrow" onClick={this.playlistDetails}></img>
-                        <img src={require("../icons/play-playlist.webp")} className="play-playlist"></img>
+                        <img onClick={() => { 
+                            PlayContext(token, item.uri)
+                        }} src={require("../icons/play-playlist.webp")} className="play-playlist"></img>
                         </div>
                     )
                 })
                 this.setState({arrayOfFeaturingPlaylists})
             }
         })
-
+        .catch(err => console.log(err))
     }
 
     
@@ -96,13 +105,13 @@ class Personal extends React.Component {
                     <h1>Everyday favourites</h1>
                     <span>2014</span>
                 </div>
-                <div className="personal-section">
+                {/* <div className="personal-section">
                     <div className="personal-item hoverable"><img src={require("../icons/personal-arrow.webp")} className="personal-arrow"></img></div>
                     <div className="personal-item hoverable"><img src={require("../icons/personal-arrow.webp")} className="personal-arrow"></img></div>
                     <div className="personal-item hoverable"><img src={require("../icons/personal-arrow.webp")} className="personal-arrow"></img></div>
                     <div className="personal-item hoverable"><img src={require("../icons/personal-arrow.webp")} className="personal-arrow"></img></div>
                     <div className="personal-item hoverable"><img src={require("../icons/personal-arrow.webp")} className="personal-arrow"></img></div>
-                </div>
+                </div> */}
             </div>
         )
     }

@@ -1942,11 +1942,11 @@ input[type=range]:focus::-ms-fill-upper {
 }
 .personal-section {
   position: relative;
-  width: 100%;
+  width: auto;
   height: 70%;
   margin: auto;
-  white-space: nowrap;
-  overflow-x: scroll;
+  word-wrap:break-word;
+  overflow-x: hidden;
 }
 .personal-section::-webkit-scrollbar {display:none;}
 .personal-item {
@@ -2039,7 +2039,7 @@ input[type=range]:focus::-ms-fill-upper {
   font-family: 'Anton', sans-serif;
 }
 .maximized {
-  height: 45%;
+  height: 50%;
   transition: all .5s ease-in-out;
   opacity: 1;
 }

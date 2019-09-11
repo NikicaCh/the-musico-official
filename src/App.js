@@ -61,7 +61,7 @@ class App extends Component {
     cookies.remove("access", ["Expires=Thu, 01 Jan 1970 00:00:01 GMT;"])
   }
   render() {
-    document.title = "Musico";
+    document.title = "The Musico";
     const linkToRedirectInDevelopment = "http://localhost:8888/login";
     const linkToRedirectInProduction = "https://themusico-redirect.herokuapp.com/login";
     let token = accessToken();

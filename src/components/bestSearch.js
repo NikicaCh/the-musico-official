@@ -153,7 +153,6 @@ class BestSearch extends React.Component {
             })
             let restTracksUris = [];
             arrayOfRestTracks = restTracks.slice(1, 6).map((track) => {
-                console.log(track)
                 restTracksUris.push(track.uri);
                 let src;
                 let artistName;

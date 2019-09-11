@@ -82,7 +82,6 @@ class Search extends Component {
               
     }
     openArtist(token, value, id) {
-        console.log("There")
         SearchFor(token, value, "artist", 50) 
         .then((data) => {
             if(data && data.data && data.data.artists && data.data.artists.items) {

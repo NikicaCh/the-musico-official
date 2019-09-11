@@ -224,7 +224,6 @@ class Player extends Component {
         })
     }
     setCurrentTrack(access) {
-        console.log("SET CURRENT TRACK")
         let track = '';
         let songArtist;
         let genius = getGeniusKey();
@@ -444,7 +443,6 @@ class Player extends Component {
             
         // Ready
         player.addListener('ready', ({ device_id }) => {
-            console.log("READY", device_id)
             this.setState({loading: false})
             this.setCurrentTrack(access); // SET CURRENT TRACK --------------------------------------------------
             this.setCurrentTrack(access); // I must call this func twice, because when I try to play the same song again the API returns is_playing:false
@@ -467,7 +465,6 @@ class Player extends Component {
         // Playback status updates
         player.addListener('player_state_changed', state => { 
             this.setState({state})
-            console.log("state", state)
             if(state.track_window && (state.track_window.next_tracks.length) || (state.track_window.previous_tracks.length) ) {
                 this.setState({context: "context"})
             }else {
@@ -631,7 +628,6 @@ class Player extends Component {
                                     }}>{deviceName}</h3>
                                 })
                                 this.setState({devices: names})
-                                console.log("DEVICES",response.data.devices)
                             })
                             $(".devices_modal").removeClass("hide")
                         }}
