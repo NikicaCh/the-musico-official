@@ -134,6 +134,7 @@ class Search extends Component {
         })
         $(".search-close").on("click", () => {
             $("#search").toggleClass("hide")
+            // $(".personal").addClass("hide")
             if($(".paused-div").hasClass("visible")) {
                 $(".paused-div").removeClass("visible")
                 $(".paused-div").addClass("hide")
@@ -260,7 +261,8 @@ class Search extends Component {
                         openArtist={this.openArtist}
                         blankSearch={this.blankSearch}/>
                     <Personal
-                        personal={this.state.personal}/>
+                        personal={this.state.personal}
+                        userId={this.props.userId}/>
                     {/* <FeaPlaylists /> */}
                     <div className="artist"></div>
                 </div>                

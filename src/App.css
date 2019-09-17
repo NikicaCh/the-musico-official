@@ -1943,21 +1943,32 @@ input[type=range]:focus::-ms-fill-upper {
 .personal-section {
   position: relative;
   width: auto;
-  height: 70%;
+  height: 90%;
   margin: auto;
   word-wrap:break-word;
   overflow-x: hidden;
 }
+
+.playlist-row {
+  position: absolute;
+  width: 85%;
+  height: 35%;
+}
+.playlist-row:nth-of-type(2) {
+  top: 55%;
+}
+.playlist-row:nth-of-type(3) {
+  top: 100%;
+}
+
 .personal-section::-webkit-scrollbar {display:none;}
 .personal-item {
   position: relative;
   display: inline-block;
-  background-image:url('https://images.unsplash.com/photo-1561266436-869747b1bff7?ixlib=rb-1.2.1&auto=format&fit=crop&w=1350&q=80');
-  height: 41%;
-  width: 13.5%;
+  height: 90%;
+  width: 17%;
   margin: 2% .3%;
   z-index: 100000;
-  transition: all .25s ease-out;
   cursor: pointer; 
 }
 .personal-item:first {
@@ -1965,7 +1976,6 @@ input[type=range]:focus::-ms-fill-upper {
 }
 .item-selected {
   border: solid 6px #e3e64b;
-  transition: .5s ease-out;
 }
 .item-selected::after {
   content: '';
@@ -1978,37 +1988,26 @@ input[type=range]:focus::-ms-fill-upper {
   border-right: 20px solid transparent;
   border-top: 20px solid #e3e64b;
   clear: both;
-  transition: .5s ease-out;
 }
 .item-unselected {
   border: solid .001px white;
-  transition: .15s ease-out;
 }
 .hoverable:hover {
-  transform: scale(1.45);
+  transform: scale(1.25);
   z-index: 1000000000000;
-  transition: all .25s ease-out;
-  transition-delay: .5s;
-  margin: 2.5% 2.75% ;
+  margin: 2%;
 }
 .hoverable:hover .personal-arrow {
   opacity: 1;
   transform: translateY(5px);
-  transition: all .2s ease-in;
-  transition-delay: 1s;
 }
 .hoverable:hover .play-playlist {
   opacity: .7;
-  transition: .1s ease-out;
 }
 .personal-details {
   position: relative;
   width: 68%;
   height: 5%;
-  margin-top: -10%;
-  color: transparent;
-  transition: all .5s ease-in-out;
-  opacity: 0;
 }
 .personal-arrow {
   position: absolute;
@@ -2040,7 +2039,6 @@ input[type=range]:focus::-ms-fill-upper {
 }
 .maximized {
   height: 50%;
-  transition: all .5s ease-in-out;
   opacity: 1;
 }
 .close-personal {
@@ -2076,9 +2074,7 @@ input[type=range]:focus::-ms-fill-upper {
   padding: .5%;
   background: rgba(238, 236, 214, 0.8);
   opacity: 0;
-  transition: all .2s ease-out;
 }
 .play-playlist:hover {
   transform: scale(1.2);
-  transition: all .1s ease-out;
 }

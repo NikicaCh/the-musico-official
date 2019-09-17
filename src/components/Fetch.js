@@ -56,7 +56,7 @@ export const getDevices = (token) => {
         })
         .catch(err => {
             if(err.response.status == 401) {
-                window.location.replace(linkToRedirectInProduction)
+                window.location.replace(linkToRedirectInDevelopment)
             }
         });
         return promise;
@@ -79,9 +79,28 @@ export const RecentlyPlayed = (token, limit) => {
     return promise;
 }
 
+// export const Recommended = (token) => {
+//     let promise = Axios('https://api.spotify.com/v1/recommendations' + limit, {
+//             headers: {
+//                 'Authorization': 'Bearer ' + token },
+//         })
+//         .catch(err => console.log(err));
+//     return promise;
+// }
 // export const Search = token => {
 
 // }
+
+export const UsersPlaylists = (token, user) => {
+    let promise = Axios(`https://api.spotify.com/v1/users/${user}/playlists`, {
+            headers: {
+                'Accept': 'application/json' ,
+                'Content-Type': 'application/json' ,
+                'Authorization': 'Bearer ' + token },
+        })
+        .catch(err => console.log(err));
+    return promise;
+}
 
 export const Pause = (token) => {
     fetch('https://api.spotify.com/v1/me/player/pause', {
@@ -223,7 +242,7 @@ export const New_Releases = () => {
 }
 
 export const FeaturingPlaylists = (token) => {
-    let promise = Axios(`https://api.spotify.com/v1/browse/featured-playlists`, {
+    let promise = Axios(`https://api.spotify.com/v1/browse/featured-playlists?limit=20`, {
         headers: {
             "Authorization": `Bearer ${token}`,
             "Content-Type": "application/json",
