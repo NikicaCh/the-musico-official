@@ -14,7 +14,6 @@ import NotFound from './components/NotFound'
 
 //import components
 import Logo from './components/logo'
-import SearchButton from './components/searchButton'
 import WiderScreen from './components/widerscreen';
 
 
@@ -64,6 +63,7 @@ class App extends Component {
     document.title = "The Musico";
     const linkToRedirectInDevelopment = "http://localhost:8888/login";
     const linkToRedirectInProduction = "https://themusico-redirect.herokuapp.com/login";
+    const linkEnv = linkToRedirectInDevelopment;
     let token = accessToken();
     getDevices(token)
     let date = new Date();
@@ -79,10 +79,10 @@ class App extends Component {
       cookies.set("access_time", date.toString())
       window.location.replace("/")
     } else if( typeof cookies.get("access_time") === "undefined" || new Date(cookies.get("access_time").toString()).addHours(1).toString() < new Date().toString()) {
-      window.location.replace(linkToRedirectInProduction)   
+      window.location.replace(linkEnv)   
     }
     this.timer = setInterval(() =>  {
-      window.location.replace(linkToRedirectInProduction)   
+      window.location.replace(linkEnv)   
     }, 2500000);
     return (
       <div id="app" className="App">     
@@ -105,7 +105,6 @@ class App extends Component {
           return (
             <div>
               <Logo color={"-black"} />
-              <SearchButton color={"-black"} />
               <Player/>
             </div>
             );

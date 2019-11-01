@@ -5,7 +5,6 @@ import Cookies from 'universal-cookie'
 
 import RestTracks from './restTracks'
 import RestArtists from './restArtists'
-import PauseDiv from './pause'
 
 class BestSearch extends React.Component {
     constructor(props) {
@@ -25,7 +24,6 @@ class BestSearch extends React.Component {
             currentId: "",
             currentPlaybackId: "",
             replayed: false,
-            pausedState: "Paused",
             arrayOfRelatedArtists: []
         }
     }
@@ -99,7 +97,7 @@ class BestSearch extends React.Component {
         })
         let token = accessToken();
         this.setState({type: this.props.type, name: this.props.max}, () => {
-            if(this.props.type === "artist") {
+            if(this.props.type !== "") {
                 Featuring(this.props.artistId, token )
                 .then((data) => {
                     if(data) {
@@ -181,19 +179,22 @@ class BestSearch extends React.Component {
             this.setState({restTracksUris})
             this.setState({arrayOfRestTracks})
         }
-        RelatedArtists(token, this.props.artistId)
-        .then((data) => {
-            let arrayOfRelatedArtists = data.data.artists.map((artist) => {
-                return <span id={artist.id} className="related-artist" onClick={(e) => {
-                        let target = e.target;
-                        let value = target.innerHTML;
-                        let token = accessToken();
-                        this.props.openArtist(token, value, artist.id)
-                        console.log("hello", value)
-                }}>{artist.name}</span>
+        if(this.props.artist !== "") { //not making requests without search value
+            RelatedArtists(token, this.props.artistId)
+            .then((data) => {
+                let arrayOfRelatedArtists = data.data.artists.map((artist) => {
+                    return <span id={artist.id} className="related-artist" onClick={(e) => {
+                            let target = e.target;
+                            let value = target.innerHTML;
+                            let token = accessToken();
+                            this.props.openArtist(token, value, artist.id)
+                            console.log("hello", value)
+                    }}>{artist.name}</span>
+                })
+                this.setState({arrayOfRelatedArtists})
             })
-            this.setState({arrayOfRelatedArtists})
-        })
+        }
+        
       }
     
     render() {
@@ -207,9 +208,6 @@ class BestSearch extends React.Component {
         }
         return (
             <div>
-            <PauseDiv 
-                playing={this.props.playing}
-                pausedState={this.state.pausedState} />
             {
                 render
                 ? <div className="container w-100 search-top">

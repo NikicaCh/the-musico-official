@@ -16,6 +16,8 @@ import Search from './Search'
 import Spinner from './Spinner'
 import Legend from './legend'
 import Profile from './profile'
+import SearchButton from './searchButton'
+import PauseDiv from './pause'
 import stringSimilarity  from 'string-similarity'
 // import scrapeIt from 'scrape-it'
 import cheerio from 'cheerio'
@@ -25,6 +27,7 @@ import $ from 'jquery'
 import uniqid from 'uniqid'
 const linkBackendInDevelopment = "http://localhost:8888/";
 const linkBackendInProduction = "https://themusico-redirect.herokuapp.com/";
+const linkEnv = linkBackendInDevelopment;
 
 
 class Player extends Component {
@@ -66,7 +69,9 @@ class Player extends Component {
             state: "",
             replay: "",
             player: "",
-            replayCounter: 0
+            replayCounter: 0,
+            search: false,
+            paused: false
         }
         this.getLyrics = this.getLyrics.bind(this)
         this.setCurrentTrack = this.setCurrentTrack.bind(this)
@@ -114,7 +119,7 @@ class Player extends Component {
         Shuffle(token);
     }
     async receiveLyrics() {
-        const response = await fetch(linkBackendInProduction);
+        const response = await fetch(linkEnv);
         const body = await response.json();
     
         if (response.status !== 200) throw Error(body.message);
@@ -177,7 +182,7 @@ class Player extends Component {
           .trim();
       }
     sendToBackEnd(url, track) {
-        Axios.post(linkBackendInProduction, {
+        Axios.post(linkEnv, {
                     data: {
                         url,
                         track
@@ -201,7 +206,7 @@ class Player extends Component {
                     hitsName.push(hit.result.full_title);
                 })
                 if(hitsName.length) { // if the genius api responds with a result
-                    if($("#lyrics-main").hasClass("hide")) {
+                    if($) {
                         $("#lyrics-main").toggleClass("hide")
                     }
                     let lyrics = stringSimilarity.findBestMatch(track, hitsName);
@@ -215,7 +220,7 @@ class Player extends Component {
                         this.receiveLyrics();
                     })
                 } else {
-                    if(!$("#lyrics-main").hasClass("hide")) {
+                    if(!$) {
                         $("#lyrics-main").toggleClass("hide")
                     }
                 } 
@@ -241,6 +246,9 @@ class Player extends Component {
                     this.setState({context})
                 }
                 this.setState({playing})
+                if(!this.state.search) {
+                    this.setState({paused: playing})
+                }
                 if(data.data.item) {
                     this.setState({trackId: data.data.item.id})
                 }
@@ -292,7 +300,7 @@ class Player extends Component {
         });                  
     }
     handleScrollLyrics(e) {
-        if($("#search").length && $("#search").hasClass("hide")) {
+        if(!this.state.search) {
             if (e.deltaY < 0) { //scroll up
                 if( this.state.fullLyrics && this.state.lyricsPosition > 0) {
                     this.setState({ lyricsPosition: this.state.lyricsPosition -1}, () => {
@@ -316,21 +324,21 @@ class Player extends Component {
         }
     }
     handleKeyPress(e) {
-        if($("#search").hasClass("hide")) { //if the search modal is not active
+        if(this.state.search === false) { //if the search modal is not active
             let event = e;
             let code = event.keyCode;
             let token = accessToken();
             let {currentPlaybackUri} = this.state
-                if(code === 37 && $("#search").hasClass("hide") && this.state.context !== "") { // left arrow
+                if(code === 37 && this.state.context !== "") { // left arrow
                     PreviousTrack(token);
                 }
-                else if(code === 39 && $("#search").hasClass("hide") && this.state.context !== "") { //right arrow
+                else if(code === 39 && this.state.context !== "") { //right arrow
                     NextTrack(token);
                 }
-                else if(code === 32 && $("#search").hasClass("hide")) { //space
+                else if(code === 32) { //space
                     this.playPause();
                 }
-                else if(code === 40 && $("#search").hasClass("hide")) { //down arrow
+                else if(code === 40) { //down arrow
                     if(this.state.volume > 0) {
                         this.setState({volume: this.state.volume - 5}, () => {
                             Volume(token, this.state.volume)
@@ -340,16 +348,16 @@ class Player extends Component {
                             // document.getElementById("app").appendChild(image)
                         })
                     }
-                } else if(code === 38 && $("#search").hasClass("hide")) { //up arrow
+                } else if(code === 38) { //up arrow
                     if(this.state.volume < 100) {
                         this.setState({volume: this.state.volume + 5}, () => {
                             Volume(token, this.state.volume)
                         })
                     }
                 }
-                else if(code === 83 && $("#search").hasClass("hide")) { //s
+                else if(code === 83) { //s
                     this.searchModal();
-                } else if(code === 82 && $("#search").hasClass("hide")) { //R
+                } else if(code === 82) { //R
                         PlayTrack(currentPlaybackUri, token, this.state.musicoId);
                         let uniqId = uniqid();
                         this.setState({lyricsPosition: 0, replay: uniqId, replayCounter: this.state.replayCounter + 1}, () => {
@@ -363,13 +371,17 @@ class Player extends Component {
         }        
     }
     searchModal() {
-        $("#search").toggleClass("hide")
-        if($(".paused-div").hasClass("visible")) {
-            $(".paused-div").removeClass("visible")
-            $(".paused-div").addClass("hide")
+        console.log("MODAL")
+        if(this.state.search === false ) {
+            this.setState({search: true}, () => {
+                this.setState({paused: true})
+                console.log("TRUE")
+            })
         } else {
-            $(".paused-div").removeClass("hide")
-            $(".paused-div").addClass("visible")
+            this.setState({search: false}, () => {
+                this.setState({paused: false})
+                console.log("FALSE")
+            })
         }
     }
 
@@ -464,8 +476,9 @@ class Player extends Component {
 
         // Playback status updates
         player.addListener('player_state_changed', state => { 
+            console.log(state)
             this.setState({state})
-            if(state.track_window && (state.track_window.next_tracks.length) || (state.track_window.previous_tracks.length) ) {
+            if(state) {
                 this.setState({context: "context"})
             }else {
                 this.setState({context: ""})
@@ -527,6 +540,8 @@ class Player extends Component {
                 :<div ref={"player"} id="player" className="player">
                 <Search
                     state={this.state.state}
+                    render={this.state.search}
+                    toggleRender={this.searchModal}
                     currentPlaybackId={this.state.currentPlaybackId}
                     deviceId={this.state.musicoId}
                     playing={this.state.playing}
@@ -535,6 +550,8 @@ class Player extends Component {
                     replay={this.state.replay}
                     replayCounter={this.state.replayCounter}
                     player={this.state.player}/>
+                <SearchButton color={"-black"} toggleRender={this.searchModal}/>
+                <PauseDiv playing={!this.state.paused} />
                 <DisplayText
                     name={this.state.display}
                     class={'songName'} 

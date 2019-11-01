@@ -654,11 +654,10 @@ body {
   font-size: 1vw;
   border-radius: 50px;
   background: rgb(212, 212, 212);
-}
-.search-searched {
   transform: translateY(-260%);
   transition: transform .5s ease-in-out;
 }
+
 
 .search-input {
   border: 0;
@@ -696,8 +695,6 @@ button:focus {outline:0;}
   top: 20%;
   left: 45%;
   font-family: 'Anton', sans-serif;
-}
-.title-searched {
   transform: translateY(-300%);
   transition: transform .5s ease-in-out;
 }
@@ -719,6 +716,8 @@ button:focus {outline:0;}
   width: 38%;
   margin: 1% auto;
   color: white;
+  transform: translateY(-700%);
+  transition: transform .5s ease-in-out;
 }
 
 @media only screen and (max-width: 1000px) {
@@ -745,10 +744,6 @@ button:focus {outline:0;}
   .search-title {
     transform: translateY(-10%);
   }
-}
-.pills-searched {
-  transform: translateY(-700%);
-  transition: transform .5s ease-in-out;
 }
 .pill {
   position: relative;
@@ -1038,7 +1033,8 @@ button:focus {outline:0;}
 .rest-tracks {
   width: 100%;
   margin: auto;
-  margin-top: 10%;
+  position: absolute;
+  margin-top: 5%;
 }
 .rest-tracks div:hover {
   background: rgb(108, 108, 109);
@@ -1072,9 +1068,10 @@ button:focus {outline:0;}
 }
 
 .rest-artists {
+  position: absolute;
   width: 100%;
   margin: auto;
-  margin-top: -20%;
+  margin-top: 5%;
 }
 
 .rest-artist-div  img{
@@ -1303,7 +1300,7 @@ button:focus {outline:0;}
 .paused-div {
   position: fixed !important;
   background: rgba(71, 73, 76, 0.9);
-  z-index: -999999999 !important;
+  z-index: 5 !important;
   width: 100vw;
   height: 100vh;
   margin: 0;
@@ -1937,8 +1934,8 @@ input[type=range]:focus::-ms-fill-upper {
   position: absolute;
   width: 100%;
   height: 90%;
-
-  margin: 0 0 0 10%;
+  margin: 10%;
+  margin-top: 2%;
 }
 .personal-section {
   position: relative;

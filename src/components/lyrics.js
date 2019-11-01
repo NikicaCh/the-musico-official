@@ -23,7 +23,7 @@ class LyricsDiv extends Component {
     }
 
     report = () => {
-        ReportLyrics(this.props.trackId, this.props.userId, this.props.userEmail)
+        // ReportLyrics(this.props.trackId, this.props.userId, this.props.userEmail)
     }
     render() {
         let loaded = this.props.lyrics;

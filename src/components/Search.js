@@ -7,7 +7,9 @@ import {accessToken, SearchFor, FeaturingPlaylists, UsersTop} from './Fetch'
 import BestSearch from './bestSearch'
 import Cookies from 'universal-cookie'
 import FeaPlaylists from './featuringPlaylists'
-import Personal from './Personal';
+import Personal from './Personal'
+import Pill from './pill'
+import { throws } from 'assert'
 
 
 class Search extends Component {
@@ -28,6 +30,7 @@ class Search extends Component {
           restTracks: [],
           restArtists: [], 
           pillLastClicked: "",
+          personal: true
         }
         this.handleChange = this.handleChange.bind(this);
         this.search = this.search.bind(this);
@@ -36,7 +39,7 @@ class Search extends Component {
         // this.handleKeyPress = this.handleKeyPress.bind(this);
     };
     blankSearch() {
-        this.setState({searchValue: "", type: "", track: "", artist: "", max: "", maxImg: "" , personal: true})
+        this.setState({searchValue: "", type: "", track: "", artist: "", max: "", maxImg: "" })
     }
     search(token, value) {
         let promise1 = SearchFor(token, value, "track", 50)
@@ -113,9 +116,6 @@ class Search extends Component {
         if(value == "") {
             this.setState({track: "", artist: "", max: "", maxImg: "", type: "", noData1: false, noData2: false})
         }
-        $(".search-inner").addClass("search-searched")
-        $(".search-title").addClass("title-searched")
-        $(".pills-row").addClass("pills-searched")
         if($("#results").hasClass("hide")) {
             $("#results").removeClass("hide")
         }
@@ -128,20 +128,13 @@ class Search extends Component {
                
     }
     componentDidMount() {
+        console.log("SEARCH MOUNT")
         let token = accessToken();
         UsersTop(token,  "tracks", "short_term", 10)
         .then((data) => {
         })
         $(".search-close").on("click", () => {
-            $("#search").toggleClass("hide")
-            // $(".personal").addClass("hide")
-            if($(".paused-div").hasClass("visible")) {
-                $(".paused-div").removeClass("visible")
-                $(".paused-div").addClass("hide")
-            } else {
-                $(".paused-div").removeClass("hide")
-                $(".paused-div").addClass("visible")
-        }
+            this.props.toggleRender()
         })
         let value = $(".search-input").val();
         $(".search-inner").addClass("search-searched")
@@ -151,31 +144,14 @@ class Search extends Component {
             $("#results").removeClass("hide")
         }
         $(".results").attr("class", "results")
-        if(!$("#search").hasClass("hide")) {
+        if(this.props.search) {
             this.setState({searchValue: value}, () => {
                 this.search(token, value);
             }) 
         }
-        $("body").on("click", ".pill-close", (e) => {
-            e.target.parentNode.remove()
-        })
-        $(".pill").on("click", (e) => {
-            if(this.state.pillLastClicked !== e.target.id || this.state.max !== e.target.innerText ) {
-                if(e.target.id === "pill1" || e.target.id === "pill2" || e.target.id === "pill3") { //if you click pill 1, 2 or 3
-                    let value = e.target.innerText;
-                    let token = accessToken();
-                    this.search(token, value);
-                    $(".search-inner").addClass("search-searched")
-                    $(".search-title").addClass("title-searched")
-                    $(".pills-row").addClass("pills-searched")
-                    $(".results").attr("class", "results")
-                } else if(e.target.id === "pill5") { //if you click pill 5
-                    FeaturingPlaylists(token)
-                    .then(data => console.log(data.data.playlists.items))
-                }
-                this.setState({pillLastClicked: e.target.id})
-            }
-        }) 
+        // $("body").on("click", ".pill-close", (e) => {
+        //     e.target.parentNode.remove()
+        // }) 
     }
     render() {
         let cookies = new Cookies();
@@ -199,9 +175,12 @@ class Search extends Component {
             type = this.state.type;
         }
         let value = this.state.searchValue;
+        let render = this.props.render;
         return (
-            <div id="search" className="search hide">
-            <img
+            <div>
+                {(render)
+                ? <div id="search" className="search"> 
+                <img
                 className="search-close"
                 src={require("../icons/pill-close.png")}>
             </img>
@@ -223,11 +202,16 @@ class Search extends Component {
                     </button>
                 </div>
                 <div className="row pills-row">
-                    <span id="pill-fire" className="pill"><img className="fire" src={require("../icons/trending.webp")}></img>trending<img className="pill-close" src={require("../icons/pill-close.png")}></img></span>
+                    <Pill search={this.search} value="trending" icon={require("../icons/trending.webp")}/>
+                    <Pill search={this.search} value={mostRecent1}/>
+                    <Pill search={this.search} value={mostRecent2}/>
+                    <Pill search={this.search} value={lastTrack} />
+                    <Pill search={this.search} value="new releases" icon={require("../icons/new.webp")}/>
+                    {/* <span id="pill-fire" className="pill"><img className="fire" src={require("../icons/trending.webp")}></img>trending<img className="pill-close" src={require("../icons/pill-close.png")}></img></span>
                     <span id="pill1" className="pill">{mostRecent1}<img className="pill-close" src={require("../icons/pill-close.png")}></img></span>
                     <span id="pill2" className="pill">{mostRecent2}<img className="pill-close" src={require("../icons/pill-close.png")}></img></span>
                     <span id="pill3" className="pill">{lastTrack}<img className="pill-close" src={require("../icons/pill-close.png")}></img></span>
-                    <span id="pill-new" className="pill"><img className="fire" src={require("../icons/new.webp")}></img>new_releases<img className="pill-close" src={require("../icons/pill-close.png")}></img></span>
+                    <span id="pill-new" className="pill"><img className="fire" src={require("../icons/new.webp")}></img>new_releases<img className="pill-close" src={require("../icons/pill-close.png")}></img></span> */}
                 </div>
                 <div className="row">
                     { value
@@ -262,11 +246,17 @@ class Search extends Component {
                         blankSearch={this.blankSearch}/>
                     <Personal
                         personal={this.state.personal}
-                        userId={this.props.userId}/>
+                        userId={this.props.userId}
+                        track={this.state.track}
+                        artist={this.state.artist}/>
                     {/* <FeaPlaylists /> */}
                     <div className="artist"></div>
                 </div>                
                 </div>
+                </div>
+                : <div></div>
+                }
+            
             </div>
         );
     };

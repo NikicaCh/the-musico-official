@@ -9,14 +9,16 @@ class SearchButton extends React.Component {
     }
 
     searchModal() {
-        $("#search").toggleClass("hide")
-        if($(".paused-div").hasClass("visible")) {
-            $(".paused-div").removeClass("visible")
-            $(".paused-div").addClass("hide")
-        } else {
-            $(".paused-div").removeClass("hide")
-            $(".paused-div").addClass("visible")
-        }    }
+        // $("#search").toggleClass("hide")
+        // if($(".paused-div").hasClass("visible")) {
+        //     $(".paused-div").removeClass("visible")
+        //     $(".paused-div").addClass("hide")
+        // } else {
+        //     $(".paused-div").removeClass("hide")
+        //     $(".paused-div").addClass("visible")
+        // } 
+        this.props.toggleRender()   
+    }
     render() {
         return(
             <span
