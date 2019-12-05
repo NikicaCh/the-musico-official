@@ -116,10 +116,10 @@ class Search extends Component {
         if(value == "") {
             this.setState({track: "", artist: "", max: "", maxImg: "", type: "", noData1: false, noData2: false})
         }
-        if($("#results").hasClass("hide")) {
-            $("#results").removeClass("hide")
-        }
-        $(".results").attr("class", "results")
+        // if($("#results").hasClass("hide")) {
+        //     $("#results").removeClass("hide")
+        // }
+        // $(".results").attr("class", "results")
         let token = accessToken();
         this.setState({searchValue: value}, () => {
             this.search(token, value);
@@ -137,13 +137,13 @@ class Search extends Component {
             this.props.toggleRender()
         })
         let value = $(".search-input").val();
-        $(".search-inner").addClass("search-searched")
-        $(".search-title").addClass("title-searched")
-        $(".pills-row").addClass("pills-searched")
-        if($("#results").hasClass("hide")) {
-            $("#results").removeClass("hide")
-        }
-        $(".results").attr("class", "results")
+        // $(".search-inner").addClass("search-searched")
+        // $(".search-title").addClass("title-searched")
+        // $(".pills-row").addClass("pills-searched")
+        // // if($("#results").hasClass("hide")) {
+        // //     $("#results").removeClass("hide")
+        // // }
+        // $(".results").attr("class", "results")
         if(this.props.search) {
             this.setState({searchValue: value}, () => {
                 this.search(token, value);
@@ -220,7 +220,7 @@ class Search extends Component {
                     }
                 </div>
                 <div>
-                <div id="results" className="results hide">
+                <div id="results" className="results">
                     <BestSearch
                         state={this.props.state}
                         position={this.props.position}

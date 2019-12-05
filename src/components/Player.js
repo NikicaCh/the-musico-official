@@ -27,7 +27,7 @@ import $ from 'jquery'
 import uniqid from 'uniqid'
 const linkBackendInDevelopment = "http://localhost:8888/";
 const linkBackendInProduction = "https://themusico-redirect.herokuapp.com/";
-const linkEnv = linkBackendInDevelopment;
+const linkEnv = linkBackendInProduction;
 
 
 class Player extends Component {
@@ -374,13 +374,9 @@ class Player extends Component {
         console.log("MODAL")
         if(this.state.search === false ) {
             this.setState({search: true}, () => {
-                this.setState({paused: true})
-                console.log("TRUE")
             })
         } else {
             this.setState({search: false}, () => {
-                this.setState({paused: false})
-                console.log("FALSE")
             })
         }
     }
@@ -551,7 +547,7 @@ class Player extends Component {
                     replayCounter={this.state.replayCounter}
                     player={this.state.player}/>
                 <SearchButton color={"-black"} toggleRender={this.searchModal}/>
-                <PauseDiv playing={!this.state.paused} />
+                <PauseDiv playing={!this.state.paused} search={this.state.search} />
                 <DisplayText
                     name={this.state.display}
                     class={'songName'} 
