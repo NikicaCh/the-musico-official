@@ -88,13 +88,13 @@ body:focus {
   cursor: pointer;
   z-index: 99999 !important;
 }
+.search-div::selection {
+  background: transparent;
+}
 .search-div:hover {
   background: white;
   color: rgb(22, 22, 22);
   transition: all .3s ease-in-out;
-}
-.search-div::selection {
-  background: transparent;
 }
 .search-div-black {
   position: absolute;
@@ -114,6 +114,18 @@ body:focus {
   background: rgb(22, 22, 22);
   color: white;
   transition: all .3s ease-in-out;
+}
+.search-div-black::selection {
+  background: transparent;
+}
+
+.eject {
+  position: absolute;
+  width: 2%;
+  height: 2%;
+  top: 81%;
+  left: 5.2%;
+  border: solid 1px green;
 }
 
 .search-close {
@@ -955,7 +967,7 @@ button:focus {outline:0;}
   position: absolute;
   z-index: 150;
   width: 100vw;
-  height: 80%;
+  height: 85%;
   top: 33%;
   overflow: auto;
 }

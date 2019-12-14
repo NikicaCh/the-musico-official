@@ -18,6 +18,7 @@ import Legend from './legend'
 import Profile from './profile'
 import SearchButton from './searchButton'
 import PauseDiv from './pause'
+import PlayerInfo from './PlayerInfo'
 import stringSimilarity  from 'string-similarity'
 // import scrapeIt from 'scrape-it'
 import cheerio from 'cheerio'
@@ -371,13 +372,11 @@ class Player extends Component {
         }        
     }
     searchModal() {
-        console.log("MODAL")
+        console.log("HE")
         if(this.state.search === false ) {
-            this.setState({search: true}, () => {
-            })
+            this.setState({search: true})
         } else {
-            this.setState({search: false}, () => {
-            })
+            this.setState({search: false})
         }
     }
 
@@ -519,8 +518,6 @@ class Player extends Component {
     }
     render() {
         let loading = this.state.loading;
-        let volume = this.state.volume;
-        let token = accessToken();
         let src="";
         if(this.state.volume >= 60) {
             src=require("../icons/speaker loud.png")
@@ -572,34 +569,7 @@ class Player extends Component {
                     numberofParagraphs={this.state.numberofParagraphs}
                     lyricsPosition={this.state.lyricsPosition}
                 />
-                <div className="player-info">
-                        {
-                            this.state.context != ""
-                            ? <div className="circle-upper"><img src={require("../icons/next.png")} onClick={() => NextTrack(token)}></img></div>
-                            : <div></div>
-                        }
-                            <input
-                                id="volume-slider"
-                                type="range"
-                                min={0}
-                                max={100}
-                                step={5}
-                                defaultValue={volume}>
-                            </input>
-                    <div className="circle-left"><img src={require("../icons/rewind.png")} onClick={() => this.backwards(10)}></img></div>
-                    <div className="circle-right"><img src={require("../icons/fast-forward.png")} onClick={() => this.forwards(10)}></img></div>
-                    <div
-                        className="player-info-circle"
-                        onClick={this.playPause}>
-                        <img src={ this.state.playing ? require('../icons/pause.png') : require('../icons/play.png')}></img>
-                    </div>
-                        {
-                            this.state.context != ""
-                            ? <div className="circle-down"><img src={require("../icons/back.png")} onClick={() => PreviousTrack(token)}></img></div>
-                            : <div></div>
-                        }
-                    
-                </div>
+                <PlayerInfo context={this.state.context} playing={this.state.playing} volume={this.state.volume} />
                 {
                     this.state.cookieUsed
                     ?<div></div>

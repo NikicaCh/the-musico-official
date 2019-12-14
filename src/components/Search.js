@@ -39,9 +39,10 @@ class Search extends Component {
         // this.handleKeyPress = this.handleKeyPress.bind(this);
     };
     blankSearch() {
-        this.setState({searchValue: "", type: "", track: "", artist: "", max: "", maxImg: "" })
+        this.setState({searchValue: "", type: "", track: "", artist: "", max: "", maxImg: "" , personal: true})
     }
     search(token, value) {
+        this.setState({personal: false})
         let promise1 = SearchFor(token, value, "track", 50)
         .then((data) => {
             if(data && data.data && data.data.tracks && data.data.tracks.items){
@@ -133,9 +134,6 @@ class Search extends Component {
         UsersTop(token,  "tracks", "short_term", 10)
         .then((data) => {
         })
-        $(".search-close").on("click", () => {
-            this.props.toggleRender()
-        })
         let value = $(".search-input").val();
         // $(".search-inner").addClass("search-searched")
         // $(".search-title").addClass("title-searched")
@@ -180,10 +178,12 @@ class Search extends Component {
             <div>
                 {(render)
                 ? <div id="search" className="search"> 
-                <img
-                className="search-close"
-                src={require("../icons/pill-close.png")}>
-            </img>
+                <a onClick={() => {this.props.toggleRender()}}>
+                    <img
+                        className="search-close"
+                        src={require("../icons/pill-close.png")}>
+                    </img>
+                </a>
                 <div className="row">
                     <span className="search-title">Search here</span>
                 </div>

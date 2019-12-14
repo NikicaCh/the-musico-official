@@ -21,11 +21,14 @@ class SearchButton extends React.Component {
     }
     render() {
         return(
-            <span
-                className={`search-div${this.props.color}`}
-                onClick={this.searchModal}
-                >browse
-            </span>        
+            <div>
+                <span
+                    className={`search-div${this.props.color}`}
+                    onClick={this.searchModal}
+                    >browse
+                </span>
+                {/* <img className="eject" src={require("../icons/eject.webp")} alt="eject"></img>         */}
+            </div>
         )
     }
 }

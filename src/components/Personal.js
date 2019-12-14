@@ -51,16 +51,17 @@ class Personal extends React.Component {
 
     render() {
         return (
-            <div className="personal">
-                {(this.props.personal)
-                ?<div className="personal-section">
+            <div>
+            {(this.props.personal)
+                ? <div className="personal">
+                <div className="personal-section">
                     <PlaylistRow data={this.state.arrayOfFeaturingPlaylists} title={"Featuring Playlists"}/>
                     <PlaylistRow data={this.state.arrayOfPersonalPlaylists.slice(0,5)} title={"Made For You"}/>
                     <PlaylistRow data={this.state.arrayOfPersonalPlaylists.slice(5,10)}/>
+                </div>            
                 </div>
-                :<div className="nopersonal"></div>
-                }
-                
+                : <div className="nopersonal"></div>
+            }
             </div>
         )
     }
