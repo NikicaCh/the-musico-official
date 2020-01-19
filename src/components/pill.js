@@ -9,13 +9,9 @@ const Pill = (props) => {
     const CloseIcon = require("../icons/pill-close.png");
 
     const handlePillClick = (e) => {
-        if(e.target.className !== "pill-close") {
+        if(e.target.className !== "pill-close" && value !== "trending" && value !== "new releases") {
             const token = accessToken();
             props.search(token, value)
-            $(".search-inner").addClass("search-searched")
-            $(".search-title").addClass("title-searched")
-            $(".pills-row").addClass("pills-searched")
-            $(".results").attr("class", "results")
         }
     }
 

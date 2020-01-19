@@ -1,16 +1,20 @@
 import React from 'react'
-import {Featuring, accessToken, PlayTrack, getDevices, Pause, RelatedArtists} from './Fetch'
+import {Featuring, accessToken, PlayTrack, getDevices, Pause, RelatedArtists, ArtistsAlbums, Seeds} from './Fetch'
 import $ from 'jquery'
 import Cookies from 'universal-cookie'
 
 import RestTracks from './restTracks'
 import RestArtists from './restArtists'
+import Artist from './Artist'
+import ArtistTrack from './ArtistTrack'
+import ArtistAlbum from './ArtistsAlbum'
 
 class BestSearch extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
             featuring: [],
+            albums: [],
             deviceId: "",
             type: "",
             name: "",
@@ -26,6 +30,102 @@ class BestSearch extends React.Component {
             replayed: false,
             arrayOfRelatedArtists: []
         }
+
+        this.featuring = this.featuring.bind(this),
+        this.albums = this.albums.bind(this),
+        this.seeds = this.seeds.bind(this),
+        this.related = this.related.bind(this)
+    }
+
+    featuring = () => {
+        if(this.props.type !== "") {
+            let token = accessToken();
+            Featuring(this.props.artistId, token )
+            .then((data) => {
+                if(data) {
+                    let index = 0;
+                    let arrayOfUris = []
+                    data.data.tracks.map((track) => {
+                        return arrayOfUris.push(track.uri)
+                    })
+                    this.setState({arrayOfUris}, () => {
+                        this.seeds()
+                    })
+                    let array = data.data.tracks.slice(0, 10).map((track) => {
+                        let name = track.name
+                        if(track.name.length > 20) {
+                            name = track.name.substring(0, 20) +"...";
+                        }
+                        index ++;
+                        let src;
+                        if(track.album.images.length) {
+                            src = track.album.images[0].url;
+                        } else {
+                            src = "https://images.unsplash.com/photo-1494232410401-ad00d5433cfa?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=1350&q=80"
+                        }
+                        return  <ArtistTrack track={track} index={index} src={src} id={track.uri} deviceId={this.state.deviceId} trackName={track.name} name={name}/>
+                    })
+                    this.setState({featuring: array, arrayOfUris})
+                }
+            })
+        }
+    }
+
+    albums = () => {
+        let token=accessToken();
+        ArtistsAlbums(token, this.props.artistId)
+        .then((data) => {
+            if(data) {
+                let ids = [];
+                let arrayOfAlbums = [];
+                data.data.items.map((item) => {
+                    if(ids.indexOf(item.id) == -1) {
+                        arrayOfAlbums.push(item);
+                        ids.push(item.id)
+                    }
+                    
+                })
+                let albums = arrayOfAlbums.map((album) => {
+                    
+                    return <ArtistAlbum album={album} deviceId={this.state.deviceId} />
+                })
+                this.setState({albums})
+            }
+        })
+    }
+
+    seeds = () => {
+        // let token = accessToken();
+        // if(this.props.artist !== "") {
+            let genres = this.props.artist.genres.slice(0, 5)
+        //     let uris = ""
+            console.log("GENRES:", genres, )
+        //     Seeds(token, this.props.artist.id, genres, uris )
+        //     .then((data) => {
+        //         if(data) {
+        //             console.log(data.data)
+        //         }
+        //     })
+        //     .catch((err) => {
+        //         console.log(err)
+        //     })
+        // }
+    }
+
+    related = () => {
+        let token = accessToken();
+        RelatedArtists(token, this.props.artistId)
+            .then((data) => {
+                let arrayOfRelatedArtists = data.data.artists.map((artist) => {
+                    return <span id={artist.id} className="related-artist" onClick={(e) => {
+                            let target = e.target;
+                            let value = target.innerHTML;
+                            let token = accessToken();
+                            this.props.openArtist(token, value, artist.id)
+                    }}>{artist.name}</span>
+                })
+                this.setState({arrayOfRelatedArtists})
+            })
     }
 
     componentDidMount() {
@@ -35,6 +135,9 @@ class BestSearch extends React.Component {
         })
         let token = accessToken();
         let userId = this.props.userId;
+        this.featuring();
+        this.albums();
+        this.related();
         getDevices(token)
         .then((data) => {
             if(data) {
@@ -42,34 +145,26 @@ class BestSearch extends React.Component {
                     if(device.name === `MUSICO ${this.props.uniq}`) {
                         let deviceId = device.id;
                         this.setState({deviceId}, () => {
-                            $("body").on('click', '.play-track', (e) => {
-                                let token = accessToken();
-                                // let userId = this.props.userId;
-                                let index = e.target.parentElement.getAttribute("id")
-                                this.setState({indexOfPlayingTrack: index})
-                                let trackId = e.target.getAttribute('id');
-                                if($(e.target).hasClass("rest")) {
-                                    PlayTrack(trackId, token, this.state.deviceId);
-                                }
-                                else if(this.props.type === "artist"){
-                                    let slicedFromStarting = this.state.arrayOfUris.slice(this.state.arrayOfUris.indexOf(trackId))
-                                    PlayTrack(slicedFromStarting, token, this.state.deviceId);
-                                    this.setState({context: "search artist", currentId: trackId})
-                                    let cookies = new Cookies();
-                                    let data1 = cookies.get(`mostRecent1${userId}`)
-                                    let data2 = this.props.artist.name
-                                    if(data1 !== data2 && cookies.get(`mostRecent2${userId}`) !== data2 ) {
-                                        cookies.set(`mostRecent2${userId}`, data1, {expires: new Date(Date.now()+2592000)})
-                                        cookies.set(`mostRecent1${userId}`, data2, {expires: new Date(Date.now()+2592000)})
-                                    }
-                                } else {
-                                    let slicedFromStarting = this.state.restTracksUris.slice(this.state.restTracksUris.indexOf(trackId))
-                                    PlayTrack(slicedFromStarting, token, this.state.deviceId);
-                                    this.setState({context: "search track"})
-                                    let cookies = new Cookies();
-                                    cookies.set(`lastTrack${userId}`, this.props.track.name, {expires: new Date(Date.now()+2592000)}) //the track name
-                                }
-                            }); 
+                            // $("body").on('click', '.play-track', (e) => {
+                            //     if(this.props.type === "artist"){
+                            //         let slicedFromStarting = this.state.arrayOfUris.slice(this.state.arrayOfUris.indexOf(trackId))
+                            //         PlayTrack(slicedFromStarting, token, this.state.deviceId);
+                            //         this.setState({context: "search artist", currentId: trackId})
+                            //         let cookies = new Cookies();
+                            //         let data1 = cookies.get(`mostRecent1${userId}`)
+                            //         let data2 = this.props.artist.name
+                            //         if(data1 !== data2 && cookies.get(`mostRecent2${userId}`) !== data2 ) {
+                            //             cookies.set(`mostRecent2${userId}`, data1, {expires: new Date(Date.now()+2592000)})
+                            //             cookies.set(`mostRecent1${userId}`, data2, {expires: new Date(Date.now()+2592000)})
+                            //         }
+                            //     } else {
+                            //         let slicedFromStarting = this.state.restTracksUris.slice(this.state.restTracksUris.indexOf(trackId))
+                            //         PlayTrack(slicedFromStarting, token, this.state.deviceId);
+                            //         this.setState({context: "search track"})
+                            //         let cookies = new Cookies();
+                            //         cookies.set(`lastTrack${userId}`, this.props.track.name, {expires: new Date(Date.now()+2592000)}) //the track name
+                            //     }
+                            // }); 
                         });
                     }
                 })
@@ -89,56 +184,11 @@ class BestSearch extends React.Component {
         //         return 0;
         //     });
         // }
-        $("body").on("click", ".blank-search", () => {
-            this.props.blankSearch();
-        })
-        $(".see-more").on("click", () => {
-            //to be done
-        })
         let token = accessToken();
         this.setState({type: this.props.type, name: this.props.max}, () => {
-            if(this.props.type !== "") {
-                Featuring(this.props.artistId, token )
-                .then((data) => {
-                    if(data) {
-                        let index = 0;
-                        let arrayOfUris = []
-                        data.data.tracks.map((track) => {
-                            return arrayOfUris.push(track.uri)
-                        })
-                        let array = data.data.tracks.slice(0, 8).map((track) => {
-                            let name = track.name
-                            if(track.name.length > 20) {
-                                name = track.name.substring(0, 20) +"...";
-                            }
-                            index ++;
-                            let src;
-                            if(track.album.images.length) {
-                                src = track.album.images[0].url;
-                            } else {
-                                src = "https://images.unsplash.com/photo-1494232410401-ad00d5433cfa?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=1350&q=80"
-                            }
-                            return  <div
-                                        className="col-md-3 col-sm-7 mt-2 mb-5">
-                                        <div
-                                            id={`suggestion${index}`}  
-                                            className="row w-100 ml-3 d-flex justify-content-center">
-                                            <img
-                                                src={src}
-                                                className="featuring-img play-track mb-3"
-                                                id={track.uri}
-                                                alt="featuring img">
-                                            </img>
-                                        </div>
-                                        <div className="row w-100 ml-3 d-flex justify-content-center">
-                                            <span title={track.name} className={`featuring-title suggestion${index}`}>{name}</span>
-                                        </div>
-                                    </div>
-                        })
-                        this.setState({featuring: array, arrayOfUris})
-                    }
-                })
-            }
+            this.featuring();
+            this.albums();
+            this.related();
         })
         
 
@@ -149,50 +199,9 @@ class BestSearch extends React.Component {
                     return track;
                 }
             })
-            let restTracksUris = [];
-            arrayOfRestTracks = restTracks.slice(1, 6).map((track) => {
-                restTracksUris.push(track.uri);
-                let src;
-                let artistName;
-                if(track.album.images.length) {
-                    src = track.album.images[0].url
-                } else {
-                    src = "https://images.unsplash.com/photo-1494232410401-ad00d5433cfa?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=1350&q=80"
-                }
-                if(track.artists.length) {
-                    artistName = track.artists[0].name
-                } else {
-                    artistName = ""
-                }
-                return  <div className="small-best-holder ml-3 d-flex justify-content-center">
-                            <img
-                                src={src}
-                                className="play-track small-best-search-img ml-4"
-                                id={track.uri}
-                                alt="best search img">
-                            </img>
-                            <span className="small-best-search-title">{track.name}</span>
-                            <span className="small-best-search-artist">{artistName}</span>
-                        </div>
-            })
-            restTracksUris.unshift(this.props.trackId)
-            this.setState({restTracksUris})
-            this.setState({arrayOfRestTracks})
         }
         if(this.props.artist !== "") { //not making requests without search value
-            RelatedArtists(token, this.props.artistId)
-            .then((data) => {
-                let arrayOfRelatedArtists = data.data.artists.map((artist) => {
-                    return <span id={artist.id} className="related-artist" onClick={(e) => {
-                            let target = e.target;
-                            let value = target.innerHTML;
-                            let token = accessToken();
-                            this.props.openArtist(token, value, artist.id)
-                            console.log("hello", value)
-                    }}>{artist.name}</span>
-                })
-                this.setState({arrayOfRelatedArtists})
-            })
+            
         }
         
       }
@@ -210,77 +219,49 @@ class BestSearch extends React.Component {
             <div>
             {
                 render
-                ? <div className="container w-100 search-top">
-                            <div className="row other-results-title">
-                            <h2>Top result</h2> 
-                            </div>
-                            <img
-                                className="blank-search"
-                                src={require("../icons/pill-close.png")}
-                                alt="pill close">
-                            </img>
-                            <div
-                                className="row w-100 dragable mb-5"> {/*this is the div where I should append the drag 'n' drop event */}
-                                <div className="col-md-3 col-xs-6 mt-5 relative"> 
-                                    <img id={this.props.trackId} src={this.props.image} className={`play-track best-search-img ${this.props.type}-img`} alt="best search"></img>
-                                    <figcaption><span className="best-search-title">{this.props.name}</span></figcaption>    
-                                </div>
-                                <div className="col-md-9 mt-5"> 
-                            {
-                                featuring 
-                                ?   <div>
-                                            <div id="first-page" className="row ml-3 mt-4 first-page" onClick={() => {
-                                                }}>
-                                                {this.state.featuring.length 
-                                                ? this.state.featuring
-                                                : <span className="nothing">Nothing to show here yet...</span>
-                                                }
-                                            </div>
-                                            <img className="next-page-icon" alt="next-page" src={require("../icons/next-page.png")}></img>
-                                            <img className="prev-page-icon" alt="prev-page" src={require("../icons/prev-page.png")}></img>
-                                    </div> 
-                                : <div></div>
-                            }
-                            {
-                                (this.props.type === "track")
-                                ? <div className="other-track-imgs row ml-5">
-                                    {this.state.arrayOfRestTracks}
-                                    <span className="see-more">see more</span>
-                                  </div> /*for other tracks*/
-                                : <div></div>
-                            }
-                                </div>
-                            </div> {/*Where the dragable div ends */}
-                            <div></div> {/*This is the second dragable div */}
-                            {this.props.type === "artist" 
-                            ? <div className="row related-artists">{this.state.arrayOfRelatedArtists.slice(0, 5)}</div>
-                            : <span></span>
-                            }
-                            <div className="other-results-container">
-                                <div className="row mt-5">
-                                    <span
-                                        className="condition"
-                                        onClick={() => {
-                                            $(".resttracks").removeClass("hide")
-                                            $(".restartists").addClass("hide")
-                                        }}>tracks</span>
-                                    <span
-                                        className="condition"
-                                        onClick={() => {
-                                            $(".restartists").removeClass("hide")
-                                            $(".resttracks").addClass("hide")
-                                        }}>artists</span>
-                                        <span
-                                        className="condition">albums</span>
-                                </div>
-                            </div>
-                            <div id="rest-tracks" className="resttracks">
-                                <RestTracks tracks={this.props.restTracks} device={this.props.deviceId}/>
-                            </div>
-                            <div id="rest-artists" className="restartists hide">
-                                <RestArtists artists={this.props.restArtists} device={this.props.deviceId}/>
-                            </div>
-                            }
+                ? <div>
+                    <Artist //this is the top result artist (if artist is type )
+                        trackId={this.props.trackId}
+                        deviceId={this.state.deviceId}
+                        image={this.props.image}
+                        type={this.props.type}
+                        name={this.props.name}
+                        featuring={this.state.featuring}
+                        albums={this.state.albums}
+                        arrayOfRestTracks={this.state.arrayOfRestTracks}
+                        blankSearch={this.props.blankSearch}
+                        arrayOfRelatedArtists={this.state.arrayOfRelatedArtists}
+                        />
+                        {this.props.type === "artist" 
+                    ? <div className="row related-artists">{this.state.arrayOfRelatedArtists.slice(0, 5)}</div>
+                    : undefined
+                    }
+                    <div></div> {/*This is the second dragable div */}
+                    <div className="other-results-container">
+                        <div className="row mt-5">
+                            <span
+                                className="condition"
+                                onClick={() => {
+                                    $(".resttracks").removeClass("hide")
+                                    $(".restartists").addClass("hide")
+                                }}>tracks</span>
+                            <span
+                                className="condition"
+                                onClick={() => {
+                                    $(".restartists").removeClass("hide")
+                                    $(".resttracks").addClass("hide")
+                                }}>artists</span>
+                                <span
+                                className="condition">albums</span>
+                        </div>
+                    </div>
+                    <div id="rest-tracks" className="resttracks">
+                        <RestTracks tracks={this.props.restTracks} device={this.props.deviceId}/>
+                    </div>
+                    <div id="rest-artists" className="restartists hide">
+                        <RestArtists artists={this.props.restArtists} device={this.props.deviceId}/>
+                    </div>
+                    }
                     </div>                       
                 :<div></div>
             }

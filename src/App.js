@@ -63,7 +63,7 @@ class App extends Component {
     document.title = "The Musico";
     const linkToRedirectInDevelopment = "http://localhost:8888/login";
     const linkToRedirectInProduction = "https://themusico-redirect.herokuapp.com/login";
-    const linkEnv = linkToRedirectInProduction;
+    const linkEnv = linkToRedirectInDevelopment;
     let token = accessToken();
     getDevices(token)
     let date = new Date();
@@ -71,14 +71,14 @@ class App extends Component {
       this.setHours(this.getHours()+h);
       return this;
     } //to add one hour on access_date cookie
-    const cookies = new Cookies();
     let parsed = queryString.parse(document.location.search)
     if(parsed.spotify) {
-      cookies.set("access", parsed.spotify)
-      cookies.set("genius", parsed.genius)
-      cookies.set("access_time", date.toString())
+      localStorage.setItem("access", parsed.spotify)
+      localStorage.setItem("genius", parsed.genius)
+      localStorage.setItem("access_time", date.toString())
       window.location.replace("/")
-    } else if( typeof cookies.get("access_time") === "undefined" || new Date(cookies.get("access_time").toString()).addHours(1).toString() < new Date().toString()) {
+    }
+    else if( typeof localStorage.getItem("access_time") === "undefined" || new Date(localStorage.getItem("access_time")).addHours(1) < new Date().toString()) {
       window.location.replace(linkEnv)   
     }
     this.timer = setInterval(() =>  {

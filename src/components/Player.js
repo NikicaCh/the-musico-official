@@ -26,9 +26,10 @@ import Axios from "../../node_modules/axios"
 // import { stringify } from "querystring"
 import $ from 'jquery'
 import uniqid from 'uniqid'
+import Explicit from "./explicit"
 const linkBackendInDevelopment = "http://localhost:8888/";
 const linkBackendInProduction = "https://themusico-redirect.herokuapp.com/";
-const linkEnv = linkBackendInProduction;
+const linkEnv = linkBackendInDevelopment;
 
 
 class Player extends Component {
@@ -72,7 +73,9 @@ class Player extends Component {
             player: "",
             replayCounter: 0,
             search: false,
-            paused: false
+            paused: false,
+            explicit: false,
+            renderLyrics: false
         }
         this.getLyrics = this.getLyrics.bind(this)
         this.setCurrentTrack = this.setCurrentTrack.bind(this)
@@ -208,7 +211,7 @@ class Player extends Component {
                 })
                 if(hitsName.length) { // if the genius api responds with a result
                     if($) {
-                        $("#lyrics-main").toggleClass("hide")
+                        this.setState({renderLyrics: true})
                     }
                     let lyrics = stringSimilarity.findBestMatch(track, hitsName);
                     hitsObject.forEach((object) => {
@@ -221,9 +224,7 @@ class Player extends Component {
                         this.receiveLyrics();
                     })
                 } else {
-                    if(!$) {
-                        $("#lyrics-main").toggleClass("hide")
-                    }
+                    this.setState({renderLyrics: false})                    
                 } 
             }
                
@@ -245,6 +246,9 @@ class Player extends Component {
                 } else if(this.state.context !=="context") {
                     context = "";
                     this.setState({context})
+                }
+                if(data.data.item) {
+                    this.setState({explicit: data.data.item.explicit})
                 }
                 this.setState({playing})
                 if(!this.state.search) {
@@ -549,6 +553,7 @@ class Player extends Component {
                     name={this.state.display}
                     class={'songName'} 
                 />
+                <Explicit explicit={this.state.explicit} />
                 <DisplayText
                     name={this.state.currentArtist}
                     class={"artists"} 
@@ -560,6 +565,7 @@ class Player extends Component {
                 </div>
                 }
                 <LyricsDiv
+                    render={this.state.renderLyrics}
                     lyrics={this.state.currentLyrics}
                     lyricsModal = {this.state.fullLyrics}
                     track={this.state.currentPlaybackName}

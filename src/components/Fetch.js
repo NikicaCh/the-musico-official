@@ -13,10 +13,9 @@ export const Port = async () => {
     return port;
 }
 
-//Get the accessToken from the cookies
+//Get the accessToken from the cookies(not cookies anymore, localstorage now 01/2020)
 export const accessToken = () => {
-    const cookies =  new Cookies();
-    let token = cookies.get("access")
+    let token = localStorage.getItem("access")
     return token;
 }
 
@@ -301,6 +300,18 @@ export const PlayTrack = (trackUri, token, deviceId) => {
     });
 }
 
+export const PlayAlbum = (uri, token, deviceId) => {
+    fetch(`https://api.spotify.com/v1/me/player/play?device_id=${deviceId}`, {
+    method: 'PUT',
+    headers: {
+        'Authorization': 'Bearer ' + token ,
+        'Content-Type': 'application/json',
+    },
+    body: JSON.stringify({
+        "context_uri": uri})
+    });
+}
+
 export const profile = (token) => {
     let promise = Axios("https://api.spotify.com/v1/me", {
         headers: {
@@ -312,6 +323,24 @@ export const profile = (token) => {
 
 export const RelatedArtists = (token, artistId) => {
     let promise = Axios(`https://api.spotify.com/v1/artists/${artistId}/related-artists`, {
+        headers: {
+            "Authorization": `Bearer ${token}`
+        }
+    })
+    return promise;
+}
+
+export const ArtistsAlbums = (token, artistId) => {
+    let promise = Axios(`https://api.spotify.com/v1/artists/${artistId}/albums?limit=10`, {
+        headers: {
+            "Authorization": `Bearer ${token}`
+        }
+    })
+    return promise;
+}
+
+export const Seeds = (token, artists, genres, tracks) => {
+    let promise = Axios(`https://api.spotify.com/v1/recommendations?seed_artists=${artists}&seed_genres=${genres}&seed_tracks=${tracks}`, {
         headers: {
             "Authorization": `Bearer ${token}`
         }

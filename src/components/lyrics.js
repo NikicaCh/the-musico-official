@@ -13,10 +13,10 @@ class LyricsDiv extends Component {
         this.report = this.report.bind(this);
     }
     showModal() {
-        console.log("RIGHT MODAL");
-        // document.getElementById("settings").className="lyrics-icon settings-logo settings-rotate";
-        $("#settings").toggleClass("settings-rotate")
-        $(".dropdown").toggleClass("hide")
+        // console.log("RIGHT MODAL");
+        // // document.getElementById("settings").className="lyrics-icon settings-logo settings-rotate";
+        // $("#settings").toggleClass("settings-rotate")
+        // $(".dropdown").toggleClass("hide")
     }
     componentDidMount() {
 
@@ -26,10 +26,10 @@ class LyricsDiv extends Component {
         // ReportLyrics(this.props.trackId, this.props.userId, this.props.userEmail)
     }
     render() {
-        let loaded = this.props.lyrics;
+        let loaded = this.props.render;
         return(
             <div>
-            { loaded
+            { loaded 
                 ? <div className="lyrics-holder">
                     <div id="lyrics-main" className="lyrics-main">
                     <div className="lyrics-icons">
@@ -51,8 +51,8 @@ class LyricsDiv extends Component {
                     </div>
                     {this.props.lyrics} </div>
                 </div>
-                :
-                <p></p>}
+               : undefined
+            }
             </div>
             
             

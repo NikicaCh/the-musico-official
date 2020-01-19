@@ -43,6 +43,7 @@ class Search extends Component {
     }
     search(token, value) {
         this.setState({personal: false})
+
         let promise1 = SearchFor(token, value, "track", 50)
         .then((data) => {
             if(data && data.data && data.data.tracks && data.data.tracks.items){
@@ -83,7 +84,9 @@ class Search extends Component {
                     this.setState({max: this.state.track.name, maxImg: this.state.track.album.images[0].url, type: "track"})
                 }
             })
-              
+            if(value === "") {
+                this.setState({personal: true})
+            }
     }
     openArtist(token, value, id) {
         SearchFor(token, value, "artist", 50) 
@@ -107,15 +110,15 @@ class Search extends Component {
         })
     }
     handleChange(event) {
-        $(".artist").on("click", (e) => {
-            let target = e.target.parentElement;
-            let h1 = target.querySelector(".artist-value");
-            let token = accessToken();
-            this.openArtist(token, h1.id, target.id)
-        })
+        // $(".artist").on("click", (e) => {
+        //     let target = e.target.parentElement;
+        //     let h1 = target.querySelector(".artist-value");
+        //     let token = accessToken();
+        //     this.openArtist(token, h1.id, target.id)
+        // })
         let value = $(".search-input").val();
-        if(value == "") {
-            this.setState({track: "", artist: "", max: "", maxImg: "", type: "", noData1: false, noData2: false})
+        if(value === "") {
+            this.blankSearch()
         }
         // if($("#results").hasClass("hide")) {
         //     $("#results").removeClass("hide")
@@ -254,7 +257,7 @@ class Search extends Component {
                 </div>                
                 </div>
                 </div>
-                : <div></div>
+                : undefined
                 }
             
             </div>
