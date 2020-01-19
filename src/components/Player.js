@@ -407,13 +407,7 @@ class Player extends Component {
         this.setState({loading: true})
         let loading = true;
         let musicoId;
-        const access = accessToken();
-        
-        $("#volume-slider").on("change", (e) => {
-            this.setState({volume: e.target.value}, () => {
-                this.handleVolumeChange(this.state.volume)
-            })
-        })            
+        const access = accessToken();       
         getUser(access)
         .then((data) => {
             if(data) {
@@ -575,7 +569,7 @@ class Player extends Component {
                     numberofParagraphs={this.state.numberofParagraphs}
                     lyricsPosition={this.state.lyricsPosition}
                 />
-                <PlayerInfo context={this.state.context} playing={this.state.playing} volume={this.state.volume} />
+                <PlayerInfo context={this.state.context} playing={this.state.playing} volume={this.state.volume} handleVolumeChange={this.handleVolumeChange} backwards={this.backwards} forwards={this.forwards}/>
                 {
                     this.state.cookieUsed
                     ?<div></div>

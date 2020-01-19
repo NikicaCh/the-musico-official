@@ -106,7 +106,7 @@ export const Pause = (token) => {
         method: 'PUT',
         headers: {
             'Authorization': 'Bearer ' + token },
-});
+    });
 }
 
 export const Play = (token) => {
