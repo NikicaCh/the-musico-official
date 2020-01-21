@@ -2209,3 +2209,7 @@ input[type=range]:focus::-ms-fill-upper {
   top: 45%;
   left: 6.5%;
 }
+.explicit:hover {
+  -webkit-filter: grayscale(100%) brightness(80%) sepia(70%) hue-rotate(5deg) saturate(500%) contrast(0.8);
+  filter: grayscale(100%) brightness(80%) sepia(70%) hue-rotate(5deg) saturate(500%) contrast(0.8);
+}
