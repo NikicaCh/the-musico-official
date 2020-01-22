@@ -29,7 +29,7 @@ import uniqid from 'uniqid'
 import Explicit from "./explicit"
 const linkBackendInDevelopment = "http://localhost:8888/";
 const linkBackendInProduction = "https://themusico-redirect.herokuapp.com/";
-const linkEnv = linkBackendInProduction;
+const linkEnv = linkBackendInDevelopment;
 
 
 class Player extends Component {
@@ -475,11 +475,11 @@ class Player extends Component {
             }else {
                 this.setState({context: ""})
             }    
-            // if(state.paused) {
-            //     this.setState({playing: false})
-            // } else {
-            //     this.setState({playing: true})
-            // }
+            if(state.paused) {
+                this.setState({playing: false})
+            } else {
+                this.setState({playing: true})
+            }
             this.setState({state})
             let token = accessToken();
             getDevices(token)
