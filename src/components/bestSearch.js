@@ -63,7 +63,7 @@ class BestSearch extends React.Component {
                         } else {
                             src = "https://images.unsplash.com/photo-1494232410401-ad00d5433cfa?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=1350&q=80"
                         }
-                        return  <ArtistTrack track={track} index={index} src={src} id={track.uri} deviceId={this.state.deviceId} trackName={track.name} name={name}/>
+                        return  <ArtistTrack track={track} index={index} src={src} id={track.uri} deviceId={this.props.deviceId} name={name}/>
                     })
                     this.setState({featuring: array, arrayOfUris})
                 }
@@ -97,9 +97,8 @@ class BestSearch extends React.Component {
     seeds = () => {
         // let token = accessToken();
         // if(this.props.artist !== "") {
-            let genres = this.props.artist.genres.slice(0, 5)
+            // let genres = this.props.artist.genres.slice(0, 5)
         //     let uris = ""
-            console.log("GENRES:", genres, )
         //     Seeds(token, this.props.artist.id, genres, uris )
         //     .then((data) => {
         //         if(data) {
@@ -144,28 +143,7 @@ class BestSearch extends React.Component {
                 data.data.devices.forEach((device) => {
                     if(device.name === `MUSICO ${this.props.uniq}`) {
                         let deviceId = device.id;
-                        this.setState({deviceId}, () => {
-                            // $("body").on('click', '.play-track', (e) => {
-                            //     if(this.props.type === "artist"){
-                            //         let slicedFromStarting = this.state.arrayOfUris.slice(this.state.arrayOfUris.indexOf(trackId))
-                            //         PlayTrack(slicedFromStarting, token, this.state.deviceId);
-                            //         this.setState({context: "search artist", currentId: trackId})
-                            //         let cookies = new Cookies();
-                            //         let data1 = cookies.get(`mostRecent1${userId}`)
-                            //         let data2 = this.props.artist.name
-                            //         if(data1 !== data2 && cookies.get(`mostRecent2${userId}`) !== data2 ) {
-                            //             cookies.set(`mostRecent2${userId}`, data1, {expires: new Date(Date.now()+2592000)})
-                            //             cookies.set(`mostRecent1${userId}`, data2, {expires: new Date(Date.now()+2592000)})
-                            //         }
-                            //     } else {
-                            //         let slicedFromStarting = this.state.restTracksUris.slice(this.state.restTracksUris.indexOf(trackId))
-                            //         PlayTrack(slicedFromStarting, token, this.state.deviceId);
-                            //         this.setState({context: "search track"})
-                            //         let cookies = new Cookies();
-                            //         cookies.set(`lastTrack${userId}`, this.props.track.name, {expires: new Date(Date.now()+2592000)}) //the track name
-                            //     }
-                            // }); 
-                        });
+                        this.setState({deviceId});
                     }
                 })
             }
@@ -173,17 +151,6 @@ class BestSearch extends React.Component {
         
     }
     componentWillReceiveProps() {
-        // if(this.props.restTracks.length) {
-        //     let tracks = this.props.restTracks;
-        //     let sortedTracks =  tracks.sort(function(a, b){
-        //         let keyA = a.popularity,
-        //             keyB = b.popularity;
-        //         // Compare the 2 dates
-        //         if(keyA < keyB) return 1;
-        //         if(keyA > keyB) return -1;
-        //         return 0;
-        //     });
-        // }
         let token = accessToken();
         this.setState({type: this.props.type, name: this.props.max}, () => {
             this.featuring();

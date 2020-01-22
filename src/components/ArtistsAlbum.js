@@ -3,7 +3,6 @@ import {accessToken, PlayAlbum } from './Fetch'
 
 
 const ArtistAlbum = (props) => {
-    console.log(props.album)
     const token = accessToken();
     return(
         <div

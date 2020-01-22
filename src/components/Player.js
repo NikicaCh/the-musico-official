@@ -469,7 +469,6 @@ class Player extends Component {
 
         // Playback status updates
         player.addListener('player_state_changed', state => { 
-            console.log(state)
             this.setState({state})
             if(state) {
                 this.setState({context: "context"})

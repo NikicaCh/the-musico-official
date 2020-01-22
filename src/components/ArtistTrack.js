@@ -12,7 +12,9 @@ const ArtistTrack = (props) => {
     return( 
         <div
             className="artistTrack"
-            onClick={() => { PlayTrack(props.id, token, props.deviceId); }} //fix the pausediv
+            onClick={() => {
+                console.log("PLAYTRACK", props.index) 
+                PlayTrack(props.track.uri, token, props.deviceId); }} //fix the pausediv
         > 
             <img
                 src={props.src}
@@ -22,13 +24,13 @@ const ArtistTrack = (props) => {
                 title={props.name}>
             </img>
             <span
-                title={props.trackName}
+                title={props.name}
                 className={`featuring-title`}
                 title={props.name}>
                 {props.name}
             </span>
             <span
-                title={props.trackName}
+                title={props.name}
                 className="featuring-duration"
                 title={props.name}>
                 {millisToMinutesAndSeconds(props.track.duration_ms)}
