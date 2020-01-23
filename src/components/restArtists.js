@@ -1,4 +1,5 @@
 import React from 'react'
+import { accessToken } from './Fetch';
 
 
 class RestArtists extends React.Component {
@@ -22,7 +23,13 @@ class RestArtists extends React.Component {
             return(
                 <div
                     className="rest-artist-div"
-                    id={artist.id}>
+                    id={artist.id}
+                    onClick={() => {
+                        let token = accessToken();
+                        let id = artist.id;
+                        let value = artist.name
+                        this.props.openArtist(token, value, id) //Open artist
+                    }}>
                     <img src={source}></img>
                     <div className="row">
                         <h1 className="artist-value"

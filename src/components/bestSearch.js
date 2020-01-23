@@ -215,16 +215,17 @@ class BestSearch extends React.Component {
                         ? 
                         <div>
                             <Track 
-                            trackId={this.props.trackId}
-                            deviceId={this.state.deviceId}
-                            image={this.props.image}
-                            type={this.props.type}
-                            name={this.props.name}
-                            featuring={this.state.featuring}
-                            albums={this.state.albums}
-                            arrayOfRestTracks={this.state.arrayOfRestTracks}
-                            blankSearch={this.props.blankSearch}
-                            arrayOfRelatedArtists={this.state.arrayOfRelatedArtists}/>
+                                trackId={this.props.trackId}
+                                deviceId={this.state.deviceId}
+                                image={this.props.image}
+                                type={this.props.type}
+                                name={this.props.name}
+                                featuring={this.state.featuring}
+                                albums={this.state.albums}
+                                arrayOfRestTracks={this.state.arrayOfRestTracks}
+                                blankSearch={this.props.blankSearch}
+                                arrayOfRelatedArtists={this.state.arrayOfRelatedArtists}/>
+                            <div className="row related-artists">{this.state.arrayOfRelatedArtists.slice(0, 5)}</div>
                         </div>
                         : undefined
                     }
@@ -248,7 +249,7 @@ class BestSearch extends React.Component {
                         <RestTracks tracks={this.props.restTracks} device={this.props.deviceId}/>
                     </div>
                     <div id="rest-artists" className="restartists hide">
-                        <RestArtists artists={this.props.restArtists} device={this.props.deviceId}/>
+                        <RestArtists artists={this.props.restArtists} device={this.props.deviceId} openArtist={this.props.openArtist}/>
                     </div>
                     }
                     </div>                       

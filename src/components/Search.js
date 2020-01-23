@@ -78,7 +78,7 @@ class Search extends Component {
             .then(() => {
                 let trackPop = this.state.track.popularity;
                 let artistPop = this.state.artist.popularity;
-                if(artistPop + 10 >= trackPop && this.state.artist.images.length) {
+                if(artistPop + 10>= trackPop && this.state.artist.images.length) {
                     this.setState({max: this.state.artist.name, maxImg: this.state.artist.images[0].url, type: "artist" })
                 } else if(trackPop > artistPop && this.state.track.album.images && this.state.track.album.images.length) {
                     this.setState({max: this.state.track.name, maxImg: this.state.track.album.images[0].url, type: "track"})
