@@ -5,7 +5,8 @@ import Cookies from 'universal-cookie'
 
 import RestTracks from './restTracks'
 import RestArtists from './restArtists'
-import Artist from './Artist'
+import Artist from './Artist' //if type is artist
+import Track from './Track' //if type is track
 import ArtistTrack from './ArtistTrack'
 import ArtistAlbum from './ArtistsAlbum'
 
@@ -20,7 +21,7 @@ class BestSearch extends React.Component {
             name: "",
             restCondition: "artists",
             whatToRender: "default", // default and artist are the options
-            arrayOfRestTracks: "",
+            arrayOfRestTracks: [],
             restTracksUris: [],
             indexOfPlayingTrack: "",
             context: "", 
@@ -63,7 +64,7 @@ class BestSearch extends React.Component {
                         } else {
                             src = "https://images.unsplash.com/photo-1494232410401-ad00d5433cfa?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=1350&q=80"
                         }
-                        return  <ArtistTrack track={track} index={index} src={src} id={track.uri} deviceId={this.props.deviceId} name={name}/>
+                        return  <ArtistTrack track={track} src={src} id={track.uri} deviceId={this.props.deviceId} name={name}/>
                     })
                     this.setState({featuring: array, arrayOfUris})
                 }
@@ -160,12 +161,15 @@ class BestSearch extends React.Component {
         
 
         if(this.props.restTracks && this.props.restTracks.length) {
-            let arrayOfRestTracks;
-            let restTracks = this.props.restTracks.map((track) => {
+            let arrayOfRestTracks = [];
+            let featuring = [];
+            this.props.restTracks.map((track) => {
                 if(track.type === "track") {
-                    return track;
+                    arrayOfRestTracks.push(track);
+                    featuring.push(<ArtistTrack track={track} src={track.album.images[0].url} id={track.uri} deviceId={this.props.deviceId} name={track.name}/>);
                 }
             })
+            this.setState({arrayOfRestTracks, featuring})
         }
         if(this.props.artist !== "") { //not making requests without search value
             
@@ -186,41 +190,59 @@ class BestSearch extends React.Component {
             <div>
             {
                 render
-                ? <div>
-                    <Artist //this is the top result artist (if artist is type )
-                        trackId={this.props.trackId}
-                        deviceId={this.state.deviceId}
-                        image={this.props.image}
-                        type={this.props.type}
-                        name={this.props.name}
-                        featuring={this.state.featuring}
-                        albums={this.state.albums}
-                        arrayOfRestTracks={this.state.arrayOfRestTracks}
-                        blankSearch={this.props.blankSearch}
-                        arrayOfRelatedArtists={this.state.arrayOfRelatedArtists}
-                        />
-                        {this.props.type === "artist" 
-                    ? <div className="row related-artists">{this.state.arrayOfRelatedArtists.slice(0, 5)}</div>
+                ? <div>                    
+                    {this.props.type === "artist" 
+                        ? 
+                        <div>
+                            <Artist //this is the top result artist (if artist is type )
+                                trackId={this.props.trackId}
+                                deviceId={this.state.deviceId}
+                                image={this.props.image}
+                                type={this.props.type}
+                                name={this.props.name}
+                                featuring={this.state.featuring}
+                                albums={this.state.albums}
+                                arrayOfRestTracks={this.state.arrayOfRestTracks}
+                                blankSearch={this.props.blankSearch}
+                                arrayOfRelatedArtists={this.state.arrayOfRelatedArtists}/>  
+                            <div className="row related-artists">{this.state.arrayOfRelatedArtists.slice(0, 5)}</div>
+                        </div>
+                        
                     : undefined
                     }
-                    <div></div> {/*This is the second dragable div */}
-                    <div className="other-results-container">
-                        <div className="row mt-5">
-                            <span
-                                className="condition"
-                                onClick={() => {
-                                    $(".resttracks").removeClass("hide")
-                                    $(".restartists").addClass("hide")
-                                }}>tracks</span>
-                            <span
-                                className="condition"
-                                onClick={() => {
-                                    $(".restartists").removeClass("hide")
-                                    $(".resttracks").addClass("hide")
-                                }}>artists</span>
-                                <span
-                                className="condition">albums</span>
+                    {
+                        this.props.type === "track"
+                        ? 
+                        <div>
+                            <Track 
+                            trackId={this.props.trackId}
+                            deviceId={this.state.deviceId}
+                            image={this.props.image}
+                            type={this.props.type}
+                            name={this.props.name}
+                            featuring={this.state.featuring}
+                            albums={this.state.albums}
+                            arrayOfRestTracks={this.state.arrayOfRestTracks}
+                            blankSearch={this.props.blankSearch}
+                            arrayOfRelatedArtists={this.state.arrayOfRelatedArtists}/>
                         </div>
+                        : undefined
+                    }
+                    <div className="other-results-container">
+                        <span
+                            className="condition"
+                            onClick={() => {
+                                $(".resttracks").removeClass("hide")
+                                $(".restartists").addClass("hide")
+                            }}>tracks</span>
+                        <span
+                            className="condition"
+                            onClick={() => {
+                                $(".restartists").removeClass("hide")
+                                $(".resttracks").addClass("hide")
+                            }}>artists</span>
+                            <span
+                            className="condition">albums</span>
                     </div>
                     <div id="rest-tracks" className="resttracks">
                         <RestTracks tracks={this.props.restTracks} device={this.props.deviceId}/>
@@ -230,7 +252,7 @@ class BestSearch extends React.Component {
                     </div>
                     }
                     </div>                       
-                :<div></div>
+                :   undefined
             }
             </div>
         )

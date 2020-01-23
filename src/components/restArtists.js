@@ -21,7 +21,7 @@ class RestArtists extends React.Component {
             }
             return(
                 <div
-                    className="artist rest-artist-div col-md-4 col-xs-6"
+                    className="rest-artist-div"
                     id={artist.id}>
                     <img src={source}></img>
                     <div className="row">

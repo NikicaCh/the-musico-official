@@ -820,21 +820,21 @@ button:focus {outline:0;}
   margin-right: 5%;
 }
 
-.first-page {
+.featuring-tracks {
   position: relative;
-  width: 90vw;
+  width: 20vw;
   height: 14vw; 
   margin: 1% 5% 0 0;
-  display: table-cell;
+  display: block;
   overflow-y: scroll;
   scroll-behavior: smooth;
 }
 
 .artist-albums {
   position: relative;
-  width: 75vw;
-  height: 17vw; 
-  display: table-cell;
+  width: 20vw;
+  height: 15vw; 
+  display: block;
   overflow-x: scroll;
   scroll-behavior: smooth;
   transform: rotate(-90deg);
@@ -855,9 +855,7 @@ button:focus {outline:0;}
   width: 14vw;
   height: 14vw;
 }
-.under-album {
-  
-}
+
 .artist-album span {
   position: absolute;
   background: rgba(85, 85, 87, 0.3);
@@ -873,7 +871,7 @@ button:focus {outline:0;}
   background: rgba(66, 64, 64, .3);
 }
 
-.first-page::-webkit-scrollbar {display:none;}
+.featuring-tracks::-webkit-scrollbar {display:none;}
 
 
 .track-img {
@@ -1094,17 +1092,17 @@ button:focus {outline:0;}
 .featuring-title::selection {
   background: transparent;
 }
+
 .other-results-container {
   position: relative;
   margin: auto;
-  width: 50%;
-  left: 45%;
-  margin-top: 50%;
+  width: 20%;
+  text-align: center;
 }
 .other-results-container span {
   color: white;
-  margin-right: 2%;
   margin: auto;
+  margin-right: 20%;
   font-family: 'Anton', sans-serif;
   color: rgb(212, 212, 212);
   text-transform: uppercase;
@@ -1113,12 +1111,10 @@ button:focus {outline:0;}
 }
 
 .rest-tracks {
-  position: absolute;
-  left: 25%;
-  width: 100%;
+  left: 15%;
+  width: 70%;
   margin: auto;
   position: absolute;
-  margin-top: 15%;
 }
 .rest-tracks div:hover {
   background: rgb(108, 108, 109);
@@ -1129,8 +1125,8 @@ button:focus {outline:0;}
   font-size: 1.2vw;
   text-transform: lowercase;
   width: 70%;
-  margin-right: 20%;
   display: inline-block;
+  margin-left: .5%;
 }
 .rest-tracks div h1 h2 {
   color: #e3e64b;
@@ -1148,19 +1144,22 @@ button:focus {outline:0;}
   font-family: 'Amatic SC', cursive;
   font-size: 1vw;
   text-transform: lowercase;
-  display: inline-block;
+  float: right;
+  margin-right: 0.5%;
 }
 
 .rest-artists {
-  position: absolute;
-  width: 100%;
+  left: 15%;
+  width: 70%;
   margin: auto;
-  margin-top: 5%;
+  position: absolute;
+  border: solid 1px yellow;
+  display: inline-grid;
 }
 
 .rest-artist-div  img{
-  width: 15vw;
-  height: 15vw;
+  width: 10vw;
+  height: 10vw;
   border-radius: 5%;
   cursor: pointer;
 }

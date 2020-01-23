@@ -1,8 +1,10 @@
-import React, {useState} from 'react'
-import { accessToken, PlayTrack } from './Fetch'
+import React, { useState } from 'react'
+import { PlayTrack, accessToken } from './Fetch'  
 
-const Artist = (props) => {
+const Track = (props) => {
+
     let token = accessToken();
+
     return (
         <div className="artistDiv">
             <img //BLANK SEARCH BUTTON
@@ -15,9 +17,9 @@ const Artist = (props) => {
                 <img 
                     id={props.trackId}
                     onClick={() => {
-                        PlayTrack(props.trackId, token, props.deviceId);}} //Should be playing all artist's songs, instead of track.id, also fix the pause div
+                        PlayTrack(props.trackId, token, props.deviceId);}} //it will only play the specific track only, not an array of uris
                     src={props.image} 
-                    className={`best-search-img artist-img`}
+                    className={`best-search-img track-img`} 
                     alt="best search">
                 </img>
                 <span className="best-search-title">{props.name}</span>
@@ -35,11 +37,11 @@ const Artist = (props) => {
                 
             : undefined
             }
-            {
+            {/* {
                 true
                 ? <div className="artist-albums">{props.albums.slice(0, 10)}</div> //artist's albums
                 : undefined
-            }
+            } */}
             {/* {
                 (props.type !== "track")
                 ? <div className="other-track-imgs">
@@ -49,8 +51,10 @@ const Artist = (props) => {
             } */}
         </div> 
     )
+
 }
 
 
 
-export default Artist;
+export default Track;
+
