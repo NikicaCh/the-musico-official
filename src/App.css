@@ -1150,11 +1150,11 @@ button:focus {outline:0;}
 
 .rest-artists {
   left: 15%;
-  width: 70%;
+  width: 80%;
   margin: auto;
   position: absolute;
-  border: solid 1px yellow;
   display: inline-grid;
+  grid-template-columns: 1fr 1fr 1fr 1fr 1fr;	
 }
 
 .rest-artist-div  img{
@@ -1162,6 +1162,7 @@ button:focus {outline:0;}
   height: 10vw;
   border-radius: 5%;
   cursor: pointer;
+  margin-top: 15%;
 }
 .rest-artist-div h1 {
   font-family: 'Amatic SC', cursive;
