@@ -1109,6 +1109,9 @@ button:focus {outline:0;}
   font-size: .8vw;
   cursor: pointer;
 }
+.other-results-container span::selection {
+  background: transparent;
+}
 
 .rest-tracks {
   left: 15%;
@@ -1151,6 +1154,7 @@ button:focus {outline:0;}
 .rest-artists {
   left: 15%;
   width: 80%;
+  min-height: 70%;
   margin: auto;
   position: absolute;
   display: inline-grid;

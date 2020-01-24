@@ -19,7 +19,7 @@ class BestSearch extends React.Component {
             deviceId: "",
             type: "",
             name: "",
-            restCondition: "artists",
+            restCondition: "tracks",
             whatToRender: "default", // default and artist are the options
             arrayOfRestTracks: [],
             restTracksUris: [],
@@ -35,7 +35,12 @@ class BestSearch extends React.Component {
         this.featuring = this.featuring.bind(this),
         this.albums = this.albums.bind(this),
         this.seeds = this.seeds.bind(this),
-        this.related = this.related.bind(this)
+        this.related = this.related.bind(this),
+        this.changeRender = this.changeRender.bind(this)
+    }
+
+    changeRender = (option) => {
+        this.setState({restCondition: option})
     }
 
     featuring = () => {
@@ -180,6 +185,12 @@ class BestSearch extends React.Component {
     render() {
         let render = this.props.image;
         let featuring = false;
+        let condition;
+        if(this.state.restCondition === "tracks") {
+            condition = <RestTracks tracks={this.props.restTracks} device={this.props.deviceId}/>
+        } else if(this.state.restCondition === "artists") {
+            condition = <RestArtists artists={this.props.restArtists} device={this.props.deviceId} openArtist={this.props.openArtist}/>
+        }
         if(this.props.type === "artist") {
             featuring = true;
             
@@ -233,23 +244,20 @@ class BestSearch extends React.Component {
                         <span
                             className="condition"
                             onClick={() => {
-                                $(".resttracks").removeClass("hide")
-                                $(".restartists").addClass("hide")
+                                this.changeRender("tracks")
                             }}>tracks</span>
                         <span
                             className="condition"
                             onClick={() => {
-                                $(".restartists").removeClass("hide")
-                                $(".resttracks").addClass("hide")
+                                this.changeRender("artists")
                             }}>artists</span>
                             <span
                             className="condition">albums</span>
                     </div>
-                    <div id="rest-tracks" className="resttracks">
-                        <RestTracks tracks={this.props.restTracks} device={this.props.deviceId}/>
-                    </div>
-                    <div id="rest-artists" className="restartists hide">
-                        <RestArtists artists={this.props.restArtists} device={this.props.deviceId} openArtist={this.props.openArtist}/>
+                    <div>
+                        {
+                            condition
+                        }
                     </div>
                     }
                     </div>                       
