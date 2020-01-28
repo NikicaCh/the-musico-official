@@ -211,6 +211,7 @@ class Player extends Component {
                 })
                 if(hitsName.length) { // if the genius api responds with a result
                     if($) {
+                        console.log("TRUEEE")
                         this.setState({renderLyrics: true})
                     }
                     let lyrics = stringSimilarity.findBestMatch(track, hitsName);
