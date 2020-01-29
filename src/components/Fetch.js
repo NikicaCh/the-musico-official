@@ -20,8 +20,7 @@ export const accessToken = () => {
 }
 
 export const getGeniusKey = () => {
-    const cookies = new Cookies();
-    let genius = cookies.get("genius");
+    let genius = localStorage.getItem("genius");
     return genius;
 }
 
