@@ -180,7 +180,7 @@ export const Lyrics = (trackName, artist, token) => {
         method: 'GET',
         params: {
             'Authorization': 'Bearer ' + token,
-            access_token: token
+            'access_token': token
         }
     })
     .catch((err) => { console.log(err) })
