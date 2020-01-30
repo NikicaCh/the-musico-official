@@ -69,7 +69,7 @@ class BestSearch extends React.Component {
                         } else {
                             src = "https://images.unsplash.com/photo-1494232410401-ad00d5433cfa?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=1350&q=80"
                         }
-                        return  <ArtistTrack track={track} src={src} id={track.uri} deviceId={this.props.deviceId} name={name}/>
+                        return  <ArtistTrack track={track} src={src} id={track.uri} deviceId={this.props.deviceId} name={name} allTracks={arrayOfUris}/>
                     })
                     this.setState({featuring: array, arrayOfUris})
                 }

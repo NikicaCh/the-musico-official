@@ -25,8 +25,7 @@ const Artist = (props) => {
             {
             props.featuring 
             ?   
-                <div className="featuring-tracks" onClick={() => { // artist's featuring tracks
-                    }}>
+                <div className="featuring-tracks">
                     {props.featuring.length 
                     ? props.featuring
                     : <span className="nothing">Nothing to show here yet...</span>

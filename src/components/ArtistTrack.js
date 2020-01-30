@@ -1,4 +1,4 @@
-import React, {useState} from 'react'
+import React, {useState, useEffect} from 'react'
 import { accessToken, PlayTrack } from './Fetch';
 
 const millisToMinutesAndSeconds = (millis) => {
@@ -9,6 +9,11 @@ const millisToMinutesAndSeconds = (millis) => {
 
 const ArtistTrack = (props) => {
     let token = accessToken();
+    const [context, setContext] = useState(props.allTracks)
+    useEffect(() => {
+        setContext(props.allTracks)
+    })
+    
     return( 
         <div
             className="artistTrack"
