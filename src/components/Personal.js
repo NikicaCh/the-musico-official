@@ -55,9 +55,9 @@ class Personal extends React.Component {
             {(this.props.personal)
                 ? <div className="personal">
                 <div className="personal-section">
-                    <PlaylistRow data={this.state.arrayOfFeaturingPlaylists} title={"Featuring Playlists"}/>
-                    <PlaylistRow data={this.state.arrayOfPersonalPlaylists.slice(0,5)} title={"Made For You"}/>
-                    <PlaylistRow data={this.state.arrayOfPersonalPlaylists.slice(5,10)}/>
+                    <PlaylistRow data={this.state.arrayOfFeaturingPlaylists} title={"Featuring Playlists"} userId={this.props.userId}/>
+                    <PlaylistRow data={this.state.arrayOfPersonalPlaylists.slice(0,5)} title={"Made For You"} userId={this.props.userId}/>
+                    <PlaylistRow data={this.state.arrayOfPersonalPlaylists.slice(5,10)} userId={this.props.userId}/>
                 </div>            
                 </div>
                 : <div className="nopersonal"></div>

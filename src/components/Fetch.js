@@ -252,7 +252,7 @@ export const FeaturingPlaylists = (token) => {
 
 export const PlaylistsTracks = (token, id, limit) => {
     let promise = Axios.get(`https://api.spotify.com/v1/playlists/${id}/tracks?limit=${limit}`, {
-        header: {
+        headers: {
             "Authorization": `Bearer ${token}`,
             "Content-Type": "application/json",
             "Accept": "application/json"
@@ -263,13 +263,45 @@ export const PlaylistsTracks = (token, id, limit) => {
 
 export const GetPlaylist = (token, id) => {
     let promise = Axios(`https://api.spotify.com/v1/playlists/${id}`, {
-        header: {
+        headers: {
             "Authorization": `Bearer ${token}`,
             "Content-Type": "application/json",
             "Accept": "application/json"
         }
     })
     return promise
+}
+
+export const IfFollowPlaylist = (token, id, user) => {
+    let promise = Axios(`https://api.spotify.com/v1/playlists/${id}/followers/contains?ids=${user}`, {
+        headers: {
+            "Authorization": `Bearer ${token}`,
+            "Content-Type": "application/json",
+            "Accept": "application/json"
+        }
+    })
+    return promise;
+}
+
+export const FollowPlaylist = (token, id) => {
+    fetch(`https://api.spotify.com/v1/playlists/${id}/followers`, {
+    method: 'PUT',
+    headers: {
+        'Authorization': 'Bearer ' + token ,
+        'Content-Type': 'application/json',
+    },
+    body: JSON.stringify({
+        "public": true })
+    });
+}
+
+export const UnfollowPlaylist = (token, id) => {
+    fetch(`https://api.spotify.com/v1/playlists/${id}/followers`, {
+    method: 'DELETE',
+    headers: {
+        'Authorization': 'Bearer ' + token ,
+        'Content-Type': 'application/json',
+    }});
 }
 
 export const UsersTop = (token, type, time_range, limit) => {

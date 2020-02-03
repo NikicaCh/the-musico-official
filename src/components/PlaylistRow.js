@@ -35,7 +35,7 @@ class PlaylistRow extends Component {
         return(
             <div className="playlist-row">
                 <h1 className="featuring-playlists">{this.props.title}</h1>
-                {this.props.data.map((item, index) => (<Playlist key={`playlist${index}`} item={item} setDetails={this.setDetails} />))}
+                {this.props.data.map((item, index) => (<Playlist key={`playlist${index}`} item={item} setDetails={this.setDetails} userId={this.props.userId}/>))}
                 <PlaylistDetails
                     name={this.state.detailsName}
                     owner={this.state.detailsOwner} />

@@ -2098,7 +2098,6 @@ input[type=range]:focus::-ms-fill-upper {
   width: 17%;
   margin: 2% .3%;
   z-index: 100000;
-  cursor: pointer; 
 }
 .personal-item:first {
   margin: 2% 0 0 6%;
@@ -2130,8 +2129,8 @@ input[type=range]:focus::-ms-fill-upper {
   opacity: 1;
   transform: translateY(5px);
 }
-.hoverable:hover .play-playlist {
-  opacity: .7;
+.hoverable:hover .play-playlist, .hoverable:hover .heart {
+  opacity: 1;
 }
 .personal-details {
   position: relative;
@@ -2200,12 +2199,27 @@ input[type=range]:focus::-ms-fill-upper {
   border-radius: 50%;
   top: 42%;
   left: 5%;
-  padding: .5%;
   background: rgba(238, 236, 214, 0.8);
   opacity: 0;
+  cursor: pointer;
 }
 .play-playlist:hover {
   transform: scale(1.2);
+}
+
+.heart {
+  position: absolute;
+  max-width: 2vw;
+  max-height: 2vw;
+  border-radius: 50%;
+  top: 45%;
+  left: 85%;
+  opacity: 0;
+  cursor: pointer;
+}
+.heart:hover {
+  transform: scale(1.2);
+
 }
 
 .explicit {
