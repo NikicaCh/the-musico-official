@@ -290,8 +290,6 @@ export const FollowPlaylist = (token, id) => {
         'Authorization': 'Bearer ' + token ,
         'Content-Type': 'application/json',
     },
-    body: JSON.stringify({
-        "public": true })
     });
 }
 

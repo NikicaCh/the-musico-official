@@ -6,28 +6,30 @@ import PlayCircleOutlineIcon from '@material-ui/icons/PlayCircleOutline';
 
 
 const Playlist = (props) =>  {
+    let colorFollow = "#FC1A0B"
+    let colorUnfollow = "#7A7E70"
+
     const [name, setName] = useState("")
     const [owner, setOwner] = useState("")
-    const [heartColor, setHeartColor] = useState("#7A7E70")
-    const [follow, setFollow] = useState("false")
+    const [heartColor, setHeartColor] = useState(colorUnfollow)
+    const [follow, setFollow] = useState(false)
     let token = accessToken();
 
+    
 
-    const Follow = () => {
-        FollowPlaylist(token, props.item.id)
-        .try((res) => {
-            console.log(res)
-        })
-        .catch((err) => {
-            console.log(err)
-        })
-    }
+    // const Follow = () => {
+    //     FollowPlaylist(token, props.item.id)
+    // }
     const handleFollow = () => {
-        if(follow) {
-            UnfollowPlaylist(token, props.item.id)
-        } else {
-            FollowPlaylist(token, props.item.id)
-        }
+        console.log("CLICKED")
+        follow ?
+            (setFollow(false),
+            UnfollowPlaylist(token, props.item.id),
+            setHeartColor(colorUnfollow))
+        :   (setFollow(true),
+            FollowPlaylist(token, props.item.id),
+            setHeartColor(colorFollow))
+        
     }
     useEffect(() => {
         setName(props.item.name)
@@ -35,13 +37,13 @@ const Playlist = (props) =>  {
         IfFollowPlaylist(token, props.item.id, props.userId)
         .then((data) => {
             if(data) {
-                if(data.data === true) {
-                    setHeartColor("#FC1A0B")
-                    setFollow("true")
-                } else {
-                    setHeartColor("#7A7E70")
-                    setFollow("false")
-                }
+                data.data[0] === true ?
+                    (console.log("FOLLOWED"),
+                    setHeartColor(colorFollow),
+                    setFollow(true))
+                :   (console.log("UNFOLLOWED"),
+                    setHeartColor(colorUnfollow),
+                    setFollow(false))
             }
         })        
         
