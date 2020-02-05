@@ -13,6 +13,9 @@ const Pill = (props) => {
             const token = accessToken();
             props.search(token, value)
         }
+        else if(value === "new releases") {
+            props.render();
+        }
     }
 
     const deletePill = (e) => {

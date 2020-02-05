@@ -1,6 +1,6 @@
 import React from 'react'
 import $ from 'jquery'
-import { accessToken ,FeaturingPlaylists, PlayContext, UsersPlaylists} from './Fetch'
+import { accessToken ,FeaturingPlaylists, PlayContext, UsersPlaylists, NewReleases} from './Fetch'
 import Axios from 'axios'
 
 
@@ -45,6 +45,7 @@ class Personal extends React.Component {
                 this.setState({arrayOfPersonalPlaylists})
             }
         })
+        
     }
 
     
@@ -52,7 +53,7 @@ class Personal extends React.Component {
     render() {
         return (
             <div>
-            {(this.props.personal)
+            {(this.props.render)
                 ? <div className="personal">
                 <div className="personal-section">
                     <PlaylistRow data={this.state.arrayOfFeaturingPlaylists} title={"Featuring Playlists"} userId={this.props.userId}/>

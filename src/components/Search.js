@@ -9,6 +9,7 @@ import Cookies from 'universal-cookie'
 import FeaPlaylists from './featuringPlaylists'
 import Personal from './Personal'
 import Pill from './pill'
+import {Releases} from './Releases'
 import { throws } from 'assert'
 
 
@@ -30,19 +31,25 @@ class Search extends Component {
           restTracks: [],
           restArtists: [], 
           pillLastClicked: "",
-          personal: true
+          best: false,
+          personal: true,
+          releases: false
         }
         this.handleChange = this.handleChange.bind(this);
         this.search = this.search.bind(this);
         this.openArtist = this.openArtist.bind(this);
         this.blankSearch = this.blankSearch.bind(this);
+        this.releasesRender = this.releasesRender.bind(this);
         // this.handleKeyPress = this.handleKeyPress.bind(this);
     };
     blankSearch() {
-        this.setState({searchValue: "", type: "", track: "", artist: "", max: "", maxImg: "" , personal: true})
+        this.setState({searchValue: "", type: "", track: "", artist: "", max: "", maxImg: "" , best: false, personal: true, releases: false})
+    }
+    releasesRender() {
+        this.setState({searchValue: "", type: "", track: "", artist: "", max: "", maxImg: "" , personal: false, best: false,  releases: true})
     }
     search(token, value) {
-        this.setState({personal: false})
+        this.setState({personal: false, releases: false, best: true})
 
         let promise1 = SearchFor(token, value, "track", 50)
         .then((data) => {
@@ -209,7 +216,7 @@ class Search extends Component {
                     <Pill search={this.search} value={mostRecent1}/>
                     <Pill search={this.search} value={mostRecent2}/>
                     <Pill search={this.search} value={lastTrack} />
-                    <Pill search={this.search} value="new releases" icon={require("../icons/new.webp")}/>
+                    <Pill search={this.search} value="new releases" render={this.releasesRender} icon={require("../icons/new.webp")}/>
                     {/* <span id="pill-fire" className="pill"><img className="fire" src={require("../icons/trending.webp")}></img>trending<img className="pill-close" src={require("../icons/pill-close.png")}></img></span>
                     <span id="pill1" className="pill">{mostRecent1}<img className="pill-close" src={require("../icons/pill-close.png")}></img></span>
                     <span id="pill2" className="pill">{mostRecent2}<img className="pill-close" src={require("../icons/pill-close.png")}></img></span>
@@ -225,6 +232,7 @@ class Search extends Component {
                 <div>
                 <div id="results" className="results">
                     <BestSearch
+                        render={this.state.best}
                         state={this.props.state}
                         position={this.props.position}
                         currentPlaybackId={this.props.currentPlaybackId}
@@ -248,10 +256,12 @@ class Search extends Component {
                         openArtist={this.openArtist}
                         blankSearch={this.blankSearch}/>
                     <Personal
-                        personal={this.state.personal}
+                        render={this.state.personal}
                         userId={this.props.userId}
                         track={this.state.track}
                         artist={this.state.artist}/>
+                    <Releases 
+                        render={this.state.releases}/>
                     {/* <FeaPlaylists /> */}
                     <div className="artist"></div>
                 </div>                

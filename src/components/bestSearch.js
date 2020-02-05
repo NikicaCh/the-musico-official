@@ -183,7 +183,7 @@ class BestSearch extends React.Component {
       }
     
     render() {
-        let render = this.props.image;
+        let render = this.props.render;
         let featuring = false;
         let condition;
         if(this.state.restCondition === "tracks") {

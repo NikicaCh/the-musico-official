@@ -29,7 +29,7 @@ import uniqid from 'uniqid'
 import Explicit from "./explicit"
 const linkBackendInDevelopment = "http://localhost:8888/";
 const linkBackendInProduction = "https://themusico-redirect.herokuapp.com/";
-const linkEnv = linkBackendInProduction;
+const linkEnv = linkBackendInDevelopment;
 
 
 class Player extends Component {

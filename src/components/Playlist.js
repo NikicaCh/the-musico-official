@@ -15,13 +15,21 @@ const Playlist = (props) =>  {
     const [follow, setFollow] = useState(false)
     let token = accessToken();
 
-    
+    IfFollowPlaylist(token, props.item.id, props.userId)
+        .then((data) => {
+            if(data) {
+                data.data[0] === true ?
+                    (setHeartColor(colorFollow),
+                    setFollow(true))
+                :   (setHeartColor(colorUnfollow),
+                    setFollow(false))
+            }
+        })        
 
     // const Follow = () => {
     //     FollowPlaylist(token, props.item.id)
     // }
     const handleFollow = () => {
-        console.log("CLICKED")
         follow ?
             (setFollow(false),
             UnfollowPlaylist(token, props.item.id),
@@ -31,23 +39,6 @@ const Playlist = (props) =>  {
             setHeartColor(colorFollow))
         
     }
-    useEffect(() => {
-        setName(props.item.name)
-        setOwner(props.item.owner.display_name)
-        IfFollowPlaylist(token, props.item.id, props.userId)
-        .then((data) => {
-            if(data) {
-                data.data[0] === true ?
-                    (console.log("FOLLOWED"),
-                    setHeartColor(colorFollow),
-                    setFollow(true))
-                :   (console.log("UNFOLLOWED"),
-                    setHeartColor(colorUnfollow),
-                    setFollow(false))
-            }
-        })        
-        
-    })
     const style = {
         backgroundImage: `url(${props.item.images[0].url})`,
         backgroundPosition: "center",
