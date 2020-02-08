@@ -79,25 +79,28 @@ class BestSearch extends React.Component {
 
     albums = () => {
         let token=accessToken();
-        ArtistsAlbums(token, this.props.artistId)
-        .then((data) => {
-            if(data) {
-                let ids = [];
-                let arrayOfAlbums = [];
-                data.data.items.map((item) => {
-                    if(ids.indexOf(item.id) == -1) {
-                        arrayOfAlbums.push(item);
-                        ids.push(item.id)
-                    }
-                    
-                })
-                let albums = arrayOfAlbums.map((album) => {
-                    
-                    return <ArtistAlbum album={album} deviceId={this.state.deviceId} />
-                })
-                this.setState({albums})
-            }
-        })
+        if(this.props.type !== "" && this.props.artistId !== "") {
+            ArtistsAlbums(token, this.props.artistId)
+            .then((data) => {
+                if(data) {
+                    let ids = [];
+                    let arrayOfAlbums = [];
+                    data.data.items.map((item) => {
+                        if(ids.indexOf(item.id) == -1) {
+                            arrayOfAlbums.push(item);
+                            ids.push(item.id)
+                        }
+                        
+                    })
+                    let albums = arrayOfAlbums.map((album) => {
+                        
+                        return <ArtistAlbum album={album} deviceId={this.state.deviceId} />
+                    })
+                    this.setState({albums})
+                }
+            })
+        }
+        
     }
 
     seeds = () => {
@@ -119,7 +122,8 @@ class BestSearch extends React.Component {
 
     related = () => {
         let token = accessToken();
-        RelatedArtists(token, this.props.artistId)
+        if(this.props.type !== "" && this.props.artistId !== "") { //to make request only when in artist
+            RelatedArtists(token, this.props.artistId)
             .then((data) => {
                 let arrayOfRelatedArtists = data.data.artists.map((artist) => {
                     return <span id={artist.id} className="related-artist" onClick={(e) => {
@@ -131,6 +135,8 @@ class BestSearch extends React.Component {
                 })
                 this.setState({arrayOfRelatedArtists})
             })
+        }
+       
     }
 
     componentDidMount() {

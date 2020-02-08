@@ -261,7 +261,10 @@ class Search extends Component {
                         track={this.state.track}
                         artist={this.state.artist}/>
                     <Releases 
-                        render={this.state.releases}/>
+                        render={this.state.releases}
+                        blankSearch={this.blankSearch}
+                        userId={this.props.userId}
+                        deviceId={this.props.deviceId}/>
                     {/* <FeaPlaylists /> */}
                     <div className="artist"></div>
                 </div>                

@@ -236,7 +236,7 @@ export const Featuring = (id, token) => {
 }
 
 export const NewReleases = (token) => {
-    let promise = Axios(`https://api.spotify.com/v1/browse/new-releases?limit=5`, {
+    let promise = Axios(`https://api.spotify.com/v1/browse/new-releases`, {
         headers: {
             "Authorization": `Bearer ${token}`,
             "Content-Type": "application/json",

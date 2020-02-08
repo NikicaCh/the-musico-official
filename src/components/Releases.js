@@ -1,25 +1,53 @@
 import React, {useState} from 'react'
 import {NewReleases, accessToken} from './Fetch'
+import NewRelease from './NewRelease'
 
 export const Releases = (props) => {
 
+
+    //////INCLUDE LIKE SEEDS, with genres, and country
+
     const [albums, setAlbums] = useState([])
-    const [request, setRequest] = useState(0)
+    const [singles, setSingles] = useState([])
+    const [request, setRequest] = useState(false)
     let token = accessToken();
-    if(props.render && request < 1) {
+    if(props.render && !request) {
         NewReleases(token)
         .then((data) => {
-            if(data) 
-            setAlbums(data.data.albums.items)
-            setRequest(request + 1)
-            console.log("NEW RELEASES:",data.data.albums.items)
+            if(data) {
+                data.data.albums.items.map((item) => {
+                    if(item.album_type === "album") {
+                        setAlbums((albums) => [...albums, item])
+                    } else if(item.album_type === "single") {
+                        setSingles((singles) => [...singles, item])
+                    }
+                    setRequest(true)
+                })
+                
+                console.log("NEW RELEASES:",data.data.albums.items)
+            }
+            
         })
     }
    
     return (
         <div>
             {props.render
-            ? <div className="releases">HELLO WORLD</div>
+            ? <div className="releases">
+                <h1 className="featuring-playlists">New Releases</h1>
+                <img //BLANK SEARCH BUTTON
+                    className="blank-search"
+                    onClick={props.blankSearch}
+                    src={require("../icons/pill-close.png")}
+                    alt="pill close">
+                </img>
+                <div className="releases-lists">
+                    {singles.slice(0, 20).map((single) => {
+                        return <NewRelease name={single.name}/>
+                    })}
+                </div>
+                <div className="releases-main"></div>
+            </div>
             : undefined}
         </div>
     )

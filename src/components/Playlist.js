@@ -13,18 +13,23 @@ const Playlist = (props) =>  {
     const [owner, setOwner] = useState("")
     const [heartColor, setHeartColor] = useState(colorUnfollow)
     const [follow, setFollow] = useState(false)
+    const [request, setRequest] = useState(false)
     let token = accessToken();
 
-    IfFollowPlaylist(token, props.item.id, props.userId)
-        .then((data) => {
-            if(data) {
-                data.data[0] === true ?
-                    (setHeartColor(colorFollow),
-                    setFollow(true))
-                :   (setHeartColor(colorUnfollow),
-                    setFollow(false))
-            }
-        })        
+    // if(! request) {
+    //     IfFollowPlaylist(token, props.item.id, props.userId)
+    //     .then((data) => {
+    //         if(data) {
+    //             data.data[0] === true ?
+    //                 (setHeartColor(colorFollow),
+    //                 setFollow(true))
+    //             :   (setHeartColor(colorUnfollow),
+    //                 setFollow(false))
+    //         }
+    //         setRequest(true)
+    //     })
+    // }
+            
 
     // const Follow = () => {
     //     FollowPlaylist(token, props.item.id)
