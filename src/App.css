@@ -2249,9 +2249,14 @@ input[type=range]:focus::-ms-fill-upper {
 }
 .releases-main {
   position: relative;
-  width: 25%;
+  width: 20%;
   height: 40%;
   float: left;
+  margin-left: 1%;
+}
+.releases-main img {
+  width: 13vw;
+  height: 13vw;
 }
 .newReleaseElement {
   display: relative;

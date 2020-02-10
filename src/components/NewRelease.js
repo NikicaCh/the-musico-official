@@ -1,9 +1,17 @@
 import React, {useState} from 'react'
+import {  accessToken, PlayTrack, PlayAlbum } from './Fetch'
 
 
 const NewRelease = (props) => {
+    let token = accessToken()
     return (
-        <div className="newReleaseElement" title={props.name}>
+        <div onClick={()=> {
+            if(props.item.album_type ===  "album") {
+
+            } else {
+                PlayTrack(props.item.uri, token, props.devideId)
+            }
+        }} className="newReleaseElement" title={props.name}>
             <h1>{`${props.name.slice(0,20)}...`}</h1>
             {
                 (props.item.album_type === "single")

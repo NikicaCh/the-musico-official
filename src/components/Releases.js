@@ -2,6 +2,8 @@ import React, {useState} from 'react'
 import {NewReleases, accessToken} from './Fetch'
 import NewRelease from './NewRelease'
 
+
+
 export const Releases = (props) => {
 
 
@@ -10,6 +12,10 @@ export const Releases = (props) => {
     const [albums, setAlbums] = useState([])
     const [singles, setSingles] = useState([])
     const [request, setRequest] = useState(false)
+    const [src, setSrc] = useState()
+
+    
+    
     let token = accessToken();
     if(props.render && !request) {
         NewReleases(token)
@@ -22,14 +28,16 @@ export const Releases = (props) => {
                         setSingles((singles) => [...singles, item])
                     }
                     setRequest(true)
-                })
-                
-                console.log("NEW RELEASES:",data.data.albums.items)
+                })               
             }
-            
         })
+
     }
-   
+
+    // const setMainRelease = (item, key) => {
+    //     setSrc(item.images[0].url)
+    // }
+    
     return (
         <div>
             {props.render
@@ -42,14 +50,16 @@ export const Releases = (props) => {
                     alt="pill close">
                 </img>
                 <div className="releases-lists">
-                    {singles.slice(0, 10).map((single) => {
-                        return <NewRelease item={single} name={single.name}/>
+                    {singles.slice(0, 10).map((single, key) => {
+                        return <NewRelease item={single} key={key} name={single.name} devideId={props.devideId} />
                     })}
-                    {albums.slice(0, 10).map((album) => {
-                        return <NewRelease item={album} name={album.name} />
+                    {albums.slice(0, 10).map((album, key) => {
+                        return <NewRelease item={album} key={key} name={album.name}  devideId={props.devideId}/>
                     })}
                 </div>
-                <div className="releases-main"></div>
+                {/* <div className="releases-main">
+                    <img src={src}></img>
+                </div> */}
             </div>
             : undefined}
         </div>
