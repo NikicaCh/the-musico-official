@@ -2236,7 +2236,6 @@ input[type=range]:focus::-ms-fill-upper {
   width: 70%;
   height: 32vw;
   margin: auto;
-  border: solid 1px yellow
 }
 
 .releases-lists {
@@ -2247,24 +2246,27 @@ input[type=range]:focus::-ms-fill-upper {
   display: grid;
   grid-template-columns: repeat(6, 1fr);
   padding: 1%;
-  border: solid 1px goldenrod
 }
 .releases-main {
   position: relative;
   width: 25%;
   height: 40%;
   float: left;
-  border: solid 1px rgb(91, 233, 63)
 }
 .newReleaseElement {
   display: relative;
   width: 10vw;
   height: 3vw;
-  border-radius: 5px;
+  border-radius: 5%;
   cursor: pointer;
-  background: rgb(252, 255, 211);
+  background: rgb(227, 228, 219);
   text-align: left;
   display: table;
+  padding-left: 2%;
+}
+
+.newReleaseElement h1::selection, .newReleaseElement img::selection {
+  background: transparent;
 }
 
 .newReleaseElement h1 {
@@ -2273,4 +2275,39 @@ input[type=range]:focus::-ms-fill-upper {
   font-size: 1.1vw;
   font-family: 'Amatic SC', cursive;
   font-weight: 700;
+}
+
+.newReleaseElement img {
+  position: relative;
+  float: right;
+  height: 100%;
+  border-radius: 0 5% 5% 0;
+  opacity: .85;
+}
+.newReleaseElement img:hover {
+  opacity: 1;
+}
+
+
+.numberOfTracks {
+  position: relative;
+  float: right;
+  height: 100%;
+  width: 3vw;
+  border-radius: 0 5% 5% 0;
+  background: rgb(31, 30, 30);
+  color: white;
+  text-align: center;
+  font-family: 'Amatic SC', cursive;
+  font-size: 1.1vw;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  opacity: .85;
+}
+.numberOfTracks:hover {
+  opacity: 1;
+}
+.numberOfTracks::selection {
+  background: transparent;
 }

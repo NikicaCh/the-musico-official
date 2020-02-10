@@ -42,8 +42,11 @@ export const Releases = (props) => {
                     alt="pill close">
                 </img>
                 <div className="releases-lists">
-                    {singles.slice(0, 20).map((single) => {
-                        return <NewRelease name={single.name}/>
+                    {singles.slice(0, 10).map((single) => {
+                        return <NewRelease item={single} name={single.name}/>
+                    })}
+                    {albums.slice(0, 10).map((album) => {
+                        return <NewRelease item={album} name={album.name} />
                     })}
                 </div>
                 <div className="releases-main"></div>
