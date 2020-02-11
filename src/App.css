@@ -2249,15 +2249,54 @@ input[type=range]:focus::-ms-fill-upper {
 }
 .releases-main {
   position: relative;
-  width: 20%;
+  width: 50%;
   height: 40%;
   float: left;
   margin-left: 1%;
 }
 .releases-main img {
   width: 13vw;
-  height: 13vw;
+  height: 100%;
 }
+.release-artists {
+  position: relative;
+  display: inline-block;
+  vertical-align: top;
+  min-width: 15vw;
+ 
+}
+.release-artists h1 {
+  font-family: 'Anton', sans-serif;
+  font-size: 1.3vw;
+  background: silver;
+  margin: 3%;
+  padding-left: 5%;
+}
+.release-artists h1::selection {
+  background: transparent;
+}
+.release-title {
+  font-family: 'Anton', sans-serif;
+  font-size: 1.3vw;
+  background: none;
+  margin: 2%;
+  padding-left: 5%;
+  color: white;
+}
+.release-title::selection {
+  background: transparent;
+}
+.release-artists span {
+  font-family: 'Anton', sans-serif;
+  font-size: .7vw;
+  background: silver;
+  margin: 3%;
+  margin-left: 5%;
+}
+.release-artists span::selection {
+  background: transparent;
+}
+
 .newReleaseElement {
   display: relative;
   width: 10vw;
@@ -2276,12 +2315,12 @@ input[type=range]:focus::-ms-fill-upper {
 
 .newReleaseElement h1 {
   display: table-cell;
-  vertical-align: middle;
+  vertical-align: top;
   font-size: 1.1vw;
   font-family: 'Amatic SC', cursive;
   font-weight: 700;
+  width: 65%;
 }
-
 .newReleaseElement img {
   position: relative;
   float: right;

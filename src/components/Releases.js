@@ -1,6 +1,7 @@
 import React, {useState} from 'react'
 import {NewReleases, accessToken} from './Fetch'
 import NewRelease from './NewRelease'
+import MainRelease from './MainRelease'
 
 
 
@@ -12,8 +13,7 @@ export const Releases = (props) => {
     const [albums, setAlbums] = useState([])
     const [singles, setSingles] = useState([])
     const [request, setRequest] = useState(false)
-    const [src, setSrc] = useState()
-
+    const [main, setMain] = useState({})
     
     
     let token = accessToken();
@@ -34,9 +34,9 @@ export const Releases = (props) => {
 
     }
 
-    // const setMainRelease = (item, key) => {
-    //     setSrc(item.images[0].url)
-    // }
+    const handleClick = (item) => {
+        setMain(item)
+    }
     
     return (
         <div>
@@ -51,15 +51,18 @@ export const Releases = (props) => {
                 </img>
                 <div className="releases-lists">
                     {singles.slice(0, 10).map((single, key) => {
-                        return <NewRelease item={single} key={key} name={single.name} devideId={props.devideId} />
+                        return <NewRelease item={single} key={key} name={single.name} devideId={props.devideId} handleClick={handleClick}/>
                     })}
                     {albums.slice(0, 10).map((album, key) => {
-                        return <NewRelease item={album} key={key} name={album.name}  devideId={props.devideId}/>
+                        return <NewRelease item={album} key={key} name={album.name}  devideId={props.devideId} handleClick={handleClick}/>
                     })}
                 </div>
-                {/* <div className="releases-main">
-                    <img src={src}></img>
-                </div> */}
+                {
+                    (main !== {} && main.images)
+                    ? <MainRelease item={main} />
+                    : undefined
+                }
+                
             </div>
             : undefined}
         </div>
