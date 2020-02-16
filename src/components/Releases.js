@@ -51,15 +51,15 @@ export const Releases = (props) => {
                 </img>
                 <div className="releases-lists">
                     {singles.slice(0, 10).map((single, key) => {
-                        return <NewRelease item={single} key={key} name={single.name} devideId={props.devideId} handleClick={handleClick}/>
+                        return <NewRelease item={single} key={key} name={single.name} deviceId={props.deviceId} handleClick={handleClick} type="single"/>
                     })}
                     {albums.slice(0, 10).map((album, key) => {
-                        return <NewRelease item={album} key={key} name={album.name}  devideId={props.devideId} handleClick={handleClick}/>
+                        return <NewRelease item={album} key={key} name={album.name}  deviceId={props.deviceId} handleClick={handleClick} type="album"/>
                     })}
                 </div>
                 {
                     (main !== {} && main.images)
-                    ? <MainRelease item={main} />
+                    ? <MainRelease item={main} deviceId={props.deviceId}/>
                     : undefined
                 }
                 

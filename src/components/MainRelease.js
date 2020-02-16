@@ -1,9 +1,18 @@
 import React, { useState, useEffect } from 'react'
+import { accessToken, PlayTrack, PlayAlbum } from './Fetch'
+import PlayCircleOutlineIcon from '@material-ui/icons/PlayCircleOutline'
+
 
 
 
 const MainRelease = (props) => {
     const [artists, setArtists] = useState([])
+
+    const icon = {
+        width: "3vw",
+        height: "3vw"
+    }
+    let token = accessToken();
 
     useEffect(() => {
         let arrayOfArtists = []
@@ -16,6 +25,15 @@ const MainRelease = (props) => {
     return (
         <div className="releases-main">
             <img src={props.item.images[0].url}></img>
+            <div
+                className="play-release"
+                title={"Play Playlist"}
+                onClick={() => {
+                        PlayAlbum(props.item.uri, token, props.deviceId)
+                // PlayContext(token, props.item.uri)
+            }}>
+                <PlayCircleOutlineIcon style={icon} />
+            </div>
             {
                 <div className="release-artists">
                     <h2 className="release-title" title={props.item.name}>{`${props.item.name.slice(0,17)}...`}</h2>

@@ -2263,7 +2263,6 @@ input[type=range]:focus::-ms-fill-upper {
   display: inline-block;
   vertical-align: top;
   min-width: 15vw;
- 
 }
 .release-artists h1 {
   font-family: 'Anton', sans-serif;
@@ -2295,6 +2294,21 @@ input[type=range]:focus::-ms-fill-upper {
 }
 .release-artists span::selection {
   background: transparent;
+}
+.releases-main:hover .play-release {
+  opacity: 1;
+}
+.play-release {
+  position: absolute;
+  left: 14%;
+  top: 38%;
+  background: rgba(238, 236, 214, 0.8);
+  opacity: 0;
+  cursor: pointer;
+  border-radius: 50%;
+}
+.play-release:hover {
+  transform: scale(1.1);
 }
 
 .newReleaseElement {

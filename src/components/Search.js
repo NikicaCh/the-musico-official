@@ -166,7 +166,7 @@ class Search extends Component {
         let userId = this.props.userId
         let mostRecent1 = cookies.get(`mostRecent1${userId}`)
         if(!mostRecent1 || mostRecent1 == "undefined") {
-            mostRecent1 = "imagine dragons"
+            mostRecent1 = "dua lipa"
         }
         let mostRecent2 = cookies.get(`mostRecent2${userId}`)
         if(!mostRecent2 || mostRecent2 == "undefined") {
@@ -174,7 +174,7 @@ class Search extends Component {
         }
         let lastTrack = cookies.get(`lastTrack${userId}`)
         if(!lastTrack || lastTrack == "undefined") {
-            lastTrack = "shallow"
+            lastTrack = "blinding lights"
         }
         let type;
         if(this.state.type === "track") {
@@ -264,7 +264,7 @@ class Search extends Component {
                         render={this.state.releases}
                         blankSearch={this.blankSearch}
                         userId={this.props.userId}
-                        deviceId={this.props.deviceId}/>
+                        deviceId={this.props.deviceId} />
                     {/* <FeaPlaylists /> */}
                     <div className="artist"></div>
                 </div>                
