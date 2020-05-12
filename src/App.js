@@ -62,7 +62,7 @@ class App extends Component {
   render() {
     document.title = "The Musico";
     const linkToRedirectInDevelopment = "http://localhost:8888/login";
-    const linkToRedirectInProduction = "https://themusico-redirect.herokuapp.com/login";
+    const linkToRedirectInProduction = "https://musico-back.herokuapp.com/login";
     const linkEnv = linkToRedirectInProduction;
     let token = accessToken();
     getDevices(token)
