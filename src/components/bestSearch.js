@@ -177,7 +177,9 @@ class BestSearch extends React.Component {
             this.props.restTracks.map((track) => {
                 if(track.type === "track") {
                     arrayOfRestTracks.push(track);
-                    featuring.push(<ArtistTrack track={track} src={track.album.images[0].url} id={track.uri} deviceId={this.props.deviceId} name={track.name}/>);
+                    if(track && track.album && track.album.images && track.album.images.length) {
+                        featuring.push(<ArtistTrack track={track} src={track.album.images[0].url} id={track.uri} deviceId={this.props.deviceId} name={track.name}/>);
+                    }
                 }
             })
             this.setState({arrayOfRestTracks, featuring})

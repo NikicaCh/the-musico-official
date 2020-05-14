@@ -175,10 +175,10 @@ export const Lyrics = (trackName, artist, token) => {
     if(track.indexOf("Remastered") !== -1) {
         track = track.substring(0, track.indexOf("Remastered"));
     }
-    let promise = Axios(`https://api.genius.com/search?q=${artist}-${track}`, {
-        method: 'GET',
+    let promise = Axios(`https://api.genius.com/search?q=${artist}-${track}`,{
+        method: "GET",
         params: {
-            'Authorization': 'Bearer ' + token,
+            'Authorization': `Bearer ${token}`,
             'access_token': token
         }
     })
