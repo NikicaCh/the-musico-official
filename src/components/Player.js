@@ -441,11 +441,7 @@ class Player extends Component {
             this.setState({player})
         player.addListener('initialization_error', ({ message }) => { console.error(message); });
         player.addListener('authentication_error', ({ message }) => {
-<<<<<<< HEAD
             window.location.replace("https://musico-back.herokuapp.com//login")
-=======
-            window.location.replace("https://musico-back.herokuapp.com/login")
->>>>>>> 87f0a1d32a1344bdd1912f90430b1d68d1372081
             }
         );
         player.addListener('account_error', ({ message }) => { console.error("MESSAGE",message); });
