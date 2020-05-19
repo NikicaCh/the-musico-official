@@ -28,7 +28,7 @@ import $ from 'jquery'
 import uniqid from 'uniqid'
 import Explicit from "./explicit"
 const linkBackendInDevelopment = "http://localhost:8888/";
-const linkBackendInProduction = "https://themusico-redirect.herokuapp.com/";
+const linkBackendInProduction = "https://musico-back.herokuapp.com/";
 const linkEnv = linkBackendInProduction;
 
 
@@ -441,7 +441,7 @@ class Player extends Component {
             this.setState({player})
         player.addListener('initialization_error', ({ message }) => { console.error(message); });
         player.addListener('authentication_error', ({ message }) => {
-            window.location.replace("https://themusico-redirect.herokuapp.com/login")
+            window.location.replace("https://musico-back.herokuapp.com//login")
             }
         );
         player.addListener('account_error', ({ message }) => { console.error("MESSAGE",message); });
