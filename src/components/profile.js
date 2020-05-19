@@ -4,7 +4,7 @@ import $ from 'jquery'
 import Axios from 'axios';
 
 const linkToRedirectInDevelopment = "http://localhost:8888/login";
-const linkToRedirectInProduction = "https://themusico-redirect.herokuapp.com/login";
+const linkToRedirectInProduction = "https://musico-back.herokuapp.com/login";
 
 class Profile extends React.Component {
     constructor(props) {
