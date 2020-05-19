@@ -7,6 +7,7 @@ import Cookies from 'universal-cookie';
 const linkToRedirectInDevelopment = "http://localhost:8888/login";
 const linkToRedirectInProduction = "https://musico-back.herokuapp.com//login";
 
+
 export const Port = async () => {
     const response = await fetch('/port')
     const port = await response.json()
@@ -175,10 +176,10 @@ export const Lyrics = (trackName, artist, token) => {
     if(track.indexOf("Remastered") !== -1) {
         track = track.substring(0, track.indexOf("Remastered"));
     }
-    let promise = Axios(`https://api.genius.com/search?q=${artist}-${track}`, {
-        method: 'GET',
+    let promise = Axios(`https://api.genius.com/search?q=${artist}-${track}`,{
+        method: "GET",
         params: {
-            'Authorization': 'Bearer ' + token,
+            'Authorization': `Bearer ${token}`,
             'access_token': token
         }
     })
