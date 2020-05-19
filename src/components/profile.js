@@ -19,7 +19,7 @@ class Profile extends React.Component {
     logout = () => {
         window.open("https://accounts.spotify.com/en/logout")
         setTimeout(() => {
-            window.location.replace(linkToRedirectInDevelopment)
+            window.location.replace(linkToRedirectInProduction)
         }, 500)
     }
 
