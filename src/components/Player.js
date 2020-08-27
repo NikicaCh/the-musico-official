@@ -19,6 +19,7 @@ import Profile from './profile'
 import SearchButton from './searchButton'
 import PauseDiv from './pause'
 import PlayerInfo from './PlayerInfo'
+import Context from './Context'
 import stringSimilarity  from 'string-similarity'
 // import scrapeIt from 'scrape-it'
 import cheerio from 'cheerio'
@@ -29,7 +30,7 @@ import uniqid from 'uniqid'
 import Explicit from "./explicit"
 const linkBackendInDevelopment = "http://localhost:8888/";
 const linkBackendInProduction = "https://musico-back.herokuapp.com/";
-const linkEnv = linkBackendInProduction;
+const linkEnv = linkBackendInDevelopment;
 
 
 class Player extends Component {
@@ -75,7 +76,9 @@ class Player extends Component {
             search: false,
             paused: false,
             explicit: false,
-            renderLyrics: false
+            renderLyrics: false,
+            pausedNotEnded: true,
+            contextObject: {}
         }
         this.getLyrics = this.getLyrics.bind(this)
         this.setCurrentTrack = this.setCurrentTrack.bind(this)
@@ -93,8 +96,25 @@ class Player extends Component {
         this.handleVolumeChange = this.handleVolumeChange.bind(this)
         this.backwards = this.backwards.bind(this)
         this.forwards = this.forwards.bind(this)
+        this.setContext = this.setContext.bind(this)
     } 
+
+    setContext(obj) {
+        this.setState({contextObject: obj})
+    }
     
+
+    playPause() {
+        let token = accessToken();
+        if(this.state.playing) {
+            Pause(token);
+            this.setState({pausedNotEnded: true})
+        } else {
+            Play(token);
+            this.setState({pausedNotEnded: false})
+        }
+    }
+
     forwards(secs) {
         let token = accessToken();
         getCurrentPlayback(token)
@@ -150,7 +170,7 @@ class Player extends Component {
                    }
                    this.setState({numberofParagraphs})
                 })
-                this.setState({currentLyrics: finished[0], lyricsPosition: 0,  fullLyrics: finished}, () => {
+                this.setState({paragraphs, t: body.scraped, currentLyrics: finished[0], lyricsPosition: 0,  fullLyrics: finished}, () => {
                 })
             } else {
                 setTimeout(() => {
@@ -321,14 +341,7 @@ class Player extends Component {
             }
         }  
     }
-    playPause() {
-        let token = accessToken();
-        if(this.state.playing) {
-            Pause(token);
-        } else {
-            Play(token);
-        }
-    }
+    
     handleKeyPress(e) {
         if(this.state.search === false) { //if the search modal is not active
             let event = e;
@@ -542,9 +555,10 @@ class Player extends Component {
                     uniq={this.state.uniq}
                     replay={this.state.replay}
                     replayCounter={this.state.replayCounter}
-                    player={this.state.player}/>
+                    player={this.state.player}
+                    setContext={this.setContext}/>
                 <SearchButton color={"-black"} toggleRender={this.searchModal}/>
-                <PauseDiv playing={!this.state.paused} search={this.state.search} />
+                <PauseDiv playing={!this.state.paused} search={this.state.search} pausedNotEnded={this.state.pausedNotEnded}/>
                 <DisplayText
                     name={this.state.display}
                     class={'songName'} 
@@ -624,6 +638,11 @@ class Player extends Component {
                 <div className="device-warning hide"><p>Listening on {this.state.activeDevice}</p></div>
                 <Legend />
                 <Profile />
+                <Context
+                    state={this.state.state}
+                    search={this.state.search}
+                    pausedNotEnded={this.state.pausedNotEnded}
+                    playing={this.state.playing}/>
             </div>
         )
     }

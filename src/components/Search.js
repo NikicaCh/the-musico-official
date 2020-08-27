@@ -117,26 +117,16 @@ class Search extends Component {
         })
     }
     handleChange(event) {
-        // $(".artist").on("click", (e) => {
-        //     let target = e.target.parentElement;
-        //     let h1 = target.querySelector(".artist-value");
-        //     let token = accessToken();
-        //     this.openArtist(token, h1.id, target.id)
-        // })
         let value = $(".search-input").val();
         if(value === "") {
             this.blankSearch()
-        }
-        // if($("#results").hasClass("hide")) {
-        //     $("#results").removeClass("hide")
-        // }
-        // $(".results").attr("class", "results")
-        let token = accessToken();
-        this.setState({searchValue: value}, () => {
-            this.search(token, value);
-        })
-        this.forceUpdate(); 
-               
+        } else {
+            let token = accessToken();
+            this.setState({searchValue: value}, () => {
+                this.search(token, value);
+            })
+            this.forceUpdate(); 
+        }           
     }
     componentDidMount() {
         console.log("SEARCH MOUNT")
@@ -145,28 +135,18 @@ class Search extends Component {
         .then((data) => {
         })
         let value = $(".search-input").val();
-        // $(".search-inner").addClass("search-searched")
-        // $(".search-title").addClass("title-searched")
-        // $(".pills-row").addClass("pills-searched")
-        // // if($("#results").hasClass("hide")) {
-        // //     $("#results").removeClass("hide")
-        // // }
-        // $(".results").attr("class", "results")
         if(this.props.search) {
             this.setState({searchValue: value}, () => {
                 this.search(token, value);
             }) 
         }
-        // $("body").on("click", ".pill-close", (e) => {
-        //     e.target.parentNode.remove()
-        // }) 
     }
     render() {
         let cookies = new Cookies();
         let userId = this.props.userId
         let mostRecent1 = cookies.get(`mostRecent1${userId}`)
         if(!mostRecent1 || mostRecent1 == "undefined") {
-            mostRecent1 = "dua lipa"
+            mostRecent1 = "khalid"
         }
         let mostRecent2 = cookies.get(`mostRecent2${userId}`)
         if(!mostRecent2 || mostRecent2 == "undefined") {
@@ -254,7 +234,8 @@ class Search extends Component {
                         replayCounter={this.props.replayCounter}
                         player={this.props.player}
                         openArtist={this.openArtist}
-                        blankSearch={this.blankSearch}/>
+                        blankSearch={this.blankSearch}
+                        setContext={this.props.setContext}/>
                     <Personal
                         render={this.state.personal}
                         userId={this.props.userId}

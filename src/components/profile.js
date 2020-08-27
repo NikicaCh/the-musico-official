@@ -12,7 +12,9 @@ class Profile extends React.Component {
 
         this.state = {
             initials: "",
-            profileLogout: false
+            profileLogout: false,
+            image: "",
+            display_name: ""
         }
         this.logout = this.logout.bind(this)
     }
@@ -28,10 +30,14 @@ class Profile extends React.Component {
         profile(token)
         .then((data) => {
             if(data) {
-                console.log("PROFILE", data.data.display_name)
+                console.log("PROFILE", data.data)
                 let {display_name} = data.data;
                 let initials = display_name.charAt(0)
-                this.setState({initials})
+                if(data.data.images && data.data.images.length) {
+                    let image = data.data.images[0].url
+                    this.setState({image})
+                }
+                this.setState({initials, display_name})
             }
         })
         // $(".logout-area").on("mouseover", () => {
@@ -51,8 +57,8 @@ class Profile extends React.Component {
                 ? <div className="logout-icon"><img
                     onClick={this.logout}
                     src={require("../icons/logout.webp")}></img></div>
-                : <div className="profile-circle">
-                <span className="initials">{this.state.initials}</span>
+                : <div>
+                <img className="profile-img" title={this.state.display_name} src={this.state.image}></img>
                 </div>
             }   
 

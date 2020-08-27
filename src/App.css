@@ -1974,7 +1974,7 @@ input[type=range]:focus::-ms-fill-upper {
   z-index: 100;
 }
 
-.profile-circle {
+.profile-img {
   position: absolute;
   background: transparent;
   top: 43%;
@@ -1982,13 +1982,14 @@ input[type=range]:focus::-ms-fill-upper {
   height: 3.5vh;
   width: 3.5vh;
   border-radius: 50%;
-  border: solid 1px rgb(140, 141, 138);
   text-align: center;
   z-index: 1000;
   align-content: center;
+  opacity: .7;
 }
-.profile-circle:hover {
+.profile-img:hover {
   cursor: pointer;
+  opacity: 1;
 }
 .initials {
   font-size: 1vw;
@@ -2312,9 +2313,9 @@ input[type=range]:focus::-ms-fill-upper {
 }
 
 .newReleaseElement {
-  display: relative;
+  display: absolute;
   width: 10vw;
-  height: 3vw;
+  height: 1vw;
   border-radius: 5%;
   cursor: pointer;
   background: rgb(227, 228, 219);
@@ -2339,6 +2340,7 @@ input[type=range]:focus::-ms-fill-upper {
   position: relative;
   float: right;
   height: 100%;
+  width: 3vw;
   border-radius: 0 5% 5% 0;
   opacity: .85;
 }
@@ -2368,4 +2370,41 @@ input[type=range]:focus::-ms-fill-upper {
 }
 .numberOfTracks::selection {
   background: transparent;
+}
+
+.context {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+}
+
+.context-div{
+  position: absolute;
+  width: 2vw;
+  height: 2vw;
+  top: 90%;
+  right: 10%;
+  z-index: 1000;
+  cursor: pointer;
+  opacity: 1;
+  transform: rotate(0deg);
+  transition: transform .6s ease-in-out;
+}
+
+.context-div:hover {
+  opacity: 1;
+}
+.context-div-rotate{ 
+  transform: rotate(-90deg);
+  transition: transform .6s ease-in-out;
+  opacity: .7;
+}
+
+.context-progress {
+  position: absolute;
+  width: 2vw;
+  height: 2vw;
+  top: 90%;
+  right: 15%;
+  z-index: 10000;
 }

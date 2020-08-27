@@ -16,19 +16,20 @@ const Playlist = (props) =>  {
     const [request, setRequest] = useState(false)
     let token = accessToken();
 
-    // if(! request) {
-    //     IfFollowPlaylist(token, props.item.id, props.userId)
-    //     .then((data) => {
-    //         if(data) {
-    //             data.data[0] === true ?
-    //                 (setHeartColor(colorFollow),
-    //                 setFollow(true))
-    //             :   (setHeartColor(colorUnfollow),
-    //                 setFollow(false))
-    //         }
-    //         setRequest(true)
-    //     })
-    // }
+    if(!request) {
+        IfFollowPlaylist(token, props.item.id, props.userId)
+        .then((data) => {
+            console.log("REQ")
+            setRequest(true)
+            if(data) {
+                data.data[0] === true ?
+                    (setHeartColor(colorFollow),
+                    setFollow(true))
+                :   (setHeartColor(colorUnfollow),
+                    setFollow(false))
+            }
+        })
+    }
             
 
     // const Follow = () => {
@@ -57,7 +58,7 @@ const Playlist = (props) =>  {
         fill: heartColor,
     }
     return (
-        <div className="personal-item hoverable" style={style} onClick={this.clickUnhoverable}>
+        <div className="personal-item hoverable" style={style} onClick={this.clickUnhoverable} title={props.item.name}>
             {/* <img
                 id={this.props.item.id}
                 src={require("../icons/personal-arrow.webp")}

@@ -215,6 +215,7 @@ class BestSearch extends React.Component {
                         <div>
                             <Artist //this is the top result artist (if artist is type )
                                 trackId={this.props.trackId}
+                                uris={this.state.arrayOfUris}
                                 deviceId={this.state.deviceId}
                                 image={this.props.image}
                                 type={this.props.type}
@@ -223,7 +224,8 @@ class BestSearch extends React.Component {
                                 albums={this.state.albums}
                                 arrayOfRestTracks={this.state.arrayOfRestTracks}
                                 blankSearch={this.props.blankSearch}
-                                arrayOfRelatedArtists={this.state.arrayOfRelatedArtists}/>  
+                                arrayOfRelatedArtists={this.state.arrayOfRelatedArtists}
+                                setContext={this.props.setContext}/>  
                             <div className="row related-artists">{this.state.arrayOfRelatedArtists.slice(0, 5)}</div>
                         </div>
                         

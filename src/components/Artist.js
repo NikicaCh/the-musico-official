@@ -15,7 +15,10 @@ const Artist = (props) => {
                 <img 
                     id={props.trackId}
                     onClick={() => {
-                        PlayTrack(props.trackId, token, props.deviceId);}} //Should be playing all artist's songs, instead of track.id, also fix the pause div
+                        PlayTrack(props.uris, token, props.deviceId); //Should be playing all artist's songs, instead of track.id, also fix the pause div
+
+                        props.setContext({a: "HELLO"}) //add to the context Object state in Player component
+                    }} 
                     src={props.image} 
                     className={`best-search-img artist-img`}
                     alt="best search">
