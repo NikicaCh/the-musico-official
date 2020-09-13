@@ -26,7 +26,7 @@ import cheerio from 'cheerio'
 import Axios from "../../node_modules/axios"
 // import { stringify } from "querystring"
 import $ from 'jquery'
-import uniqid from 'uniqid'
+import shortid from 'shortid'
 import Explicit from "./explicit"
 const linkBackendInDevelopment = "http://localhost:8888/";
 const linkBackendInProduction = "https://musico-back.herokuapp.com/";
@@ -378,7 +378,7 @@ class Player extends Component {
                     this.searchModal();
                 } else if(code === 82) { //R
                         PlayTrack(currentPlaybackUri, token, this.state.musicoId);
-                        let uniqId = uniqid();
+                        let uniqId = shortid.generate();
                         this.setState({lyricsPosition: 0, replay: uniqId, replayCounter: this.state.replayCounter + 1}, () => {
                         this.setState({currentLyrics: this.state.fullLyrics[this.state.lyricsPosition]})
                         })
@@ -445,7 +445,7 @@ class Player extends Component {
         document.body.appendChild(script);
         window.onSpotifyWebPlaybackSDKReady = () => {
             const token = access;
-            let uniq = uniqid();
+            let uniq = shortid.generate();
             this.setState({uniq})
             const player = new window.Spotify.Player({
               name: `MUSICO ${uniq}`,
