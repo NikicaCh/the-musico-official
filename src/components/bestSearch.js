@@ -225,7 +225,9 @@ class BestSearch extends React.Component {
                                 arrayOfRestTracks={this.state.arrayOfRestTracks}
                                 blankSearch={this.props.blankSearch}
                                 arrayOfRelatedArtists={this.state.arrayOfRelatedArtists}
-                                setContext={this.props.setContext}/>  
+                                setContext={this.props.setContext}
+                                props={this.props.artist} //contains all info about artist
+                                />  
                             <div className="row related-artists">{this.state.arrayOfRelatedArtists.slice(0, 5)}</div>
                         </div>
                         

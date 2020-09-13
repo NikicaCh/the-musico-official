@@ -72,6 +72,11 @@ const Playlist = (props) =>  {
                 title={"Play Playlist"}
                 onClick={() => { 
                 PlayContext(token, props.item.uri)
+                let contextObject = {
+                    type: "playlist",
+                    item: props.item //contains all info for playlist, from parent component BestSearch
+                }
+                props.setContext({contextObject}) //add to the context Object state in Player component
             }}>
                 <PlayCircleOutlineIcon style={icon1} />
             </div>

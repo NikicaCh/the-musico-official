@@ -30,7 +30,7 @@ import uniqid from 'uniqid'
 import Explicit from "./explicit"
 const linkBackendInDevelopment = "http://localhost:8888/";
 const linkBackendInProduction = "https://musico-back.herokuapp.com/";
-const linkEnv = linkBackendInDevelopment;
+const linkEnv = linkBackendInProduction;
 
 
 class Player extends Component {
@@ -486,6 +486,9 @@ class Player extends Component {
             console.log("stateeee", state)
             if(state.paused) {
                 this.setState({playing: false})
+                if(this.state.state & this.state.state.track_window && this.state.state.track_window.next_tracks && this.state.state.track_window.next_tracks.length === 0 && this.state.pausedNotEnded === false) {
+                    this.setState({pausedNotEnded: true})
+                }
             } else {
                 this.setState({playing: true})
             }
@@ -558,7 +561,7 @@ class Player extends Component {
                     player={this.state.player}
                     setContext={this.setContext}/>
                 <SearchButton color={"-black"} toggleRender={this.searchModal}/>
-                <PauseDiv playing={!this.state.paused} search={this.state.search} pausedNotEnded={this.state.pausedNotEnded}/>
+                <PauseDiv paused={!this.state.playing} search={this.state.search} pausedNotEnded={this.state.pausedNotEnded}/>
                 <DisplayText
                     name={this.state.display}
                     class={'songName'} 
@@ -642,7 +645,9 @@ class Player extends Component {
                     state={this.state.state}
                     search={this.state.search}
                     pausedNotEnded={this.state.pausedNotEnded}
-                    playing={this.state.playing}/>
+                    playing={this.state.playing}
+                    contextObject={this.state.contextObject}
+                    currentPlaybackName={this.state.currentPlaybackName}/>
             </div>
         )
     }

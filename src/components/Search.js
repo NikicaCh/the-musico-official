@@ -240,7 +240,8 @@ class Search extends Component {
                         render={this.state.personal}
                         userId={this.props.userId}
                         track={this.state.track}
-                        artist={this.state.artist}/>
+                        artist={this.state.artist}
+                        setContext={this.props.setContext}/>
                     <Releases 
                         render={this.state.releases}
                         blankSearch={this.blankSearch}

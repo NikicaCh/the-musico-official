@@ -56,9 +56,9 @@ class Personal extends React.Component {
             {(this.props.render)
                 ? <div className="personal">
                 <div className="personal-section">
-                    <PlaylistRow data={this.state.arrayOfFeaturingPlaylists} title={"Featuring Playlists"} userId={this.props.userId}/>
-                    <PlaylistRow data={this.state.arrayOfPersonalPlaylists.slice(0,5)} title={"Made For You"} userId={this.props.userId}/>
-                    <PlaylistRow data={this.state.arrayOfPersonalPlaylists.slice(5,10)} userId={this.props.userId}/>
+                    <PlaylistRow data={this.state.arrayOfFeaturingPlaylists} title={"Featuring Playlists"} userId={this.props.userId} setContext={this.props.setContext}/>
+                    <PlaylistRow data={this.state.arrayOfPersonalPlaylists.slice(0,5)} title={"Made For You"} userId={this.props.userId} setContext={this.props.setContext}/>
+                    <PlaylistRow data={this.state.arrayOfPersonalPlaylists.slice(5,10)} userId={this.props.userId} setContext={this.props.setContext}/>
                 </div>            
                 </div>
                 : <div className="nopersonal"></div>
