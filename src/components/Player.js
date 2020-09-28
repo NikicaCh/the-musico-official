@@ -78,7 +78,8 @@ class Player extends Component {
             explicit: false,
             renderLyrics: false,
             pausedNotEnded: true,
-            contextObject: {}
+            contextObject: {},
+            playerOffline: false
         }
         this.getLyrics = this.getLyrics.bind(this)
         this.setCurrentTrack = this.setCurrentTrack.bind(this)
@@ -484,15 +485,32 @@ class Player extends Component {
         // Playback status updates
         player.addListener('player_state_changed', state => {
             console.log("stateeee", state)
-            if(state.paused) {
-                this.setState({playing: false})
-                if(this.state.state & this.state.state.track_window && this.state.state.track_window.next_tracks && this.state.state.track_window.next_tracks.length === 0 && this.state.pausedNotEnded === false) {
-                    this.setState({pausedNotEnded: true})
+            if(state === null) {
+                this.setState({playerOffline: true})
+                let token = accessToken();
+            getDevices(token)
+            .then((response) => {
+                if(response) {
+                    response.data.devices.map((device) => {
+                        if(device.id !== this.state.musicoId) {
+                            $(".device-warning").removeClass("hide")
+                            this.setState({activeDevice: device.name})
+                        } else if( device.is_active && device.id == this.state.musicoId) {
+                            $(".device-warning").addClass("hide")
+                        }
+                    })
                 }
+            })
             } else {
-                this.setState({playing: true})
-            }
-            this.setState({state})
+                if(state.paused) {
+                    this.setState({playing: false})
+                    if(this.state.state & this.state.state.track_window && this.state.state.track_window.next_tracks && this.state.state.track_window.next_tracks.length === 0 && this.state.pausedNotEnded === false) {
+                        this.setState({pausedNotEnded: true})
+                    }
+                } else {
+                    this.setState({playing: true})
+                }
+                this.setState({state})
             if(state) {
                 this.setState({context: "context"})
             }else {
@@ -517,6 +535,8 @@ class Player extends Component {
             this.setCurrentTrack(access); // SET CURRENT TRACK -------------------------------------------------
             this.setCurrentTrack(access); // I must call this func twice, because when I try to play the same song again the API returns is_playing:false
             let url;
+            }
+            
                 
         });
 
@@ -561,7 +581,7 @@ class Player extends Component {
                     player={this.state.player}
                     setContext={this.setContext}/>
                 <SearchButton color={"-black"} toggleRender={this.searchModal}/>
-                <PauseDiv paused={!this.state.playing} search={this.state.search} pausedNotEnded={this.state.pausedNotEnded}/>
+                <PauseDiv paused={!this.state.playing} search={this.state.search} pausedNotEnded={this.state.pausedNotEnded} play={this.playPause}/>
                 <DisplayText
                     name={this.state.display}
                     class={'songName'} 

@@ -2,7 +2,7 @@
   "name": "capstone",
   "version": "0.1.0",
   "engines": {
-    "node": "14.x"
+    "node": "14.10.1"
   },
   "private": true,
   "dependencies": {
