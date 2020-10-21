@@ -55,7 +55,7 @@ export const getDevices = (token) => {
         })
         .catch(err => {
             if(err.response.status == 401) {
-                window.location.replace(linkToRedirectInProduction)
+                window.location.replace(linkToRedirectInDevelopment)
             }
         });
         return promise;
