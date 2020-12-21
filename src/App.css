@@ -1267,6 +1267,12 @@ button:focus {outline:0;}
   cursor: pointer;
 }
 
+.play-pause {
+  position: relative;
+  margin-top: -7%;
+  margin-left: -5%;
+}
+
 .circle-slider {
   position: absolute;
   margin: auto;

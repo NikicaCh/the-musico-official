@@ -56,7 +56,10 @@ const PlayerInfo = (props) => {
                 id="player-info-circle"
                 className="player-info-circle"
                 onClick={playPause}>
-                { props.playing ? <PauseIcon fontSize="large"/> : <PlayArrowTwoToneIcon fontSize="large"/>}
+                    <div className="play-pause">
+                        { props.playing ? <PauseIcon fontSize="large"/> : <PlayArrowTwoToneIcon fontSize="large"/>}
+                    </div>
+                
             </div>
             <div className="circle-slider">
                 <CircleSlider
