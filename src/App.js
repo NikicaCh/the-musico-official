@@ -63,7 +63,7 @@ class App extends Component {
     document.title = "The Musico";
     const linkToRedirectInDevelopment = "http://localhost:8888/login";
     const linkToRedirectInProduction = "https://musico-back.herokuapp.com/login";
-    const linkEnv = linkToRedirectInProduction;
+    const linkEnv = linkToRedirectInDevelopment;
     let token = accessToken();
     getDevices(token)
     let date = new Date();
@@ -103,7 +103,7 @@ class App extends Component {
         <Route exact path="/cookie" component={CookiePolicy} />
         <Route exact path="/" render = { () => {
           return (
-            <div>
+            <div className="official-logo">
               <Logo color={"-black"} />
               <Player/>
             </div>

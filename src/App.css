@@ -22,13 +22,29 @@ body:focus {
   background: transparent;
 }
 .musico-logo {
-  position: absolute;
+  position: relative;
   height: 3vw;
   width: 3vw;
   top: 4%;
   left: 4.5%;
   cursor: pointer;
+
 }
+.spotify-logo {
+  position: relative;
+  height: 2vw;
+  width: 2vw;
+  top: 5%;
+  left: 12%;
+  cursor: pointer;
+  -webkit-filter: grayscale(100%); /* Safari 6.0 - 9.0 */
+  filter: grayscale(100%);
+}
+.spotify-logo:hover {
+  -webkit-filter: grayscale(0%); /* Safari 6.0 - 9.0 */
+  filter: grayscale(0%);
+}
+
 .legend-div {
   position: absolute;
   width: auto;
@@ -1445,6 +1461,7 @@ button:focus {outline:0;}
   height: 100vh;
   margin: 0;
   top: 0;
+  cursor: pointer;
 } 
 .paused-div *::selection {
   background: transparent;
@@ -1519,25 +1536,6 @@ button:focus {outline:0;}
   z-index: 15;
   top: 4%;
   left: 4.5%;
-}
-
-.player-logo-hover img {
-  position:absolute;
-  -webkit-transition: opacity .2s ease;
-  -moz-transition: opacity .2s ease;
-  -o-transition: opacity .2s ease;
-  transition: opacity .2s ease;
-}
-
-.player-logo-hover img.bottom{
-  opacity: 0;
-}
-.player-logo-hover:hover img.bottom {
-  opacity: 1;
-}
-
-.player-logo-hover img.top:hover {
-  opacity: 0;
 }
 
 .cookies {
@@ -1903,11 +1901,11 @@ input[type=range]:focus::-ms-fill-upper {
 
 .device-warning {
   width: 100%;
-  height: 2.3%;
-  z-index: 1000000000000000000;
+  height: 2%;
+  z-index: 5;
   background: #3aa065;
   position: absolute;
-  top:97.7%;
+  top:95.2%;
   color: rgb(34, 32, 30);
   font-family: 'Anton', sans-serif;
 }
@@ -1920,10 +1918,10 @@ input[type=range]:focus::-ms-fill-upper {
   width: 0;
   height: 0;
   border-style: solid;
-  border-width: 20px 20px 0 20px;
+  border-width: 15px 15px 0 15px;
   border-color: #3aa065 transparent #3aa065 transparent;
   display: inline-block;
-  transform: rotate(180deg) translateY(100%) translateX(-92vw);
+  transform: rotate(180deg) translateY(100%) translateX(-92.2vw);
 }
 
 .device_active {
@@ -2081,7 +2079,7 @@ input[type=range]:focus::-ms-fill-upper {
 .personal-section {
   position: relative;
   width: auto;
-  height: 90%;
+  height: 85%;
   margin: auto;
   word-wrap:break-word;
   overflow-x: hidden;
@@ -2235,6 +2233,7 @@ input[type=range]:focus::-ms-fill-upper {
   position: absolute;
   top: 45%;
   left: 6.5%;
+  z-index: 4;
 }
 .explicit:hover {
   -webkit-filter: grayscale(100%) brightness(80%) sepia(70%) hue-rotate(5deg) saturate(500%) contrast(0.8);
@@ -2433,32 +2432,37 @@ input[type=range]:focus::-ms-fill-upper {
   word-wrap: none;
   color: white;
   position:absolute;
-  -webkit-animation:linear infinite;
-  -webkit-animation-name: run;
-  -webkit-animation-duration: 25s;
-  }     
-  @-webkit-keyframes run {
-      0% { left: 100%;}
-      50%{ left : 0%;}
-      100%{ left : -80%;}
-  }
+  display: inline-block;
+  white-space: nowrap;
+  animation: floatText 15s infinite linear;
+  padding-left: 100%; /*Initial offset*/
+}
+.stripe:nth-child(2){
+  word-wrap: none;
+  color: white;
+  position:absolute;
+  display: inline-block;
+  white-space: nowrap;
+  animation: floatText 15s infinite linear;
+  animation-delay: 7.5s;
+  padding-left: 100%; /*Initial offset*/
+}
 
-  .black-stripe p:nth-child(2){
-    word-wrap: none;
-    color: white;
-    position:absolute;
-    left: 110%;
-    -webkit-animation:linear infinite;
-    -webkit-animation-name: run;
-    -webkit-animation-duration: 25s;
-    animation-delay: 10s;
-    }     
-    @-webkit-keyframes run {
-        0% { left: 110%;}
-        50%{ left : 0%;}
-        100%{ left : -80%;}
-    }
-    
 .black-stripe p::selection {
   background: transparent;
+}
+
+
+.black-stripe:hover .stripe{
+  animation-play-state:paused;
+  -webkit-animation-play-state:paused;
+}
+
+@keyframes floatText {
+  from {
+    transform: translateX(0%);
+  }
+  to {
+    transform: translateX(-100%);
+  }
 }

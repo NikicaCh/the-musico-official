@@ -41,8 +41,8 @@ const Context = (props) => {
         {   
             !lock && name!== "" ?
             <div className="black-stripe">
-                <p>{name} - {props.currentPlaybackName}</p>
-                <p>{name} - {props.currentPlaybackName}</p>
+                <p className="stripe">{name} - {props.currentPlaybackName}</p>
+                <p className="stripe">{name} - {props.currentPlaybackName}</p>
             </div>
             : undefined
         }

@@ -1,17 +1,14 @@
 import React from 'react';
 
-class Logo extends React.Component {
-    constructor(props) {
-        super(props);
-    }
-    render() {
-        return(
-            <div className="player-logo-hover">
-                 <a href="/home"><img className="musico-logo bottom" src={require("../icons/musico-logo-gold.webp")}></img>
-                 </a>
-            </div>
-        )
-    }
+const Logo = (props) => {
+    return(
+        <div className="player-logo-hover">
+                <img className="musico-logo bottom" src={require(`../icons/musico-logo${props.color}.webp`)}></img>
+                <img className="spotify-logo" title="Powered by SPOTIFY" src={require(`../icons/spotify.webp`)}></img>
+        </div>
+    )
 }
+    
+
 
 export default Logo;

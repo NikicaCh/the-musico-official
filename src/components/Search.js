@@ -3,7 +3,7 @@ import queryString from 'query-string'
 import $ from "jquery"
 
 import Result from './searchResults/Result'
-import {accessToken, SearchFor, FeaturingPlaylists, UsersTop} from './Fetch'
+import {accessToken, SearchFor, FeaturingPlaylists, UsersTop, Categories} from './Fetch'
 import BestSearch from './bestSearch'
 import Cookies from 'universal-cookie'
 import FeaPlaylists from './featuringPlaylists'
@@ -33,7 +33,8 @@ class Search extends Component {
           pillLastClicked: "",
           best: false,
           personal: true,
-          releases: false
+          releases: false,
+          reservedWords: []
         }
         this.handleChange = this.handleChange.bind(this);
         this.search = this.search.bind(this);
@@ -129,10 +130,20 @@ class Search extends Component {
         }           
     }
     componentDidMount() {
-        console.log("SEARCH MOUNT")
         let token = accessToken();
         UsersTop(token,  "tracks", "short_term", 10)
         .then((data) => {
+        })
+        Categories(token).then((data) => {
+            console.log("RESERVERD", data.data.categories.items)
+            
+            if(data && data.data && data.data.categories && data.data.categories.items) {
+                let items = data.data.categories.items;
+                let reservedWords = items.map((item) => {
+                    return item.name
+                })
+                this.setState({reservedWords})
+            }
         })
         let value = $(".search-input").val();
         if(this.props.search) {

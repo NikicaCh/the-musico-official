@@ -55,7 +55,7 @@ export const getDevices = (token) => {
         })
         .catch(err => {
             if(err.response.status == 401) {
-                window.location.replace(linkToRedirectInProduction)
+                window.location.replace(linkToRedirectInDevelopment)
             }
         });
         return promise;
@@ -394,3 +394,13 @@ export const Seeds = (token, artists, genres, tracks) => {
           
         //     moving.style.transform = `translate3d(-${mouseX}%, -${mouseY}%, 0)`;
         // });
+
+//reserved words
+export const Categories = (token) => {
+    let promise = Axios(`https://api.spotify.com/v1/browse/categories?limit=50`, {
+        headers: {
+            "Authorization": `Bearer ${token}`
+        }
+    })
+    return promise;
+}

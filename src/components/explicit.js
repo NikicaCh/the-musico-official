@@ -4,7 +4,7 @@ const Explicit = (props) => {
     return(
         <div>
         {(props.explicit)
-            ?<div title={"Explicit version"} className="explicit"><ExplicitTwoToneIcon style={{ fill: '#F6F337' }}/></div>
+            ?<div title="Explicit version" className="explicit"><ExplicitTwoToneIcon style={{ fill: '#F6F337' }}/></div>
             :undefined
             }
         </div>

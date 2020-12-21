@@ -30,7 +30,7 @@ import shortid from 'shortid'
 import Explicit from "./explicit"
 const linkBackendInDevelopment = "http://localhost:8888/";
 const linkBackendInProduction = "https://musico-back.herokuapp.com/";
-const linkEnv = linkBackendInProduction;
+const linkEnv = linkBackendInDevelopment;
 
 
 class Player extends Component {
@@ -232,7 +232,6 @@ class Player extends Component {
                 })
                 if(hitsName.length) { // if the genius api responds with a result
                     if($) {
-                        console.log("TRUEEE")
                         this.setState({renderLyrics: true})
                     }
                     let lyrics = stringSimilarity.findBestMatch(track, hitsName);
@@ -391,7 +390,6 @@ class Player extends Component {
         }        
     }
     searchModal() {
-        console.log("HE")
         if(this.state.search === false ) {
             this.setState({search: true})
         } else {
@@ -484,7 +482,6 @@ class Player extends Component {
 
         // Playback status updates
         player.addListener('player_state_changed', state => {
-            console.log("stateeee", state)
             if(state === null) {
                 this.setState({playerOffline: true})
                 let token = accessToken();
@@ -586,7 +583,7 @@ class Player extends Component {
                     name={this.state.display}
                     class={'songName'} 
                 />
-                <Explicit explicit={this.state.explicit} />
+                <Explicit explicit={this.state.explicit}/>
                 <DisplayText
                     name={this.state.currentArtist}
                     class={"artists"} 
