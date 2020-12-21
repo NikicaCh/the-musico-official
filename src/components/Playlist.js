@@ -16,19 +16,19 @@ const Playlist = (props) =>  {
     const [request, setRequest] = useState(false)
     let token = accessToken();
 
-    if(!request) {
-        IfFollowPlaylist(token, props.item.id, props.userId)
-        .then((data) => {
-            console.log("REQ")
-            setRequest(true)
-            if(data) {
-                data.data[0] === true ?
-                    (setHeartColor(colorFollow),
-                    setFollow(true))
-                :   (setHeartColor(colorUnfollow),
-                    setFollow(false))
-            }
-        })
+    if(!request) { // way too many requests
+        // IfFollowPlaylist(token, props.item.id, props.userId)
+        // .then((data) => {
+        //     console.log("REQ")
+        //     setRequest(true)
+        //     if(data) {
+        //         data.data[0] === true ?
+        //             (setHeartColor(colorFollow),
+        //             setFollow(true))
+        //         :   (setHeartColor(colorUnfollow),
+        //             setFollow(false))
+        //     }
+        // })
     }
             
 

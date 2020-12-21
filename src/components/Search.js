@@ -11,6 +11,7 @@ import Personal from './Personal'
 import Pill from './pill'
 import {Releases} from './Releases'
 import { throws } from 'assert'
+import CategoryCookie from './CategoryCookie'
 
 
 class Search extends Component {
@@ -34,7 +35,8 @@ class Search extends Component {
           best: false,
           personal: true,
           releases: false,
-          reservedWords: []
+          reservedWords: [],
+          searchedReserved: []
         }
         this.handleChange = this.handleChange.bind(this);
         this.search = this.search.bind(this);
@@ -51,6 +53,18 @@ class Search extends Component {
     }
     search(token, value) {
         this.setState({personal: false, releases: false, best: true})
+
+        { // categories
+            let length = value.length;
+            let reservedWords = this.state.reservedWords;
+            let arrayOfFeaturing = []
+            reservedWords.map((word) => {
+                if(word.toUpperCase().slice(0, length) == value.toUpperCase()) {
+                    arrayOfFeaturing.push(word)
+                }
+                this.setState({searchedReserved: arrayOfFeaturing})
+            })  
+        }
 
         let promise1 = SearchFor(token, value, "track", 50)
         .then((data) => {
@@ -119,8 +133,9 @@ class Search extends Component {
     }
     handleChange(event) {
         let value = $(".search-input").val();
-        if(value === "") {
+        if(value == "") {
             this.blankSearch()
+            this.setState({searchedReserved: []})
         } else {
             let token = accessToken();
             this.setState({searchValue: value}, () => {
@@ -213,6 +228,13 @@ class Search extends Component {
                     <span id="pill2" className="pill">{mostRecent2}<img className="pill-close" src={require("../icons/pill-close.png")}></img></span>
                     <span id="pill3" className="pill">{lastTrack}<img className="pill-close" src={require("../icons/pill-close.png")}></img></span>
                     <span id="pill-new" className="pill"><img className="fire" src={require("../icons/new.webp")}></img>new_releases<img className="pill-close" src={require("../icons/pill-close.png")}></img></span> */}
+                </div>
+                <div className="row categoryCookie-row">
+                    {
+                        this.state.searchedReserved.map((word) => {
+                            return <CategoryCookie key={word} word={word}/>
+                        })
+                    }
                 </div>
                 <div className="row">
                     { value
