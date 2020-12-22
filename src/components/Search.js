@@ -58,8 +58,8 @@ class Search extends Component {
             let length = value.length;
             let reservedWords = this.state.reservedWords;
             let arrayOfFeaturing = []
-            reservedWords.map((word) => {
-                if(word.toUpperCase().slice(0, length) == value.toUpperCase()) {
+            reservedWords.map((word) => { // alternative names, and multiple word names
+                if(word.name.toUpperCase().slice(0, length) == value.toUpperCase()) {
                     arrayOfFeaturing.push(word)
                 }
                 this.setState({searchedReserved: arrayOfFeaturing})
@@ -155,7 +155,7 @@ class Search extends Component {
             if(data && data.data && data.data.categories && data.data.categories.items) {
                 let items = data.data.categories.items;
                 let reservedWords = items.map((item) => {
-                    return item.name
+                    return item
                 })
                 this.setState({reservedWords})
             }
@@ -231,8 +231,8 @@ class Search extends Component {
                 </div>
                 <div className="row categoryCookie-row">
                     {
-                        this.state.searchedReserved.map((word) => {
-                            return <CategoryCookie key={word} word={word}/>
+                        this.state.searchedReserved.map((item) => {
+                            return <CategoryCookie  deviceId={this.props.deviceId} key={item.name} item={item}/>
                         })
                     }
                 </div>

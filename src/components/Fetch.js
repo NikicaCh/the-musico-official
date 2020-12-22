@@ -55,7 +55,7 @@ export const getDevices = (token) => {
         })
         .catch(err => {
             if(err.response.status == 401) {
-                window.location.replace(linkToRedirectInDevelopment)
+                window.location.replace(linkToRedirectInProduction)
             }
         });
         return promise;
@@ -404,3 +404,13 @@ export const Categories = (token) => {
     })
     return promise;
 }
+
+export const CategoryPlaylists = (token, category, limit) => { //Implement coutry filter later on
+    let promise = Axios(`https://api.spotify.com/v1/browse/categories/${category}/playlists?limit=${limit}`, {
+        headers: {
+            "Authorization": `Bearer ${token}`
+        }
+    })
+    return promise;
+}
+

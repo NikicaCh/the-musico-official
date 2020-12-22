@@ -30,7 +30,7 @@ import shortid from 'shortid'
 import Explicit from "./explicit"
 const linkBackendInDevelopment = "http://localhost:8888/";
 const linkBackendInProduction = "https://musico-back.herokuapp.com/";
-const linkEnv = linkBackendInDevelopment;
+const linkEnv = linkBackendInProduction;
 
 
 class Player extends Component {
@@ -282,7 +282,7 @@ class Player extends Component {
                 let lastPlayed;
                 if(data.status === 200) {
                     let artists = [];
-                    let artistsCopy = data.data.item.artists.map((artist) => artist.name);
+                    let artistsCopy = data.data.item.artists.map((artist) => artist.name); // CHANGE ON PODCASTS
                     let artist = artistsCopy.join(" \n ");
                     data.data.item.artists.map((artist) => {
                         artists.push(<span className="artistName">{artist.name}</span>)
