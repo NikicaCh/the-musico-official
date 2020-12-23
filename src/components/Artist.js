@@ -1,5 +1,5 @@
 import React, {useState} from 'react'
-import { accessToken, PlayTrack } from './Fetch'
+import { accessToken, PlayTrack, PlayAlbum } from './Fetch'
 
 const Artist = (props) => {
     let token = accessToken();
@@ -15,12 +15,13 @@ const Artist = (props) => {
                 <img 
                     id={props.trackId}
                     onClick={() => {
-                        PlayTrack(props.uris, token, props.deviceId); //Should be playing all artist's songs, instead of track.id, also fix the pause div
-                        let contextObject = {
-                            type: "artist",
-                            item: props.props //contains all info for artist, from parent component BestSearch
-                        }
-                        props.setContext({contextObject}) //add to the context Object state in Player component
+                        PlayAlbum(props.props.uri, token, props.deviceId, true) // better approach, playing artist as context
+                        // PlayTrack(props.uris, token, props.deviceId); //Should be playing all artist's songs, instead of track.id, also fix the pause div
+                        // let contextObject = {
+                        //     type: "artist",
+                        //     item: props.props //contains all info for artist, from parent component BestSearch
+                        // }
+                        // props.setContext({contextObject}) //add to the context Object state in Player component
                     }} 
                     src={props.image} 
                     className={`best-search-img artist-img`}

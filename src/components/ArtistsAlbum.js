@@ -10,7 +10,7 @@ const ArtistAlbum = (props) => {
             className="artist-album"
             onClick={() => {
                 console.log("ALBUM PLAYED")
-                PlayAlbum(`spotify:album:${props.album.id}`, token, props.deviceId)
+                PlayAlbum(props.album.uri, token, props.deviceId, false)
             }}
             title={props.album.name}>
             <img src={props.album.images[1].url}></img>

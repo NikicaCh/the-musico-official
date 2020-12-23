@@ -149,12 +149,6 @@ export const NextTrack = (token) => {
     });
 }
 
-export const Shuffle = (token) => {
-    Axios.put('https://api.spotify.com/v1/me/player/shuffle', {
-        headers: {
-            'Authorization': 'Bearer ' + token },
-    });
-}
 
 export const SeekPosition = (token, ms) => {
     fetch('https://api.spotify.com/v1/me/player/seek?position_ms=' + ms, {
@@ -337,17 +331,6 @@ export const PlayTrack = (trackUri, token, deviceId) => {
     });
 }
 
-export const PlayAlbum = (uri, token, deviceId) => {
-    fetch(`https://api.spotify.com/v1/me/player/play?device_id=${deviceId}`, {
-    method: 'PUT',
-    headers: {
-        'Authorization': 'Bearer ' + token ,
-        'Content-Type': 'application/json',
-    },
-    body: JSON.stringify({
-        "context_uri": uri})
-    });
-}
 
 export const profile = (token) => {
     let promise = Axios("https://api.spotify.com/v1/me", {
@@ -414,3 +397,22 @@ export const CategoryPlaylists = (token, category, limit) => { //Implement coutr
     return promise;
 }
 
+export const PlayAlbum = (uri, token, deviceId, bool) => {
+    fetch(`https://api.spotify.com/v1/me/player/play?device_id=${deviceId}`, {
+    method: 'PUT',
+    headers: {
+        'Authorization': 'Bearer ' + token ,
+        'Content-Type': 'application/json',
+    },
+    body: JSON.stringify({
+        "context_uri": uri})
+    });
+    Shuffle(token, bool)
+}
+
+export const Shuffle = (token, bool) => {
+    Axios.put(`https://api.spotify.com/v1/me/player/shuffle?state=${bool}`, {
+        headers: {
+            'Authorization': 'Bearer ' + token },
+    });
+}
