@@ -2088,8 +2088,9 @@ input[type=range]:focus::-ms-fill-upper {
 
 .playlist-row {
   position: absolute;
-  width: 85%;
+  width: 80%;
   height: 35%;
+  padding: 0 0 0 5%;
 }
 .playlist-row:nth-of-type(2) {
   top: 55%;
@@ -2100,15 +2101,10 @@ input[type=range]:focus::-ms-fill-upper {
 
 .personal-section::-webkit-scrollbar {display:none;}
 .personal-item {
-  position: relative;
   display: inline-block;
-  height: 90%;
-  width: 17%;
-  margin: 2% .3%;
-  z-index: 100000;
-}
-.personal-item:first {
-  margin: 2% 0 0 6%;
+  height: 10vw;
+  width: 12vw;
+  z-index: 5;
 }
 .item-selected {
   border: solid 6px #e3e64b;
@@ -2131,7 +2127,6 @@ input[type=range]:focus::-ms-fill-upper {
 .hoverable:hover {
   transform: scale(1.25);
   z-index: 1000000000000;
-  margin: 2%;
 }
 .hoverable:hover .personal-arrow {
   opacity: 1;
@@ -2502,4 +2497,26 @@ input[type=range]:focus::-ms-fill-upper {
   display: block;
   margin: -7% auto 7%;
   width: 100%;
+}
+.first-playlist {
+  z-index: 5;
+  width: 55%;
+  height: 10%;
+  position: absolute;
+  top: 45%;
+  left: 30%;
+  color: rgb(206, 204, 204);
+  font-size: 2vw;
+
+}
+.new-playlist {
+  position: absolute;
+  top: 50%;
+  left: 8%;
+  display: inline-block;
+  height: 10vw;
+  width: 12vw;
+  margin: 2% auto 0 27%;
+  z-index: 5;
+  background: white;
 }

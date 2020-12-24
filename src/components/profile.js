@@ -62,7 +62,7 @@ class Profile extends React.Component {
                 <img
                     className="profile-img"
                     title={this.state.display_name}
-                    src={this.state.conditionImage}
+                    src={this.state.conditionImage || require("../icons/user.png")} 
                     alt="profile-img"></img>
                 </div>
             }   

@@ -1,6 +1,7 @@
 import React from 'react'
 import $ from 'jquery'
 import { accessToken ,FeaturingPlaylists, PlayContext, UsersPlaylists, NewReleases} from './Fetch'
+import AddCircleIcon from '@material-ui/icons/AddCircle';
 import Axios from 'axios'
 
 
@@ -17,6 +18,7 @@ class Personal extends React.Component {
             arrayOfFeaturingPlaylists: [],
             featuringDetails: "",
             arrayOfPersonalPlaylists: [],
+            newUser: false
         } 
     } 
     
@@ -29,7 +31,7 @@ class Personal extends React.Component {
         FeaturingPlaylists(token)
         .then((data) => {
             if(data) {
-                let arrayOfFeaturingPlaylists = data.data.playlists.items.slice(0, 5).map((item) => {
+                let arrayOfFeaturingPlaylists = data.data.playlists.items.slice(0, 6).map((item) => {
                     return item              
                 })
                 this.setState({arrayOfFeaturingPlaylists})
@@ -49,16 +51,31 @@ class Personal extends React.Component {
     }
 
     
+    
 
     render() {
+
+        const addIcon = {
+            margin: "auto"
+        } 
         return (
             <div>
             {(this.props.render)
                 ? <div className="personal">
                 <div className="personal-section">
-                    <PlaylistRow data={this.state.arrayOfFeaturingPlaylists} title={"Featuring Playlists"} userId={this.props.userId} setContext={this.props.setContext}/>
-                    <PlaylistRow data={this.state.arrayOfPersonalPlaylists.slice(0,5)} title={"Made For You"} userId={this.props.userId} setContext={this.props.setContext}/>
-                    <PlaylistRow data={this.state.arrayOfPersonalPlaylists.slice(5,10)} userId={this.props.userId} setContext={this.props.setContext}/>
+                    <PlaylistRow data={this.state.arrayOfFeaturingPlaylists} title={"Featuring Playlists"} userId={this.props.userId} deviceId={this.props.deviceId} setContext={this.props.setContext}/>
+                    {
+                        this.state.arrayOfPersonalPlaylists.length > 0
+                        ? <div><PlaylistRow data={this.state.arrayOfPersonalPlaylists.slice(0,5)} title={"Made For You"} userId={this.props.userId} deviceId={this.props.deviceId} setContext={this.props.setContext}/>
+                          <PlaylistRow data={this.state.arrayOfPersonalPlaylists.slice(5,10)} userId={this.props.userId} deviceId={this.props.deviceId} setContext={this.props.setContext}/></div>
+                        : <div>
+                            <h1 className="first-playlist">Create your first playlist</h1>
+                            <div className="new-playlist">
+                                <AddCircleIcon style={this.addIcon}/>
+                            </div>
+                          </div>
+                    }
+                    
                 </div>            
                 </div>
                 : <div className="nopersonal"></div>

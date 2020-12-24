@@ -272,6 +272,7 @@ class Search extends Component {
                     <Personal
                         render={this.state.personal}
                         userId={this.props.userId}
+                        deviceId={this.props.deviceId}
                         track={this.state.track}
                         artist={this.state.artist}
                         setContext={this.props.setContext}/>

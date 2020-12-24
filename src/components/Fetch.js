@@ -55,7 +55,7 @@ export const getDevices = (token) => {
         })
         .catch(err => {
             if(err.response.status == 401) {
-                window.location.replace(linkToRedirectInProduction)
+                window.location.replace(linkToRedirectInDevelopment)
             }
         });
         return promise;
@@ -397,6 +397,12 @@ export const CategoryPlaylists = (token, category, limit) => { //Implement coutr
     return promise;
 }
 
+export const Shuffle = (token, bool) => {
+    Axios.put(`https://api.spotify.com/v1/me/player/shuffle?state=${bool}`, {
+        headers: {
+            'Authorization': 'Bearer ' + token },
+    });
+}
 export const PlayAlbum = (uri, token, deviceId, bool) => {
     fetch(`https://api.spotify.com/v1/me/player/play?device_id=${deviceId}`, {
     method: 'PUT',
@@ -407,12 +413,6 @@ export const PlayAlbum = (uri, token, deviceId, bool) => {
     body: JSON.stringify({
         "context_uri": uri})
     });
-    Shuffle(token, bool)
 }
 
-export const Shuffle = (token, bool) => {
-    Axios.put(`https://api.spotify.com/v1/me/player/shuffle?state=${bool}`, {
-        headers: {
-            'Authorization': 'Bearer ' + token },
-    });
-}
+

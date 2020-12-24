@@ -30,7 +30,7 @@ import shortid from 'shortid'
 import Explicit from "./explicit"
 const linkBackendInDevelopment = "http://localhost:8888/";
 const linkBackendInProduction = "https://musico-back.herokuapp.com/";
-const linkEnv = linkBackendInProduction;
+const linkEnv = linkBackendInDevelopment;
 
 
 class Player extends Component {
@@ -482,6 +482,7 @@ class Player extends Component {
 
         // Playback status updates
         player.addListener('player_state_changed', state => {
+            console.log(state)
             if(state === null) {
                 this.setState({playerOffline: true})
                 let token = accessToken();

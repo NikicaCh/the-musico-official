@@ -63,7 +63,7 @@ class App extends Component {
     document.title = "The Musico";
     const linkToRedirectInDevelopment = "http://localhost:8888/login";
     const linkToRedirectInProduction = "https://musico-back.herokuapp.com/login";
-    const linkEnv = linkToRedirectInProduction;
+    const linkEnv = linkToRedirectInDevelopment;
     let token = accessToken();
     getDevices(token)
     let date = new Date();

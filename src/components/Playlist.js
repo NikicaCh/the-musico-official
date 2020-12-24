@@ -1,5 +1,5 @@
 import React, {useState, useEffect} from 'react';
-import { accessToken, PlayContext, IfFollowPlaylist, FollowPlaylist, UnfollowPlaylist } from './Fetch';
+import { accessToken, PlayContext, IfFollowPlaylist, FollowPlaylist, UnfollowPlaylist, PlayAlbum } from './Fetch';
 import FavoriteTwoToneIcon from '@material-ui/icons/FavoriteTwoTone';
 import PlayCircleOutlineIcon from '@material-ui/icons/PlayCircleOutline';
 
@@ -14,7 +14,6 @@ const Playlist = (props) =>  {
     const [heartColor, setHeartColor] = useState(colorUnfollow)
     const [follow, setFollow] = useState(false)
     const [request, setRequest] = useState(false)
-    let token = accessToken();
 
     if(!request) { // way too many requests
         // IfFollowPlaylist(token, props.item.id, props.userId)
@@ -36,17 +35,17 @@ const Playlist = (props) =>  {
     //     FollowPlaylist(token, props.item.id)
     // }
     const handleFollow = () => {
-        follow ?
-            (setFollow(false),
-            UnfollowPlaylist(token, props.item.id),
-            setHeartColor(colorUnfollow))
-        :   (setFollow(true),
-            FollowPlaylist(token, props.item.id),
-            setHeartColor(colorFollow))
+        // follow ?
+        //     (setFollow(false),
+        //     UnfollowPlaylist(token, props.item.id),
+        //     setHeartColor(colorUnfollow))
+        // :   (setFollow(true),
+        //     FollowPlaylist(token, props.item.id),
+        //     setHeartColor(colorFollow))
         
     }
     const style = {
-        backgroundImage: `url(${props.item.images[0].url})`,
+        backgroundImage: `url(${props.item.images[0].url || require("../icons/user.png")})`,
         backgroundPosition: "center",
         backgroundSize: "auto"
     }
@@ -71,7 +70,8 @@ const Playlist = (props) =>  {
                 className="play-playlist"
                 title={"Play Playlist"}
                 onClick={() => { 
-                PlayContext(token, props.item.uri)
+                let token = accessToken();
+                PlayAlbum(props.item.uri, token, props.deviceId)
                 let contextObject = {
                     type: "playlist",
                     item: props.item //contains all info for playlist, from parent component BestSearch
