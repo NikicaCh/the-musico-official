@@ -561,7 +561,7 @@ class Player extends Component {
             src=require("../icons/speaker mute.png")
         }
         return (
-            <div id="player-div">
+            <div id="player-div" dblclick={() => {console.log("DOUBLE CLICK")}}>
                 {loading 
                 ? <Spinner /> 
                 :<div ref={"player"} id="player" className="player">

@@ -415,4 +415,12 @@ export const PlayAlbum = (uri, token, deviceId, bool) => {
     });
 }
 
-
+export const SaveTrack = (token, id) => {
+    fetch(`https://api.spotify.com/v1/me/tracks?ids=${id}`, {
+        method: "PUT",
+        headers: {
+            'Authorization': 'Bearer ' + token ,
+            'Content-Type': 'application/json',
+        },
+    })
+}

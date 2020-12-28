@@ -15,19 +15,21 @@ const Playlist = (props) =>  {
     const [follow, setFollow] = useState(false)
     const [request, setRequest] = useState(false)
 
-    if(!request) { // way too many requests
-        // IfFollowPlaylist(token, props.item.id, props.userId)
-        // .then((data) => {
-        //     console.log("REQ")
-        //     setRequest(true)
-        //     if(data) {
-        //         data.data[0] === true ?
-        //             (setHeartColor(colorFollow),
-        //             setFollow(true))
-        //         :   (setHeartColor(colorUnfollow),
-        //             setFollow(false))
-        //     }
-        // })
+    let token = accessToken()
+    if(request) { // way too many requests
+        console.log("ENTER")
+        IfFollowPlaylist(token, props.item.id, props.userId)
+        .then((data) => {
+            console.log("REQ")
+            setRequest(true)
+            if(data) {
+                data.data[0] === true ?
+                    (setHeartColor(colorFollow),
+                    setFollow(true))
+                :   (setHeartColor(colorUnfollow),
+                    setFollow(false))
+            }
+        })
     }
             
 
@@ -35,13 +37,13 @@ const Playlist = (props) =>  {
     //     FollowPlaylist(token, props.item.id)
     // }
     const handleFollow = () => {
-        // follow ?
-        //     (setFollow(false),
-        //     UnfollowPlaylist(token, props.item.id),
-        //     setHeartColor(colorUnfollow))
-        // :   (setFollow(true),
-        //     FollowPlaylist(token, props.item.id),
-        //     setHeartColor(colorFollow))
+        follow ?
+            (setFollow(false),
+            UnfollowPlaylist(token, props.item.id),
+            setHeartColor(colorUnfollow))
+        :   (setFollow(true),
+            FollowPlaylist(token, props.item.id),
+            setHeartColor(colorFollow))
         
     }
     const style = {
@@ -57,7 +59,7 @@ const Playlist = (props) =>  {
         fill: heartColor,
     }
     return (
-        <div className="personal-item hoverable" style={style} onClick={this.clickUnhoverable} title={props.item.name}>
+        <div className="personal-item hoverable" style={style} onClick={this.clickUnhoverable} title={props.item.name} onMouseEnter={() => setRequest(true)} onMouseLeave={() => setRequest(false)}>
             {/* <img
                 id={this.props.item.id}
                 src={require("../icons/personal-arrow.webp")}

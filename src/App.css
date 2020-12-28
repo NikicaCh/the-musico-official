@@ -2087,13 +2087,14 @@ input[type=range]:focus::-ms-fill-upper {
 }
 
 .playlist-row {
-  position: absolute;
+  position: relative;
   width: 80%;
   height: 35%;
   padding: 0 0 0 5%;
+  margin: 0 0 5% 
 }
 .playlist-row:nth-of-type(2) {
-  top: 55%;
+  margin-top: 60%;
 }
 .playlist-row:nth-of-type(3) {
   top: 100%;
@@ -2103,7 +2104,7 @@ input[type=range]:focus::-ms-fill-upper {
 .personal-item {
   display: inline-block;
   height: 10vw;
-  width: 12vw;
+  width: 14vw;
   z-index: 5;
 }
 .item-selected {
@@ -2191,6 +2192,7 @@ input[type=range]:focus::-ms-fill-upper {
   text-transform: uppercase;
   position: relative;
   font-family: 'Anton', sans-serif;
+  margin: 2% 2% 2% 0;
 }
 .featuring-playlists::selection {
   background: transparent;
@@ -2497,26 +2499,4 @@ input[type=range]:focus::-ms-fill-upper {
   display: block;
   margin: -7% auto 7%;
   width: 100%;
-}
-.first-playlist {
-  z-index: 5;
-  width: 55%;
-  height: 10%;
-  position: absolute;
-  top: 45%;
-  left: 30%;
-  color: rgb(206, 204, 204);
-  font-size: 2vw;
-
-}
-.new-playlist {
-  position: absolute;
-  top: 50%;
-  left: 8%;
-  display: inline-block;
-  height: 10vw;
-  width: 12vw;
-  margin: 2% auto 0 27%;
-  z-index: 5;
-  background: white;
 }
