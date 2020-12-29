@@ -1,4 +1,5 @@
-import React, { Component } from 'react'
+import React, { useState } from 'react'
+import { useEffect } from 'react'
 
 
 import Playlist from './Playlist'
@@ -7,43 +8,35 @@ import PlaylistDetails from './Playlist-details'
 
 
 
-class PlaylistRow extends Component {
-    constructor(props) {
-        super(props)
+const PlaylistRow = (props) => {
+        const [playlists, setPlaylists] = useState([])
 
-        this.state = {
-            playlists: [],
-            detailsName: "",
-            detailsOwner: ""
-        }
+        useEffect(() => {
+            if(props.title === "Featuring Playlists") { // featuring playlists
+                let array = props.data;
+                let array1 = []
+                props.data.map((playlist) => {
+                    if(props.array2.indexOf(playlist) === -1) {
+                        array1.push(playlist)
+                    }
+                  })
+                setPlaylists(array1.slice(0,5))
+            } else {
+                let array = props.data.map((playlist) => {
+                    return playlist
+                })
+                setPlaylists(array)
+            }
+            
+        }, [props.data])
+        
 
-        this.setDetails = this.setDetails.bind(this);
-    }
-
-    setDetails = (name, owner) => {
-        this.setState({detailsName: name, detailsOwner: owner})
-    }
-
-    componentDidMount() {
-        let playlists = this.props.data.map((playlist) => {
-            return playlist
-        })
-        this.setState({playlists})
-    }
-
-    render() {
         return(
             <div className="playlist-row">
-                <h1 className="featuring-playlists">{this.props.title}</h1>
-                {this.props.data.map((item, index) => (<Playlist key={`playlist${index}`} item={item} setDetails={this.setDetails} deviceId={this.props.deviceId} userId={this.props.userId} setContext={this.props.setContext}/>))}
-                <PlaylistDetails
-                    name={this.state.detailsName}
-                    owner={this.state.detailsOwner} />
+                <h1 className="featuring-playlists">{props.title}</h1>
+                {playlists.map((item, index) => (<Playlist key={`playlist${index}`} item={item} deviceId={props.deviceId} userId={props.userId} setContext={props.setContext}/>))}
             </div>
         )
     }
-}
-
-
 
 export default PlaylistRow;

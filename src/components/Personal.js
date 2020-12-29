@@ -39,24 +39,10 @@ class Personal extends React.Component {
         FeaturingPlaylists(token)
         .then((data) => {
             if(data) {
-                let arrayOfFeaturingPlaylists = data.data.playlists.items.map((item) => {
-                    let condition = this.state.arrayOfPersonalPlaylists.forEach((personal) => {
-                        if(personal.uri === item.uri) {
-                            return true
-                        } else {
-                            return false
-                        }
-                    })
-                    console.log("COND",condition)
-                    // if(!condition){ return item}
-                    return item
-                })
-                this.setState({arrayOfFeaturingPlaylists})
+                this.setState({arrayOfFeaturingPlaylists: data.data.playlists.items})
             }
         })
         .catch(err => console.log(err))
-        
-        
     }
 
     
@@ -76,7 +62,7 @@ class Personal extends React.Component {
             {(this.props.render)
                 ? <div className="personal">
                 <div className="personal-section">
-                    <PlaylistRow data={this.state.arrayOfFeaturingPlaylists.slice(0,5)} title={"Featuring Playlists"} userId={this.props.userId} deviceId={this.props.deviceId} setContext={this.props.setContext}/>
+                    <PlaylistRow data={this.state.arrayOfFeaturingPlaylists} array2={this.state.arrayOfPersonalPlaylists} title={"Featuring Playlists"} userId={this.props.userId} deviceId={this.props.deviceId} setContext={this.props.setContext}/>
                     {
                         this.state.arrayOfPersonalPlaylists.length > 0
                         ? <div><PlaylistRow data={this.state.arrayOfPersonalPlaylists.slice(0,5)} title={"Made For You"} userId={this.props.userId} deviceId={this.props.deviceId} setContext={this.props.setContext}/>
