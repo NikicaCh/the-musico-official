@@ -15,7 +15,7 @@
     "body-parser": "^1.19.0",
     "bootstrap": "^4.5.2",
     "cheerio": "^1.0.0-rc.3",
-    "handlebars": "^4.7.6",
+    "handlebars": "^4.7.7",
     "jquery": "^3.5.1",
     "jsonp": "^0.2.1",
     "material-ui": "^0.20.2",
